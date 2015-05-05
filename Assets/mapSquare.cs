@@ -22,6 +22,7 @@ public class mapSquare : MonoBehaviour
 
 	bool hidden = false;
 
+	//this method should only be called when absolutly needed as it is very slow.
 	void updateObjects()
 	{
 		if(objectStore != null)
@@ -54,39 +55,56 @@ public class mapSquare : MonoBehaviour
 				objectType = (GameObject)Resources.Load("Walls/softRockPyramid");
 				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,0,0));
 			}
-			
+
+			//** Parallel wall X-axis **//
 			//if x+ and x- are walls make a straight wall parallel to them
 			else if(neighbors[0].terrainType == 3 && neighbors[2].terrainType == 3)
 			{
+				//if z+ and z- are floors make a wedge.
+				if(neighbors[1].terrainType == 1 && neighbors[3].terrainType == 1)
+				{
+					objectType = (GameObject)Resources.Load("Walls/softRockWedge");
+					objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,90,0));
+				}
 				//if z+ is a floor make the wall rotated towards the floor
-				if(neighbors[1].terrainType == 1)
+				else if(neighbors[1].terrainType == 1)
 				{
 					objectType = (GameObject)Resources.Load("Walls/softRock");
 					objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,0,0));
 				}
 				//if z- is a floor make the wall rotated towards the floor
-				if(neighbors[3].terrainType == 1)
+				else if(neighbors[3].terrainType == 1)
 				{
 					objectType = (GameObject)Resources.Load("Walls/softRock");
 					objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,180,0));
 				}
 			}
+
+			//** Parallel wall Z-axis **//
 			//if z+ and z- are walls make a straight wall parallel to them
 			else if(neighbors[1].terrainType == 3 && neighbors[3].terrainType == 3)
 			{
+				//if x+ and x- are floors make a wedge.
+				if(neighbors[0].terrainType == 1 && neighbors[2].terrainType == 1)
+				{
+					objectType = (GameObject)Resources.Load("Walls/softRockWedge");
+					objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,90,0));
+				}
 				//if x+ is a floor make the wall rotated towards the floor
-				if(neighbors[0].terrainType == 1)
+				else if(neighbors[0].terrainType == 1)
 				{
 					objectType = (GameObject)Resources.Load("Walls/softRock");
 					objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,90,0));
 				}
 				//if x- is a floor make the wall rotated towards the floor
-				if(neighbors[2].terrainType == 1)
+				else if(neighbors[2].terrainType == 1)
 				{
 					objectType = (GameObject)Resources.Load("Walls/softRock");
 					objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,-90,0));
 				}
 			}
+
+			//** inside corner **//
 			//if x+ is a wall and z+ is a wall and x- and z- is a roof make a inside corner.
 			else if(neighbors[0].terrainType == 3 && neighbors[1].terrainType == 3 && neighbors[2].terrainType == 2 && neighbors[3].terrainType == 2)
 			{
@@ -110,6 +128,85 @@ public class mapSquare : MonoBehaviour
 			{
 				objectType = (GameObject)Resources.Load("Walls/softRockICorner");
 				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,0,0));
+			}
+
+			//** corner **//
+			//used for 2x2 square of walls
+			//if x- and z- are walls, and x+ and z+ are floor, and the z- neighbor of the x- neighbor is a wall make a corner
+			else if(neighbors[2].terrainType == 3 && neighbors[3].terrainType == 3 && neighbors[0].terrainType == 1 && neighbors[1].terrainType == 1 && neighbors[2].neighbors[3].terrainType == 3)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockCorner");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,90,0));
+			}
+			//if x- and z+ are walls, and x+ and z- are floor, and the z+ neighbor of the x- neighbor is a wall make a corner
+			else if(neighbors[2].terrainType == 3 && neighbors[1].terrainType == 3 && neighbors[0].terrainType == 1 && neighbors[3].terrainType == 1 && parentMap.map[xPos-1,zPos+1].terrainType == 3)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockCorner");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,180,0));
+			}
+			//if x+ and z- are walls, and x- and z+ are floor, and the z- neighbor of the x+ neighbor is a wall make a corner
+			else if(neighbors[0].terrainType == 3 && neighbors[3].terrainType == 3 && neighbors[2].terrainType == 1 && neighbors[1].terrainType == 1 && parentMap.map[xPos+1,zPos-1].terrainType == 3)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockCorner");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,0,0));
+			}
+			//if z+ and x+ are walls, and x- and z- are floor, and the z+ neighbor of the x+ neighbor is a wall make a corner
+			else if(neighbors[1].terrainType == 3 && neighbors[0].terrainType == 3 && neighbors[2].terrainType == 1 && neighbors[3].terrainType == 1 && parentMap.map[xPos+1,zPos+1].terrainType == 3)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockCorner");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,-90,0));
+			}
+
+			//** pyramid inside corner **//
+			//if x+ and z- are walls, and x- and z+ are floor make a pyramid inside corner.
+			else if(neighbors[0].terrainType == 3 && neighbors[3].terrainType == 3 && neighbors[1].terrainType == 1 && neighbors[2].terrainType == 1)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockPyramidInsideCorner");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,180,0));
+			}
+			//if x- and z+ are walls, and x+ and z- are floor make a pyramid inside corner.
+			else if(neighbors[2].terrainType == 3 && neighbors[1].terrainType == 3 && neighbors[3].terrainType == 1 && neighbors[0].terrainType == 1)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockPyramidInsideCorner");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,0,0));
+			}
+			//if x- and z- are walls, and x+ and z+ are floor make a pyramid inside corner.
+			else if(neighbors[2].terrainType == 3 && neighbors[3].terrainType == 3 && neighbors[0].terrainType == 1 && neighbors[1].terrainType == 1)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockPyramidInsideCorner");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,-90,0));
+			}
+			//if x+ and z+ are walls, and x- and z- are floor make a pyramid inside corner.
+			else if(neighbors[0].terrainType == 3 && neighbors[1].terrainType == 3 && neighbors[2].terrainType == 1 && neighbors[3].terrainType == 1)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockPyramidInsideCorner");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,90,0));
+			}
+
+			//** angled pyramid wall **//
+			//if z+ and x- and x+ is a floor, and z- is a wall make a angled pyramid wall.
+			else if(neighbors[1].terrainType == 1 && neighbors[0].terrainType == 1 && neighbors[2].terrainType == 1 && neighbors[3].terrainType == 3)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockPyramidAngle");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,0,0));
+			}
+			//if z- and x- and x+ is a floor, and z+ is a wall make a angled pyramid wall.
+			else if(neighbors[3].terrainType == 1 && neighbors[0].terrainType == 1 && neighbors[2].terrainType == 1 && neighbors[1].terrainType == 3)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockPyramidAngle");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,180,0));
+			}
+			//if x+ and z- and z+ is a floor, and x- is a wall make a angled pyramid wall.
+			else if(neighbors[0].terrainType == 1 && neighbors[1].terrainType == 1 && neighbors[3].terrainType == 1 && neighbors[2].terrainType == 3)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockPyramidAngle");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,90,0));
+			}
+			//if x- and z- and z+ is a floor, and x+ is a wall make a angled pyramid wall.
+			else if(neighbors[2].terrainType == 1 && neighbors[1].terrainType == 1 && neighbors[3].terrainType == 1 && neighbors[0].terrainType == 3)
+			{
+				objectType = (GameObject)Resources.Load("Walls/softRockPyramidAngle");
+				objectStore = (GameObject)Instantiate(objectType,new Vector3(xPos,0,zPos),Quaternion.Euler(-90,-90,0));
 			}
 		}
 	}

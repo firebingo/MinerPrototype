@@ -1,5 +1,7 @@
 fileFormatVersion: 2
-guid: 100ed3b53c376b44f838dc948abe2d4a
+guid: 656dc8d07b3cd1943b5085323fa41358
+timeCreated: 1430802852
+licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
@@ -7,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Box001
+    4300000: Pyramid001
     9500000: //RootNode
   materials:
     importMaterials: 0
@@ -42,11 +44,11 @@ ModelImporter:
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
-    useFileScale: 0
+    useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 88
+    normalSmoothAngle: 60
     splitTangentsAcrossUV: 1
-    normalImportMode: 1
+    normalImportMode: 0
     tangentImportMode: 1
   importAnimation: 1
   copyAvatar: 0

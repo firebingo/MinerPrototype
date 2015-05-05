@@ -115,6 +115,18 @@ public class map1 : mapScript
 		map [8, 2].terrainType = 3;
 		map [8, 2].xPos = 8;
 		map [8, 2].zPos = 2;
+		map [9, 2].terrainType = 3;
+		map [9, 2].xPos = 9;
+		map [9, 2].zPos = 2;
+		map [2, 9].terrainType = 3;
+		map [2, 9].xPos = 2;
+		map [2, 9].zPos = 9;
+		map [16, 17].terrainType = 3;
+		map [16, 17].xPos = 16;
+		map [16, 17].zPos = 17;
+		map [17, 16].terrainType = 3;
+		map [17, 16].xPos = 17;
+		map [17, 16].zPos = 16;
 
 
 		map [4, 8].terrainType = 3;
@@ -132,6 +144,56 @@ public class map1 : mapScript
 		map [5, 10].terrainType = 3;
 		map [5, 10].xPos = 5;
 		map [5, 10].zPos = 10;
+		map [6, 8].terrainType = 3;
+		map [6, 8].xPos = 6;
+		map [6, 8].zPos = 8;
+
+		map [9, 5].terrainType = 3;
+		map [9, 5].xPos = 9;
+		map [9, 5].zPos = 5;
+		map [10, 5].terrainType = 3;
+		map [10, 5].xPos = 10;
+		map [10, 5].zPos = 5;
+		map [11, 4].terrainType = 3;
+		map [11, 4].xPos = 11;
+		map [11, 4].zPos = 4;
+		map [11, 5].terrainType = 3;
+		map [11, 5].xPos = 11;
+		map [11, 5].zPos = 5;
+		map [10, 7].terrainType = 3;
+		map [10, 7].xPos = 10;
+		map [10, 7].zPos = 7;
+		map [9, 7].terrainType = 3;
+		map [9, 7].xPos = 9;
+		map [9, 7].zPos = 7;
+		map [9, 8].terrainType = 3;
+		map [9, 8].xPos = 9;
+		map [9, 8].zPos = 8;
+		map [8, 5].terrainType = 3;
+		map [8, 5].xPos = 8;
+		map [8, 5].zPos = 5;
+		map [11, 7].terrainType = 3;
+		map [11, 7].xPos = 11;
+		map [11, 7].zPos = 7;
+		map [9, 6].terrainType = 3;
+		map [9, 6].xPos = 9;
+		map [9, 6].zPos = 6;
+		map [11, 6].terrainType = 3;
+		map [11, 6].xPos = 11;
+		map [11, 6].zPos = 6;
+		map [10, 6].terrainType = 3;
+		map [10, 6].xPos = 10;
+		map [10, 6].zPos = 6;
+		map [12, 7].terrainType = 3;
+		map [12, 7].xPos = 12;
+		map [12, 7].zPos = 7;
+		map [10, 4].terrainType = 3;
+		map [10, 4].xPos = 10;
+		map [10, 4].zPos = 4;
+		map [9, 4].terrainType = 3;
+		map [9, 4].xPos = 9;
+		map [9, 4].zPos = 4;
+
 	}
 
 	void deleteMap()
@@ -145,13 +207,28 @@ public class map1 : mapScript
 		}
 	}
 
+	//updates the whole map, very slow process
 	void updateMap()
 	{
 		for (int i = 0; i< width; ++i)
 		{
 			for (int j = 0; j< height; ++j)
 			{
-				map [i, j].terrainType = 0;
+				map [i, j].updateObjects();
+			}
+		}
+	}
+
+	//only updates squares in the area around a changed wall, faster than changing the whole map.
+	void updateSquare(int x, int z)
+	{
+		//map[x, z].updateObjects();
+		for(int i = 0; i < 4; ++i)
+		{
+			map[x,z].neighbors[i].updateObjects();
+			for(int j = 0; j < 4; ++j)
+			{
+				map[x,z].neighbors[i].neighbors[j].updateObjects();
 			}
 		}
 	}
@@ -171,8 +248,28 @@ public class map1 : mapScript
 	{
 		if (Input.GetKey(KeyCode.G))
 		{
-			Debug.Log("test");
+			Debug.Log("Map Deleted");
 			deleteMap();
+			updateMap();
+		}
+		if (Input.GetKey(KeyCode.H))
+		{
+			Debug.Log("Map Created");
+			deleteMap();
+			updateMap();
+			createMap();
+			updateMap();
+		}
+		if (Input.GetKey(KeyCode.J))
+		{
+			Debug.Log("Map Updated");
+			updateMap();
+		}
+		if (Input.GetKey(KeyCode.K))
+		{
+			Debug.Log("Square 10,6 changed to floor");
+			map[10,6].terrainType = 1;
+			updateSquare(10, 6);
 		}
 	}
 }

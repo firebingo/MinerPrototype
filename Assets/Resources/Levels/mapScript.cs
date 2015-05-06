@@ -8,6 +8,17 @@ public class mapScript : MonoBehaviour
 	public static int height;
 	public mapSquare[,] map;
 
+    //updates the whole map, very slow process
+    public void updateMap()
+    {
+        for (int i = 0; i < width; ++i)
+        {
+            for (int j = 0; j < height; ++j)
+            {
+                map[i, j].updateObjects();
+            }
+        }
+    }
 
 	/*
 

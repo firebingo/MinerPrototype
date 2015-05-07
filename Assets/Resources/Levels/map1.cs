@@ -35,45 +35,45 @@ public class map1 : mapScript
 			}
 		}
 		
-		//changes the edges of the map to roofs
+		//changes the edges of the map to walls
 		for (int i = 0; i < height; ++i)
 		{
-			map [0, i].terrainType = 2;
+			map [0, i].terrainType = 3;
 			map [0, i].xPos = 0;
 			map [0, i].zPos = i;
-			map [width - 1, i].terrainType = 2;
+			map [width - 1, i].terrainType = 3;
 			map [width - 1, i].xPos = width - 1;
 			map [width - 1, i].zPos = i;
 		}
 		for (int i = 0; i < width; ++i)
 		{
-			map [i, 0].terrainType = 2;
+			map [i, 0].terrainType = 3;
 			map [i, 0].xPos = i;
 			map [i, 0].zPos = 0;
-			map [i, height - 1].terrainType = 2;
+			map [i, height - 1].terrainType = 3;
 			map [i, height - 1].xPos = i;
 			map [i, height - 1].zPos = height - 1;
 		}
-		
-		//changes the inner edges to walls
-		for (int i = 1; i < height-1; ++i)
-		{
-			map [1, i].terrainType = 3;
-			map [1, i].xPos = 1;
-			map [1, i].zPos = i;
-			map [width - 2, i].terrainType = 3;
-			map [width - 2, i].xPos = width - 2;
-			map [width - 2, i].zPos = i;
-		}
-		for (int i = 1; i < width-1; ++i)
-		{
-			map [i, 1].terrainType = 3;
-			map [i, 1].xPos = i;
-			map [i, 1].zPos = 1;
-			map [i, height - 2].terrainType = 3;
-			map [i, height - 2].xPos = i;
-			map [i, height - 2].zPos = height - 2;
-		}
+
+        ////changes the inner edges to walls
+        //for (int i = 1; i < height - 1; ++i)
+        //{
+        //    map[1, i].terrainType = 3;
+        //    map[1, i].xPos = 1;
+        //    map[1, i].zPos = i;
+        //    map[width - 2, i].terrainType = 3;
+        //    map[width - 2, i].xPos = width - 2;
+        //    map[width - 2, i].zPos = i;
+        //}
+        //for (int i = 1; i < width - 1; ++i)
+        //{
+        //    map[i, 1].terrainType = 3;
+        //    map[i, 1].xPos = i;
+        //    map[i, 1].zPos = 1;
+        //    map[i, height - 2].terrainType = 3;
+        //    map[i, height - 2].xPos = i;
+        //    map[i, height - 2].zPos = height - 2;
+        //}
 		
 		// manual changing of map squares
 		map [3, 3].terrainType = 3;

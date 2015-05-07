@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 19470099966989a4fa47d3d07874d992
-timeCreated: 1430880876
+timeCreated: 1430958633
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -62,6 +62,12 @@ ModelImporter:
     100108: PyramidInsideCorner002
     100110: PyramidInsideCorner004
     100112: TripleICorner005
+    100114: PyramidAngke005
+    100116: PyramidAngke006
+    100118: QuadTop
+    100120: TriangleTop001
+    100122: TripleICorner006
+    100124: TripleICorner007
     400000: //RootNode
     400002: Corner
     400004: Corner001
@@ -119,6 +125,12 @@ ModelImporter:
     400108: PyramidInsideCorner002
     400110: PyramidInsideCorner004
     400112: TripleICorner005
+    400114: PyramidAngke005
+    400116: PyramidAngke006
+    400118: QuadTop
+    400120: TriangleTop001
+    400122: TripleICorner006
+    400124: TripleICorner007
     2300000: Corner
     2300002: Corner001
     2300004: DoubleCorner
@@ -175,6 +187,12 @@ ModelImporter:
     2300106: PyramidInsideCorner002
     2300108: PyramidInsideCorner004
     2300110: TripleICorner005
+    2300112: PyramidAngke005
+    2300114: PyramidAngke006
+    2300116: QuadTop
+    2300118: TriangleTop001
+    2300120: TripleICorner006
+    2300122: TripleICorner007
     3300000: Corner
     3300002: Corner001
     3300004: DoubleCorner
@@ -231,6 +249,12 @@ ModelImporter:
     3300106: PyramidInsideCorner002
     3300108: PyramidInsideCorner004
     3300110: TripleICorner005
+    3300112: PyramidAngke005
+    3300114: PyramidAngke006
+    3300116: QuadTop
+    3300118: TriangleTop001
+    3300120: TripleICorner006
+    3300122: TripleICorner007
     4300000: softRock
     4300002: Corner
     4300004: DoubleCorner
@@ -287,6 +311,12 @@ ModelImporter:
     4300106: PyramidInsideCorner002
     4300108: PyramidInsideCorner004
     4300110: TripleICorner005
+    4300112: PyramidAngke005
+    4300114: PyramidAngke006
+    4300116: QuadTop
+    4300118: TriangleTop001
+    4300120: TripleICorner006
+    4300122: TripleICorner007
     9500000: //RootNode
   materials:
     importMaterials: 1

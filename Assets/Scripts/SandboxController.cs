@@ -4,6 +4,7 @@ using System.Collections;
 public class SandboxController : MonoBehaviour {
 
     public mapScript mainMap = null;
+    public bool isActive;
 
 	// Use this for initialization
 	void Start () 
@@ -15,35 +16,43 @@ public class SandboxController : MonoBehaviour {
 	void Update () 
     {
         mainMap = (mapScript)FindObjectOfType(typeof(mapScript));
-	    if(Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.K))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 1 << 8))
+            isActive = !isActive;
+        }
+
+        if (isActive)
+        {
+            if (Input.GetMouseButtonDown(0))
             {
-                int xPos, zPos;
-                xPos = hit.collider.gameObject.GetComponent<WallInfo>().xPos;
-                zPos = hit.collider.gameObject.GetComponent<WallInfo>().zPos;
-                if(mainMap)
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 50, 1 << 8))
                 {
-                    mainMap.map[xPos, zPos].terrainType = 3;
-                    mainMap.updateMap();
+                    int xPos, zPos;
+                    xPos = hit.collider.gameObject.GetComponent<WallInfo>().xPos;
+                    zPos = hit.collider.gameObject.GetComponent<WallInfo>().zPos;
+                    if (mainMap)
+                    {
+                        mainMap.map[xPos, zPos].terrainType = 3;
+                        mainMap.updateMap();
+                    }
                 }
             }
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 1 << 8))
+            if (Input.GetMouseButtonDown(1))
             {
-                int xPos, zPos;
-                xPos = hit.collider.gameObject.GetComponent<WallInfo>().xPos;
-                zPos = hit.collider.gameObject.GetComponent<WallInfo>().zPos;
-                if (mainMap)
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 50, 1 << 8))
                 {
-                    mainMap.map[xPos, zPos].terrainType = 1;
-                    mainMap.updateMap();
+                    int xPos, zPos;
+                    xPos = hit.collider.gameObject.GetComponent<WallInfo>().xPos;
+                    zPos = hit.collider.gameObject.GetComponent<WallInfo>().zPos;
+                    if (mainMap)
+                    {
+                        mainMap.map[xPos, zPos].terrainType = 1;
+                        mainMap.updateMap();
+                    }
                 }
             }
         }

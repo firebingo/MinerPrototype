@@ -265,11 +265,5 @@ public class map1 : mapScript
 			Debug.Log("Map Updated");
 			updateMap();
 		}
-		if (Input.GetKey(KeyCode.K))
-		{
-			Debug.Log("Square 10,6 changed to floor");
-			map[10,6].terrainType = 1;
-			updateSquare(10, 6);
-		}
 	}
 }

@@ -7,8 +7,8 @@ public class map1 : mapScript
 	void createMap()
 	{
 		//creates the map
-		for (int i = 0; i < width; ++i)
-		{
+        for (int i = 0; i < width; ++i)
+        {
 			for (int j = 0; j < height; ++j)
 			{
 				map [i, j] = gameObject.AddComponent<mapSquare>();
@@ -207,38 +207,14 @@ public class map1 : mapScript
 		}
 	}
 
-    ////updates the whole map, very slow process
-    //public void updateMap()
-    //{
-    //    for (int i = 0; i< width; ++i)
-    //    {
-    //        for (int j = 0; j< height; ++j)
-    //        {
-    //            map [i, j].updateObjects();
-    //        }
-    //    }
-    //}
-
-	//only updates squares in the area around a changed wall, faster than changing the whole map.
-	void updateSquare(int x, int z)
-	{
-		//map[x, z].updateObjects();
-		for(int i = 0; i < 4; ++i)
-		{
-			map[x,z].neighbors[i].updateObjects();
-			for(int j = 0; j < 4; ++j)
-			{
-				map[x,z].neighbors[i].neighbors[j].updateObjects();
-			}
-		}
-	}
-
 	// Use this for initialization
 	void Start()
 	{
-		width = 20;
-		height = 20;
+		width = 50;
+		height = 50;
 		map = new mapSquare[width, height];
+
+        gameMaster = FindObjectOfType<GameController>();
 
 		createMap();
 	}

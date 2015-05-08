@@ -15,24 +15,25 @@ public class BasicMiner : Miner
 
     protected override void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(selected)
         {
-            selection();
-        }
-        if (selected)
-        {
-            Material objMat = GetComponentInChildren<Renderer>().material;
-            objMat.SetColor("_Color", new Color(0.15f, 1.0f, 0.0f, origColor.a));
-
             if (Input.GetMouseButtonDown(1))
             {
                 moveTo();
             }
         }
-        else
+        if (selected && selectionChange)
+        {
+            Material objMat = GetComponentInChildren<Renderer>().material;
+            objMat.SetColor("_Color", new Color(0.15f, 1.0f, 0.0f, origColor.a));
+
+            selectionChange = false;
+        }
+        else if(selectionChange)
         {
             Material objMat = GetComponentInChildren<Renderer>().material;
             objMat.SetColor("_Color", origColor);
+            selectionChange = false;
         }
         
     }

@@ -12,19 +12,49 @@ public class WallInfo : Entity
     // 5 = hardrock
     // 6 = solidrock
 
-    protected override void Start()
-    {
-       
-    }
-
-    protected override void Update()
-    {
-
-    } 
-
     public int xPos;
     public int zPos;
     public int terrainType;
     public int tileValue;
     public mapSquare parentSquare;
+
+    
+
+    Color origColor;
+
+    protected override void Start()
+    {
+        selected = false;
+
+        gameMaster = parentSquare.gameMaster;
+
+        Material objMat = GetComponentInChildren<Renderer>().material;
+        origColor = objMat.GetColor("_Color");
+        selectionChange = false;
+    }
+
+    protected override void Update()
+    {
+        if (terrainType != 6)
+        {
+            if (selected && selectionChange)
+            {
+                Material objMat = GetComponentInChildren<Renderer>().material;
+                objMat.SetColor("_Color", new Color(origColor.r - 0.2f, origColor.g - 0.2f, origColor.b - 0.2f, origColor.a));
+                selectionChange = false;
+            }
+            else if (selectionChange)
+            {
+                Material objMat = GetComponentInChildren<Renderer>().material;
+                objMat.SetColor("_Color", origColor);
+                selectionChange = false;
+            }
+        }
+    }
+
+    public void selection()
+    {
+        selected = true;
+        gameMaster.selectedEntity = this;
+    }
 }

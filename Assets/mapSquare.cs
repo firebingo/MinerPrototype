@@ -25,6 +25,8 @@ public class mapSquare : MonoBehaviour
     int tileValue;
     int tempTileValue;
 
+    public GameController gameMaster;
+
     bool hidden = false;
 
     //this method should only be called when absolutly needed as it is very very slow.
@@ -659,6 +661,8 @@ public class mapSquare : MonoBehaviour
         }
 
         updateObjects();
+
+        gameMaster = parentMap.gameMaster;
     }
 
     // Update is called once per frame

@@ -4,6 +4,7 @@ using System.Collections;
 public abstract class Entity : MonoBehaviour
 {
     public bool selected;
+    public bool selectionChange;
     public GameController gameMaster;
 
     // Use this for initialization

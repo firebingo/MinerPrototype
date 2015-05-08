@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GameController : MonoBehaviour
 {
+    public SandboxController sandCont;
+    public Selector gSelector;
 
     public bool objectSelected;
     public Entity selectedEntity;
@@ -14,7 +16,7 @@ public class GameController : MonoBehaviour
 
     // Use this for initialization
     void Start()
-    { 
+    {
         objectSelected = false;
     }
 

@@ -7,9 +7,14 @@ public class SandboxController : MonoBehaviour {
     public bool isActive;
     int terrainType;
 
+    GameController gameMaster;
+
 	// Use this for initialization
 	void Start () 
     {
+        gameMaster = FindObjectOfType<GameController>();
+        gameMaster.sandCont = this;
+
         terrainType = 3;
 	}
 	
@@ -36,7 +41,7 @@ public class SandboxController : MonoBehaviour {
                     if (mainMap)
                     {
                         mainMap.map[xPos, zPos].terrainType = terrainType;
-                        mainMap.updateMap();
+                        mainMap.updateSquare(xPos, zPos);
                     }
                 }
             }
@@ -52,7 +57,7 @@ public class SandboxController : MonoBehaviour {
                     if (mainMap)
                     {
                         mainMap.map[xPos, zPos].terrainType = 1;
-                        mainMap.updateMap();
+                        mainMap.updateSquare(xPos, zPos);
                     }
                 }
             }

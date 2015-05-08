@@ -39,7 +39,7 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 191244}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_Materials:
   - {fileID: 2100000, guid: 91337a5be0fb8e94c8b85c7707d63506, type: 2}
@@ -103,10 +103,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee80d34c70847b247ab42b203c4c9691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selected: 0
+  gameMaster: {fileID: 0}
   xPos: 0
   zPos: 0
   terrainType: 0
   tileValue: 0
+  parentSquare: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

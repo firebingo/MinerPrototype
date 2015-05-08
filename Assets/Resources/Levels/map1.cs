@@ -35,22 +35,22 @@ public class map1 : mapScript
 			}
 		}
 		
-		//changes the edges of the map to walls
+		//changes the edges of the map to solid walls
 		for (int i = 0; i < height; ++i)
 		{
-			map [0, i].terrainType = 3;
+			map [0, i].terrainType = 6;
 			map [0, i].xPos = 0;
 			map [0, i].zPos = i;
-			map [width - 1, i].terrainType = 3;
+			map [width - 1, i].terrainType = 6;
 			map [width - 1, i].xPos = width - 1;
 			map [width - 1, i].zPos = i;
 		}
 		for (int i = 0; i < width; ++i)
 		{
-			map [i, 0].terrainType = 3;
+			map [i, 0].terrainType = 6;
 			map [i, 0].xPos = i;
 			map [i, 0].zPos = 0;
-			map [i, height - 1].terrainType = 3;
+			map [i, height - 1].terrainType = 6;
 			map [i, height - 1].xPos = i;
 			map [i, height - 1].zPos = height - 1;
 		}

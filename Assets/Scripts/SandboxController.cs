@@ -5,11 +5,12 @@ public class SandboxController : MonoBehaviour {
 
     public mapScript mainMap = null;
     public bool isActive;
+    int terrainType;
 
 	// Use this for initialization
 	void Start () 
     {
-       
+        terrainType = 3;
 	}
 	
 	// Update is called once per frame
@@ -34,7 +35,7 @@ public class SandboxController : MonoBehaviour {
                     zPos = hit.collider.gameObject.GetComponent<WallInfo>().zPos;
                     if (mainMap)
                     {
-                        mainMap.map[xPos, zPos].terrainType = 3;
+                        mainMap.map[xPos, zPos].terrainType = terrainType;
                         mainMap.updateMap();
                     }
                 }
@@ -54,6 +55,14 @@ public class SandboxController : MonoBehaviour {
                         mainMap.updateMap();
                     }
                 }
+            }
+            if(Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                terrainType = 3;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                terrainType = 6;
             }
         }
 	}

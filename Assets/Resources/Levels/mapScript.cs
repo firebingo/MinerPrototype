@@ -15,7 +15,8 @@ public class mapScript : MonoBehaviour
         {
             for (int j = 0; j < height; ++j)
             {
-                map[i, j].updateObjects();
+                if(map[i,j].terrainType != 2)
+                    map[i, j].updateObjects();
             }
         }
     }

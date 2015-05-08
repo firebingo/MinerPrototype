@@ -27,8 +27,11 @@ public class Miner : Entity
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 50, 1 << 9))
             {
-                selected = true;
-                gameMaster.selectedEntity = this;
+                if (hit.collider.gameObject == this.gameObject)
+                {
+                    selected = true;
+                    gameMaster.selectedEntity = this;
+                }
             }
         }
     }

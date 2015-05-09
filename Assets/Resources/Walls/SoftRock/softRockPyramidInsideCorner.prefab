@@ -31,7 +31,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 485966}
   - 135: {fileID: 13556334}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DrillZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 448408}
   - 135: {fileID: 13535344}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DrillZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,11 +179,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selected: 0
+  selectionChange: 0
   gameMaster: {fileID: 0}
   xPos: 0
   zPos: 0
   terrainType: 0
   tileValue: 0
+  parentSquare: {fileID: 0}
+  oQueue: {fileID: 0}
 --- !u!135 &13535344
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -194,7 +197,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: .100000001
+  m_Radius: .200000003
   m_Center: {x: 0, y: .100000001, z: 0}
 --- !u!135 &13556334
 SphereCollider:
@@ -206,7 +209,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: .100000001
+  m_Radius: .200000003
   m_Center: {x: 0, y: .100000001, z: 0}
 --- !u!208 &20847212
 NavMeshObstacle:

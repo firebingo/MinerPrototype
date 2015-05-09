@@ -210,8 +210,8 @@ public class map1 : mapScript
 	// Use this for initialization
 	void Start()
 	{
-		width = 50;
-		height = 50;
+		width = 20;
+		height = 20;
 		map = new mapSquare[width, height];
 
         gameMaster = FindObjectOfType<GameController>();

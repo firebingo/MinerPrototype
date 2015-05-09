@@ -3,6 +3,10 @@ using System.Collections;
 
 public class Miner : Entity
 {
+    public NavMeshAgent navAgent;
+    public Order currentOrder;
+    public bool doingOrder;
+
     protected override void Start()
     {
         gameMaster = FindObjectOfType<GameController>();
@@ -22,15 +26,23 @@ public class Miner : Entity
 
     protected void moveTo()
     {
+        if(navAgent == null)
+            navAgent = GetComponent<NavMeshAgent>();
+
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 50, 1 << 8))
         {
             if (hit.collider.name.ToString() == "floor(Clone)")
             {
-                this.GetComponent<NavMeshAgent>().SetDestination(hit.point);
-
+                navAgent.SetDestination(hit.point);
             }
         }
+    }
+
+    public override void queueOrder()
+    {
+        throw new System.NotImplementedException();
     }
 }

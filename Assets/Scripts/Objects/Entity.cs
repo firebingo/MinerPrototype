@@ -12,4 +12,6 @@ public abstract class Entity : MonoBehaviour
 
     // Update is called once per frame
     protected abstract void Update();
+
+    public abstract void queueOrder();
 }

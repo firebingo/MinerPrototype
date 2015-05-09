@@ -208,11 +208,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selected: 0
+  selectionChange: 0
   gameMaster: {fileID: 0}
   xPos: 0
   zPos: 0
   terrainType: 0
   tileValue: 0
+  parentSquare: {fileID: 0}
+  oQueue: {fileID: 0}
 --- !u!135 &13528710
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -223,7 +226,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: .100000001
+  m_Radius: .200000003
   m_Center: {x: 0, y: .100000001, z: 0}
 --- !u!135 &13557932
 SphereCollider:
@@ -235,7 +238,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: .100000001
+  m_Radius: .200000003
   m_Center: {x: 0, y: .100000001, z: 0}
 --- !u!135 &13594254
 SphereCollider:
@@ -247,7 +250,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: .100000001
+  m_Radius: .200000003
   m_Center: {x: 0, y: .100000001, z: 0}
 --- !u!208 &20823388
 NavMeshObstacle:

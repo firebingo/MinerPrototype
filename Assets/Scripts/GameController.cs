@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour
     public bool objectSelected;
     public Entity selectedEntity;
 
+    public orderQueue oQueue;
+
     void Awake()
     {
         DontDestroyOnLoad(transform.gameObject);

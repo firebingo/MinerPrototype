@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class mapSquare : MonoBehaviour
 {
@@ -33,8 +34,17 @@ public class mapSquare : MonoBehaviour
     //this method should only be called when absolutly needed as it is very very slow.
     public void updateObjects()
     {
+        bool updateOrder = false;
+        WallInfo pastWallinfo = null;
+
         if (objectStore != null)
         {
+            if(objectStore.GetComponent<WallInfo>().inQueue)
+            {
+                updateOrder = true;
+                pastWallinfo = objectStore.GetComponent<WallInfo>();
+            }
+
             Destroy(objectStore);
         }
 
@@ -450,6 +460,24 @@ public class mapSquare : MonoBehaviour
             objectWallInfo.terrainType = terrainType;
             objectWallInfo.tileValue = tempTileValue;
             objectWallInfo.parentSquare = this;
+
+            if(updateOrder)
+            {
+                Order drillWall = new Order();
+                List<Vector3> drillZones = new List<Vector3>();
+                for (int i = 0; i < transform.childCount; ++i)
+                {
+                    drillZones.Add(transform.GetChild(i).transform.position);
+                }
+                drillWall.initOrder(3, pastWallinfo.drillZones, pastWallinfo);
+
+                Order findOrder = gameMaster.oQueue.drillQueue.Find(drillWall).Value;
+
+                if(findOrder != null)
+                {
+                    Order tempOrder = 
+                }
+            }
         }
     }
 

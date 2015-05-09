@@ -31,7 +31,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 427538}
   - 135: {fileID: 13556566}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DrillZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 468180}
   - 135: {fileID: 13543238}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DrillZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 496910}
   - 135: {fileID: 13579900}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DrillZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -79,7 +79,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 480914}
   - 135: {fileID: 13515480}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DrillZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,10 +236,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee80d34c70847b247ab42b203c4c9691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selected: 0
+  selectionChange: 0
+  gameMaster: {fileID: 0}
   xPos: 0
   zPos: 0
   terrainType: 0
   tileValue: 0
+  parentSquare: {fileID: 0}
+  oQueue: {fileID: 0}
 --- !u!135 &13515480
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -250,7 +255,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: .100000001
+  m_Radius: .200000003
   m_Center: {x: 0, y: .100000001, z: 0}
 --- !u!135 &13543238
 SphereCollider:
@@ -262,7 +267,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: .100000001
+  m_Radius: .200000003
   m_Center: {x: 0, y: .100000001, z: 0}
 --- !u!135 &13556566
 SphereCollider:
@@ -274,7 +279,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: .100000001
+  m_Radius: .200000003
   m_Center: {x: 0, y: .100000001, z: 0}
 --- !u!135 &13579900
 SphereCollider:
@@ -286,7 +291,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: .100000001
+  m_Radius: .200000003
   m_Center: {x: 0, y: .100000001, z: 0}
 --- !u!208 &20814144
 NavMeshObstacle:

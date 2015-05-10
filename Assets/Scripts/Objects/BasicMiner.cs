@@ -7,8 +7,11 @@ public class BasicMiner : Miner
 
     public bool drilling;
     Collider drillingZone;
+    public bool carrying;
+    Entity carriedObject;
 
     int orderXPos;
+    float orderTime;
 
     protected override void Start()
     {
@@ -53,6 +56,20 @@ public class BasicMiner : Miner
             findOrder();
         }
 
+        if (currentOrder != null && navAgent != null)
+        {
+            if (navAgent.remainingDistance == 0 && orderTime > 0.3f && currentOrder.orderType == 3 && drilling == false)
+            {
+                currentOrder = null;
+                doingOrder = false;
+            }
+        }
+
+        if(doingOrder)
+            orderTime += Time.deltaTime;
+        else
+            orderTime = 0;
+
     }
     public override void queueOrder()
     {
@@ -67,13 +84,36 @@ public class BasicMiner : Miner
             WallInfo tempInfo = currentOrder.parentObject as WallInfo;
             orderXPos = tempInfo.xPos;
         }
+        else if (gameMaster.oQueue.crystalQueue.Count > 0)
+        {
+            currentOrder = gameMaster.oQueue.crystalQueue.Dequeue();
+        }
+        else if(gameMaster.oQueue.oreQueue.Count > 0)
+        {
+            currentOrder = gameMaster.oQueue.oreQueue.Dequeue();
+        }
     }
 
     public void doOrder()
     {
         doingOrder = true;
         
-        if (currentOrder.orderType == 3)
+        if(currentOrder.orderType == 1 && !carrying)
+        {
+            if (navAgent == null)
+                navAgent = GetComponent<NavMeshAgent>();
+
+            navAgent.SetDestination(currentOrder.destination[0]);
+        }
+        if (currentOrder.orderType == 2 && !carrying)
+        {
+            if (navAgent == null)
+                navAgent = GetComponent<NavMeshAgent>();
+
+            navAgent.SetDestination(currentOrder.destination[0]);
+        }
+
+        if (currentOrder.orderType == 3) 
         {
             if (navAgent == null)
                 navAgent = GetComponent<NavMeshAgent>();
@@ -89,6 +129,7 @@ public class BasicMiner : Miner
 
             navAgent.SetDestination(shortestZone);
         }
+
     }
 
     void OnTriggerEnter(Collider other)
@@ -106,16 +147,57 @@ public class BasicMiner : Miner
         {
             drillingZone = other;
         }
+        else if (other.name == "Ore(Clone)" && currentOrder != null)
+        {
+            if(other.GetComponent<Ore>() == currentOrder.parentObject)
+            {
+                other.transform.position = new Vector3(transform.FindChild("CarrySpot").transform.position.x, transform.FindChild("CarrySpot").transform.position.y, transform.FindChild("CarrySpot").transform.position.z);
+                other.transform.parent = this.gameObject.transform;
+                carrying = true;
+                carriedObject = other.GetComponent<Ore>();
+                navAgent.SetDestination(gameMaster.mapStock.transform.position);
+            }
+        }
+        else if (other.name == "Crystal(Clone)" && currentOrder != null)
+        {
+            if (other.GetComponent<Crystal>() == currentOrder.parentObject)
+            {
+                other.transform.position = new Vector3(transform.FindChild("CarrySpot").transform.position.x, transform.FindChild("CarrySpot").transform.position.y, transform.FindChild("CarrySpot").transform.position.z);
+                other.transform.parent = this.gameObject.transform;
+                carrying = true;
+                carriedObject = other.GetComponent<Crystal>();
+                navAgent.SetDestination(gameMaster.mapStock.transform.position);
+            }
+        }
+        else if (other.name == "StockPile" && currentOrder != null && carrying)
+        {
+            carriedObject.transform.parent = null;
+            if (carriedObject.name == "Ore(Clone)")
+                carriedObject.transform.position = new Vector3(gameMaster.mapStock.transform.position.x + Random.Range(-0.3f, 0.3f), 0.06f, gameMaster.mapStock.transform.position.z + Random.Range(-0.3f, 0.3f));
+            if (carriedObject.name == "Crystal(Clone)")
+                carriedObject.transform.position = new Vector3(gameMaster.mapStock.transform.position.x + Random.Range(-0.3f, 0.3f), 0.032f, gameMaster.mapStock.transform.position.z + Random.Range(-0.3f, 0.3f));
+            carrying = false;
+            carriedObject = null;
+            currentOrder = null;
+            doingOrder = false;
+            orderTime = 0;
+            navAgent.SetDestination(transform.position);
+        }
     }
 
     IEnumerator drillTime()
     {
         yield return new WaitForSeconds(4.0f);
-        if (drillingZone.gameObject.transform.parent.gameObject.GetComponent<WallInfo>())
-            drillingZone.gameObject.transform.parent.gameObject.GetComponent<WallInfo>().destroyWall();
+        if (drillingZone)
+        {
+            if (drillingZone.gameObject.transform.parent.gameObject.GetComponent<WallInfo>())
+                drillingZone.gameObject.transform.parent.gameObject.GetComponent<WallInfo>().destroyWall();
+        }
         currentOrder = null;
         doingOrder = false;
         drilling = false;
+        orderTime = 0.0f;
+        orderXPos = -1;
     }
 
 }

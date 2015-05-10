@@ -164,7 +164,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 445150, guid: 184e6b8768dc96b4ea128712ac73efa4, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 184e6b8768dc96b4ea128712ac73efa4, type: 2}
@@ -314,7 +314,7 @@ Light:
     m_Type: 1
     m_Resolution: -1
     m_Strength: .824999988
-    m_Bias: 0
+    m_Bias: .100000001
     m_NormalBias: 0
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
@@ -430,6 +430,58 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canSelect: 0
+--- !u!1 &1246832012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1246832013}
+  - 65: {fileID: 1246832014}
+  - 114: {fileID: 1246832015}
+  m_Layer: 0
+  m_Name: StockPile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1246832013
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1246832012}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.62800002, y: 0, z: 1.62800002}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+--- !u!65 &1246832014
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1246832012}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: .5, y: 1, z: .5}
+  m_Center: {x: 0, y: .25, z: 0}
+--- !u!114 &1246832015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1246832012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c697cb3ccf1634ca8cfaa0943485e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1540404387
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,7 +667,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 445150, guid: 184e6b8768dc96b4ea128712ac73efa4, type: 2}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 199908, guid: 184e6b8768dc96b4ea128712ac73efa4, type: 2}
       propertyPath: m_Name
@@ -660,6 +712,7 @@ MonoBehaviour:
   objectSelected: 0
   selectedEntity: {fileID: 0}
   oQueue: {fileID: 0}
+  mapStock: {fileID: 0}
 --- !u!4 &1704767286
 Transform:
   m_ObjectHideFlags: 0

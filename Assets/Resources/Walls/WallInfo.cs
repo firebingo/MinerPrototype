@@ -18,7 +18,9 @@ public class WallInfo : Entity
     public int zPos;
     public int terrainType;
     public int tileValue;
+    public int crystalCount;
     public mapSquare parentSquare;
+
     public orderQueue oQueue;
     public bool inQueue;
     Miner hasOrder;
@@ -74,7 +76,7 @@ public class WallInfo : Entity
 
     public override void queueOrder()
     {
-        if (!inQueue)
+        if (!inQueue && terrainType != 1)
         {
             Order drillWall = new Order();
             for (int i = 0; i < transform.childCount; ++i)
@@ -88,10 +90,24 @@ public class WallInfo : Entity
         }
     }
 
+    public override void queueOrder(Vector3 destination) { }
+
     public void destroyWall()
     {
+        if(crystalCount > 0)
+        {
+            for(int i = 0; i < crystalCount; ++i)
+            {
+                Instantiate(Resources.Load("Objects/Crystal"), new Vector3(Random.Range(transform.position.x - 0.15f, transform.position.x + 0.15f), 0.032f, Random.Range(transform.position.z - 0.15f, transform.position.z + 0.15f)), Quaternion.Euler(0, 0, 0));
+            }
+        }
+        for (int i = 0; i < 3; ++i)
+        {
+            Instantiate(Resources.Load("Objects/Ore"), new Vector3(Random.Range(transform.position.x - 0.15f, transform.position.x + 0.15f), 0.06f, Random.Range(transform.position.z - 0.15f, transform.position.z + 0.15f)), Quaternion.Euler(0, 0, 0));
+        }
         inQueue = false;
         parentSquare.parentMap.map[parentSquare.xPos, parentSquare.zPos].terrainType = 1;
         parentSquare.parentMap.updateSquare(parentSquare.xPos, parentSquare.zPos);
     }
+
 }

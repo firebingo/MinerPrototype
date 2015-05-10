@@ -14,4 +14,5 @@ public abstract class Entity : MonoBehaviour
     protected abstract void Update();
 
     public abstract void queueOrder();
+    public abstract void queueOrder(Vector3 destination);
 }

@@ -26,7 +26,7 @@ public class orderQueue : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log(drillQueue.Count);
+            Debug.Log(crystalQueue.Count);
         }
     }
 

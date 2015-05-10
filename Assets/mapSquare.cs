@@ -26,6 +26,8 @@ public class mapSquare : MonoBehaviour
     int tileValue;
     int tempTileValue;
 
+    public int crystalCount;
+
     public GameController gameMaster;
 
     bool hidden = false;
@@ -450,6 +452,7 @@ public class mapSquare : MonoBehaviour
             objectWallInfo.terrainType = terrainType;
             objectWallInfo.tileValue = tempTileValue;
             objectWallInfo.parentSquare = this;
+            objectWallInfo.crystalCount = crystalCount;
         }
     }
 

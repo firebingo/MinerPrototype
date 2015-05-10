@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public Entity selectedEntity;
 
     public orderQueue oQueue;
+    public StockPile mapStock;
 
     void Awake()
     {

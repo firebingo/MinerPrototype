@@ -41,8 +41,6 @@ public class Miner : Entity
         }
     }
 
-    public override void queueOrder()
-    {
-        throw new System.NotImplementedException();
-    }
+    public override void queueOrder() { }
+    public override void queueOrder(Vector3 destination) { }
 }

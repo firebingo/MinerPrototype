@@ -13,7 +13,7 @@ public class BasicMiner : Miner
     int orderXPos;
     float orderTime;
 
-    float navSpeed;
+    
 
     protected override void Start()
     {

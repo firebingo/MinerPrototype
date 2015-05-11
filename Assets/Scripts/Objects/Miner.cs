@@ -6,6 +6,7 @@ public class Miner : Entity
     public NavMeshAgent navAgent;
     public Order currentOrder;
     public bool doingOrder;
+    protected float navSpeed;
 
     protected override void Start()
     {
@@ -26,8 +27,11 @@ public class Miner : Entity
 
     protected void moveTo()
     {
-        if(navAgent == null)
+        if (navAgent == null)
+        {
             navAgent = GetComponent<NavMeshAgent>();
+            navSpeed = navAgent.speed;
+        }
 
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

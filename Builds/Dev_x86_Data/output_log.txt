@@ -2,25 +2,24 @@ Initialize engine version: 5.0.1f1 (5a2e8fe35a68)
 GfxDevice: creating device client; threaded=1
 Direct3D:
     Version:  Direct3D 11.0 [level 11.0]
-    Renderer: NVIDIA GeForce GTX 850M      (ID=0x1391)
+    Renderer: NVIDIA GeForce GTX 980 (ID=0x13c0)
     Vendor:   NVIDIA
-    VRAM:     1972 MB
+    VRAM:     3072 MB
 Begin MonoManager ReloadAssembly
-Platform assembly: C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
-Loading C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
-Platform assembly: C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-Platform assembly: C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.052 seconds
-desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+Platform assembly: F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\Assembly-CSharp-firstpass.dll (this message is harmless)
+Loading F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\Assembly-CSharp-firstpass.dll into Unity Child Domain
+Platform assembly: F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+- Completed reload, in  0.031 seconds
+desktop: 1920x1080 100Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-Platform assembly: C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: C:\Users\Matt\Documents\school\RockRaiders\UnityTest\Builds\Dev_x86_Data\Managed\System.dll (this message is harmless)
-Waiting for finish
+Platform assembly: F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: F:\UnityProjects\MinerPrototype\Builds\Dev_x86_Data\Managed\System.dll (this message is harmless)

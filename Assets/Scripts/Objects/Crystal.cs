@@ -27,4 +27,20 @@ public class Crystal : Entity
         gameMaster.oQueue.crystalQueue.Enqueue(carryCry);
     }
     public override void queueOrder() { }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.name == "StockPile")
+        {
+            ++gameMaster.crystalCount;
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.name == "StockPile")
+        {
+            --gameMaster.crystalCount;
+        }
+    }
 }

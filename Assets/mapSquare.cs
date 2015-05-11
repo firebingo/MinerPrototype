@@ -668,10 +668,4 @@ public class mapSquare : MonoBehaviour
 
         gameMaster = parentMap.gameMaster;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

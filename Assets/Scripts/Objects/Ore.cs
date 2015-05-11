@@ -28,4 +28,20 @@ public class Ore : Entity
         gameMaster.oQueue.oreQueue.Enqueue(carryOre);
     }
     public override void queueOrder() { }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.name == "StockPile")
+        {
+            ++gameMaster.oreCount;
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.name == "StockPile")
+        {
+            --gameMaster.oreCount;
+        }
+    }
 }

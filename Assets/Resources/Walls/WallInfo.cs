@@ -72,6 +72,7 @@ public class WallInfo : Entity
     {
         selected = true;
         gameMaster.selectedEntity = this;
+        //gameMaster.gameUI.transform.FindChild("Drill").gameObject.SetActive(true);
     }
 
     public override void queueOrder()

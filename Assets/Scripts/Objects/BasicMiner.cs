@@ -13,6 +13,8 @@ public class BasicMiner : Miner
     int orderXPos;
     float orderTime;
 
+    float navSpeed;
+
     protected override void Start()
     {
         gameMaster = FindObjectOfType<GameController>();
@@ -101,14 +103,20 @@ public class BasicMiner : Miner
         if(currentOrder.orderType == 1 && !carrying)
         {
             if (navAgent == null)
+            {
                 navAgent = GetComponent<NavMeshAgent>();
+                navSpeed = navAgent.speed;
+            }
 
             navAgent.SetDestination(currentOrder.destination[0]);
         }
         if (currentOrder.orderType == 2 && !carrying)
         {
             if (navAgent == null)
+            {
                 navAgent = GetComponent<NavMeshAgent>();
+                navSpeed = navAgent.speed;
+            }
 
             navAgent.SetDestination(currentOrder.destination[0]);
         }
@@ -116,7 +124,10 @@ public class BasicMiner : Miner
         if (currentOrder.orderType == 3) 
         {
             if (navAgent == null)
+            {
                 navAgent = GetComponent<NavMeshAgent>();
+                navSpeed = navAgent.speed;
+            }
 
             Vector3 shortestZone;
             shortestZone = currentOrder.destination[0];
@@ -155,6 +166,7 @@ public class BasicMiner : Miner
                 other.transform.parent = this.gameObject.transform;
                 carrying = true;
                 carriedObject = other.GetComponent<Ore>();
+                navAgent.speed = navSpeed / 2;
                 navAgent.SetDestination(gameMaster.mapStock.transform.position);
             }
         }
@@ -166,6 +178,7 @@ public class BasicMiner : Miner
                 other.transform.parent = this.gameObject.transform;
                 carrying = true;
                 carriedObject = other.GetComponent<Crystal>();
+                navAgent.speed = navSpeed / 2;
                 navAgent.SetDestination(gameMaster.mapStock.transform.position);
             }
         }
@@ -181,6 +194,7 @@ public class BasicMiner : Miner
             currentOrder = null;
             doingOrder = false;
             orderTime = 0;
+            navAgent.speed = navSpeed;  
             navAgent.SetDestination(transform.position);
         }
     }

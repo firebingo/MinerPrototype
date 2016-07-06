@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Crystal : Entity
+public class Ore : Entity
 {
+    // Use this for initialization
     protected override void Start()
     {
-        gameMaster = FindObjectOfType<GameController>();
-        queueOrder(gameMaster.mapStock.transform.position);
+        queueOrder(GameController._instance.mapStock.transform.position);
     }
 
     // Update is called once per frame
@@ -18,21 +18,21 @@ public class Crystal : Entity
 
     public override void queueOrder(Vector3 destination)
     {
-        Order carryCry = new Order();
+        Order carryOre = new Order();
         List<Vector3> dests = new List<Vector3>();
         dests.Add(transform.position);
         dests.Add(destination);
-        carryCry.initOrder(2, dests, this);
+        carryOre.initOrder(1, dests, this);
 
-        gameMaster.oQueue.crystalQueue.Enqueue(carryCry);
+		GameController._instance.oQueue.oreQueue.Enqueue(carryOre);
     }
     public override void queueOrder() { }
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.name == "StockPile")
+        if(other.name == "StockPile")
         {
-            ++gameMaster.crystalCount;
+            ++GameController._instance.oreCount;
         }
     }
 
@@ -40,7 +40,7 @@ public class Crystal : Entity
     {
         if (other.name == "StockPile")
         {
-            --gameMaster.crystalCount;
+            --GameController._instance.oreCount;
         }
     }
 }

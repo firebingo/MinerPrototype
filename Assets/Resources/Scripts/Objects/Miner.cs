@@ -10,7 +10,6 @@ public class Miner : Entity
 
     protected override void Start()
     {
-        gameMaster = FindObjectOfType<GameController>();
         selected = false;
     }
 
@@ -22,7 +21,7 @@ public class Miner : Entity
     public void selection()
     {
         selected = true;
-        gameMaster.selectedEntity = this;
+        GameController._instance.selectedEntity = this;
     }
 
     protected void moveTo()

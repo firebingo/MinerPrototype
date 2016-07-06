@@ -3,7 +3,6 @@ using System.Collections;
 
 public class mapScript : MonoBehaviour
 {
-
     public static int width;
     public static int height;
     public mapSquare[,] map;
@@ -17,7 +16,7 @@ public class mapScript : MonoBehaviour
         {
             for (int j = 0; j < height; ++j)
             {
-                if (map[i, j].terrainType != 2)
+                if (map[i, j].terrainType != terrainType.floor)
                     map[i, j].updateObjects();
             }
         }

@@ -4,6 +4,8 @@ using System.Collections;
 
 public class GameController : MonoBehaviour
 {
+	public static GameController _instance;
+
     public SandboxController sandCont;
     public Selector gSelector;
 
@@ -21,6 +23,14 @@ public class GameController : MonoBehaviour
 
     void Awake()
     {
+		if(_instance)
+		{
+			Destroy(this.gameObject);
+		}
+		else
+		{
+			_instance = this;
+		}
         DontDestroyOnLoad(transform.gameObject);
     }
 

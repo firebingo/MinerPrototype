@@ -46,7 +46,7 @@ public class Selector : MonoBehaviour
                 else if (Physics.Raycast(ray, out hit, 50, 1 << 8))
                 {
                     WallInfo selection = hit.collider.GetComponent<WallInfo>();
-                    if (selection.terrainType != 6)
+                    if (selection.terrainType != terrainType.solidrock)
                     {
                         if (gameMaster.selectedEntity)
                         {

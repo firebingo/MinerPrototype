@@ -13,12 +13,8 @@ public class BasicMiner : Miner
     int orderXPos;
     float orderTime;
 
-    
-
     protected override void Start()
     {
-        gameMaster = FindObjectOfType<GameController>();
-
         Material objMat = GetComponentInChildren<Renderer>().material;
         origColor = objMat.GetColor("_Color");
 
@@ -80,19 +76,19 @@ public class BasicMiner : Miner
 
     public void findOrder()
     {
-        if (gameMaster.oQueue.drillQueue.Count > 0)
+        if (GameController._instance.oQueue.drillQueue.Count > 0)
         {
-            currentOrder = gameMaster.oQueue.drillQueue.Dequeue();
+            currentOrder = GameController._instance.oQueue.drillQueue.Dequeue();
             WallInfo tempInfo = currentOrder.parentObject as WallInfo;
             orderXPos = tempInfo.xPos;
         }
-        else if (gameMaster.oQueue.crystalQueue.Count > 0)
+        else if (GameController._instance.oQueue.crystalQueue.Count > 0)
         {
-            currentOrder = gameMaster.oQueue.crystalQueue.Dequeue();
+            currentOrder = GameController._instance.oQueue.crystalQueue.Dequeue();
         }
-        else if(gameMaster.oQueue.oreQueue.Count > 0)
+        else if(GameController._instance.oQueue.oreQueue.Count > 0)
         {
-            currentOrder = gameMaster.oQueue.oreQueue.Dequeue();
+            currentOrder = GameController._instance.oQueue.oreQueue.Dequeue();
         }
     }
 
@@ -167,7 +163,7 @@ public class BasicMiner : Miner
                 carrying = true;
                 carriedObject = other.GetComponent<Ore>();
                 navAgent.speed = navSpeed / 2;
-                navAgent.SetDestination(gameMaster.mapStock.transform.position);
+                navAgent.SetDestination(GameController._instance.mapStock.transform.position);
             }
         }
         else if (other.name == "Crystal(Clone)" && currentOrder != null)
@@ -179,16 +175,16 @@ public class BasicMiner : Miner
                 carrying = true;
                 carriedObject = other.GetComponent<Crystal>();
                 navAgent.speed = navSpeed / 2;
-                navAgent.SetDestination(gameMaster.mapStock.transform.position);
+                navAgent.SetDestination(GameController._instance.mapStock.transform.position);
             }
         }
         else if (other.name == "StockPile" && currentOrder != null && carrying)
         {
             carriedObject.transform.parent = null;
             if (carriedObject.name == "Ore(Clone)")
-                carriedObject.transform.position = new Vector3(gameMaster.mapStock.transform.position.x + Random.Range(-0.3f, 0.3f), 0.06f, gameMaster.mapStock.transform.position.z + Random.Range(-0.3f, 0.3f));
+                carriedObject.transform.position = new Vector3(GameController._instance.mapStock.transform.position.x + Random.Range(-0.3f, 0.3f), 0.06f, GameController._instance.mapStock.transform.position.z + Random.Range(-0.3f, 0.3f));
             if (carriedObject.name == "Crystal(Clone)")
-                carriedObject.transform.position = new Vector3(gameMaster.mapStock.transform.position.x + Random.Range(-0.3f, 0.3f), 0.032f, gameMaster.mapStock.transform.position.z + Random.Range(-0.3f, 0.3f));
+                carriedObject.transform.position = new Vector3(GameController._instance.mapStock.transform.position.x + Random.Range(-0.3f, 0.3f), 0.032f, GameController._instance.mapStock.transform.position.z + Random.Range(-0.3f, 0.3f));
             carrying = false;
             carriedObject = null;
             currentOrder = null;

@@ -40,6 +40,7 @@ ExportedObj/
 *.user
 *.unityproj
 *.booproj
+*.tss
 
 # =========================
 # Operating System Files

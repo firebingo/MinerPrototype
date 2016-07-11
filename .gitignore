@@ -33,14 +33,23 @@ Assets/AssetStoreTools*
 ExportedObj/
 *.svd
 *.userprefs
-*.csproj
+/*.csproj
 *.pidb
 *.suo
-*.sln
+/*.sln
 *.user
 *.unityproj
 *.booproj
 *.tss
+
+#Nuget packages
+MapBuilder/packages
+
+#MapBuilder Builds
+MapBuilder/MapBuilderLibWindows/bin
+MapBuilder/MapBuilderLibWindows/obj
+MapBuilder/MapBuilderWpf/bin
+MapBuilder/MapBuilderWpf/obj
 
 # =========================
 # Operating System Files

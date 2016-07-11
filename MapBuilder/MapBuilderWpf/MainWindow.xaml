@@ -1,0 +1,75 @@
+﻿<Window x:Class="MapBuilderWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MapBuilderWpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1080" Width="1920">
+	<Window.Resources>
+		<ControlTemplate x:Key = "GridButtonColorTemplate" TargetType = "{x:Type Button}">
+			<Button Background="{TemplateBinding Background}" Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" x:Name="btn_main">
+				<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />
+				<Button.Style>
+					<Style TargetType="{x:Type Button}" x:Name="btn_style">
+						<Setter Property="Height" Value="{Binding Height}"/>
+						<Setter Property="Width" Value="{Binding Width}"/>
+						<Setter Property="Background" Value="{Binding Background}"/>
+						<Setter Property="BorderBrush" Value="#FF050505"/>
+						<Setter Property="BorderThickness" Value="1"/>
+						<Setter Property="Foreground" Value="#00FFFFFF"/>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="{x:Type Button}">
+									<Border x:Name="border" SnapsToDevicePixels="true" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+										<ContentPresenter x:Name="contentPresenter" Focusable="False"/>
+									</Border>
+									<ControlTemplate.Triggers>
+										<Trigger Property="IsMouseOver" Value="True">
+											<Setter TargetName="border" Property="BorderBrush" Value="Red"/>
+										</Trigger>
+									</ControlTemplate.Triggers>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style>
+				</Button.Style>
+			</Button>
+		</ControlTemplate>
+	</Window.Resources>
+	<Grid>
+		<Grid Name="rightControls" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15" Height="450" Width="175">
+			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="175">
+				<WrapPanel>
+					<Label Content="Terrain Type" Width="75"/>
+					<ComboBox Name="terrainComboBox" HorizontalAlignment="Right" Width="85" Margin="3" SelectedIndex="{Binding terrainType, Mode=TwoWay}">
+						
+					</ComboBox>
+				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Ore Count" Width="75"/>
+					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oreCount, Mode=TwoWay}"/>
+				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Crystal Count" Width="75"/>
+					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding crystalCount, Mode=TwoWay}"/>
+				</WrapPanel>
+			</StackPanel>
+		</Grid>
+		<Grid Name="mapParentGrid">
+		</Grid>
+		<Grid Name="bottomControls" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="15" Width="350">
+			<StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15">
+				<WrapPanel>
+					<Label Content="Height" Width="45"/>
+					<TextBox HorizontalAlignment="Right" Width="40" Margin="3" Text="{Binding heightTextBox, Mode=TwoWay}"/>
+				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Width" Width="45"/>
+					<TextBox HorizontalAlignment="Right" Width="40" Margin="3" Text="{Binding widthTextBox, Mode=TwoWay}"/>
+				</WrapPanel>
+			</StackPanel>
+			<Button Margin="15" Width="100" Height="50" Click="newMapButtonClick">new map</Button>
+		</Grid>
+	</Grid>
+</Window>

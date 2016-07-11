@@ -23,8 +23,6 @@ public class CreateTilemap : MonoBehaviour
 	public GameObject playerSpawn;
 	public Color playerSpawnColor;
 
-
-
 	void Start() 
 	{
 		for (int y = 0; y < map.height; y++)

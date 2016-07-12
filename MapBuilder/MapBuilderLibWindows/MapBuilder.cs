@@ -58,6 +58,15 @@ namespace MapBuilderLibWindows
 				mapTiles[width - 1, y].tileType = terrainType.solidrock;
 			}
 		}
+
+		public void modifyTile(int x, int y, terrainType tileType, bool mobSpawn)
+		{
+			if(x < width && y < height)
+			{
+				mapTiles[x, y].tileType = tileType;
+				mapTiles[x, y].mobSpawn = mobSpawn;
+			}
+		}
 	}
 
 	public class MapTile
@@ -65,12 +74,14 @@ namespace MapBuilderLibWindows
 		public terrainType tileType;
 		public int x { get; private set; }
 		public int y { get; private set; }
+		public bool mobSpawn;
 
-		public MapTile(terrainType type, int x, int y)
+		public MapTile(terrainType type, int x, int y, bool mobSpawn = false)
 		{
 			this.x = x;
 			this.y = y;
 			tileType = type;
+			this.mobSpawn = mobSpawn;
 		}
 	}
 

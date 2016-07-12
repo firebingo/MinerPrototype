@@ -178,6 +178,7 @@ namespace MapBuilderWpf
 		public int terrainType { get; set; }
 		public string oreCount { get; set; }
 		public string crystalCount { get; set; }
+		public bool mobSpawn { get; set; }
 	}
 
 	public class MapBuilderApp

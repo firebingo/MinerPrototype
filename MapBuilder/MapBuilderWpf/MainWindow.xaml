@@ -54,6 +54,10 @@
 					<Label Content="Crystal Count" Width="75"/>
 					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding crystalCount, Mode=TwoWay}"/>
 				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Mob Spawn" Width="75"/>
+					<CheckBox HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" IsChecked="{Binding mobSpawn, Mode=TwoWay}"/>
+				</WrapPanel>
 			</StackPanel>
 		</Grid>
 		<Grid Name="mapParentGrid">

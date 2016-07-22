@@ -46,7 +46,7 @@ namespace MapBuilderLibWindows
 				}
 			}
 
-			//initilize walls to solid rock.
+			//initialize walls to solid rock.
 			for (int x = 0; x < width; ++x)
 			{
 				mapTiles[x, 0].tileType = terrainType.solidrock;

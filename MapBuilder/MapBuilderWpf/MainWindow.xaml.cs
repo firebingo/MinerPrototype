@@ -30,6 +30,8 @@ namespace MapBuilderWpf
 		List<RowDefinition> gridRows;
 		bottomControlData bottomData;
 		rightControlData rightData;
+		leftControlData leftData;
+		Grid mapGrid;
 
 		public MainWindow()
 		{
@@ -37,9 +39,12 @@ namespace MapBuilderWpf
 
 			bottomData = new bottomControlData();
 			bottomControls.DataContext = bottomData;
-
+			
 			rightData = new rightControlData();
 			rightControls.DataContext = rightData;
+
+			leftData = new leftControlData();
+			leftControls.DataContext = leftData;
 
 			var terrainNames = Enum.GetNames(typeof(terrainType));
 			foreach(var name in terrainNames)
@@ -47,6 +52,34 @@ namespace MapBuilderWpf
 				var nameItem = new ComboBoxItem();
 				nameItem.Content = name;
 				terrainComboBox.Items.Add(nameItem);
+			}
+		}
+
+		private void OnMouseMove(object sender, MouseEventArgs e)
+		{
+			if (e.LeftButton == MouseButtonState.Pressed)
+			{
+				if (mapGrid?.Children != null && mapGrid.Children.Count > 0)
+				{
+					foreach (var child in mapGrid.Children )
+					{
+						var bu = child as Button;
+						if(bu != null)
+						{
+							if(bu.IsMouseOver)
+							{
+								gridButtonData gbd = bu.DataContext as gridButtonData;
+								if (gbd != null)
+								{
+									if (e.LeftButton == MouseButtonState.Pressed)
+									{
+										changeTilebutton(gbd);
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -74,9 +107,44 @@ namespace MapBuilderWpf
 			}
 		}
 
-		private void gridButtonClick(object sender, RoutedEventArgs e)
+		//private void GridButtonMouseMove(object sender, MouseEventArgs e)
+		//{
+		//	Button bu = sender as Button;
+		//	if (bu != null)
+		//	{
+		//		bu.ReleaseMouseCapture();
+		//	}
+		//}
+
+		private void GridButtonMouseDown(object sender, MouseButtonEventArgs e)
 		{
-			
+			Button bu = sender as Button;
+			if (bu != null)
+			{
+				bu.CaptureMouse();
+				bu.ReleaseMouseCapture();
+			}
+		}
+
+		private void gridButtonEnter(object sender, MouseEventArgs e)
+		{
+			Button bu = sender as Button;
+			if (bu != null)
+			{
+				gridButtonData gbd = bu.DataContext as gridButtonData;
+				if (gbd != null)
+				{
+					if (e.LeftButton == MouseButtonState.Pressed)
+					{
+						changeTilebutton(gbd);
+					}
+				}
+			}
+		}
+
+		private void changeTilebutton(gridButtonData data)
+		{
+			data.Background = new SolidColorBrush(Colors.Black);
 		}
 
 		private void BuildMapGrid()
@@ -84,7 +152,7 @@ namespace MapBuilderWpf
 			if (mapParentGrid.Children.Count > 0)
 				mapParentGrid.Children.Clear();
 
-			var mapGrid = new Grid();
+			mapGrid = new Grid();
 			
 			if (gridColumns != null)
 				gridColumns.Clear();
@@ -147,15 +215,22 @@ namespace MapBuilderWpf
 				{
 					if (buttonTemplate != null)
 					{
+						gridButtonData buttonData = new gridButtonData();
 						Button gridButton = new Button();
 						gridButton.Template = buttonTemplate;
-						gridButton.Click += gridButtonClick;
+						gridButton.PreviewMouseDown += GridButtonMouseDown;
+						//gridButton.Click += gridButtonClick;
+						//gridButton.MouseMove += GridButtonMouseMove;
+						gridButton.MouseEnter += gridButtonEnter;
 						var tileType = appMap.buildMap.mapTiles[x, y].tileType;
 						var tileDef = appMap.tileColors.Where(tile => tile.type == tileType).ToArray();
 						var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
-						gridButton.Background = new SolidColorBrush(colorToUse);
-						gridButton.Height = rowHeight;
-						gridButton.Width = colWidth;
+						buttonData.Background = new SolidColorBrush(colorToUse);
+						buttonData.Height = rowHeight;
+						buttonData.Width = colWidth;
+						buttonData.x = x;
+						buttonData.y = y;
+						gridButton.DataContext = buttonData;
 						Grid.SetRow(gridButton, y);
 						Grid.SetColumn(gridButton, x);
 						mapGrid.Children.Add(gridButton);
@@ -179,6 +254,18 @@ namespace MapBuilderWpf
 		public string oreCount { get; set; }
 		public string crystalCount { get; set; }
 		public bool mobSpawn { get; set; }
+	}
+
+	public class leftControlData
+	{
+		public string oxygenCount { get; set; }
+		public string oxygenTick { get; set; }
+	}
+
+	public class gridButtonData : Button
+	{
+		public int x;
+		public int y;
 	}
 
 	public class MapBuilderApp

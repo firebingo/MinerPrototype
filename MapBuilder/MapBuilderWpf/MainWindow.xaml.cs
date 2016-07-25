@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using MapBuilderLibWindows;
 using MapEnums;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace MapBuilderWpf
 {
@@ -24,14 +25,25 @@ namespace MapBuilderWpf
 	public partial class MainWindow : Window
 	{
 		MapBuilderApp appMap;
-		int width = 0;
-		int height = 0;
+		int mapWidth = 0;
+		int mapHeight = 0;
+		const int baseGridWidth = 700;
+		int maxGridWidth = baseGridWidth;
+		const int baseGridHeight = 700;
+		int maxGridHeight = baseGridHeight;
+		const int baseTileWidth = 32;
+		int maxTileWidth = baseTileWidth;
+		const int baseTileHeight = 32;
+		int maxTileHeight = baseTileHeight;
 		List<ColumnDefinition> gridColumns;
 		List<RowDefinition> gridRows;
 		bottomControlData bottomData;
 		rightControlData rightData;
 		leftControlData leftData;
+		errorMessageData errorData;
 		Grid mapGrid;
+
+		DateTime LastSizeUpdate = DateTime.Now;
 
 		public MainWindow()
 		{
@@ -39,36 +51,164 @@ namespace MapBuilderWpf
 
 			bottomData = new bottomControlData();
 			bottomControls.DataContext = bottomData;
-			
+
 			rightData = new rightControlData();
+			rightData.oreCount = "3";
+			rightData.crystalCount = "0";
+			rightData.mobSpawn = false;
+			rightData.terrainType = (int)terrainType.empty;
 			rightControls.DataContext = rightData;
 
 			leftData = new leftControlData();
+			leftData.oxygenCount = "300";
+			leftData.oxygenTick = "1.0";
 			leftControls.DataContext = leftData;
 
+			errorData = new errorMessageData();
+			errorData.errorMessage = "TSET";
+			errorGrid.DataContext = errorData;
+
 			var terrainNames = Enum.GetNames(typeof(terrainType));
-			foreach(var name in terrainNames)
+			foreach (var name in terrainNames)
 			{
 				var nameItem = new ComboBoxItem();
 				nameItem.Content = name;
 				terrainComboBox.Items.Add(nameItem);
 			}
+
+			checkSizes((int)this.Width, (int)this.Height);
 		}
 
-		private void OnMouseMove(object sender, MouseEventArgs e)
+		private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			checkSizes((int)e.NewSize.Width, (int)e.NewSize.Height);
+		}
+
+		private void checkSizes(int windowWidth, int windowHeight)
+		{
+			var delta = DateTime.Now - LastSizeUpdate;
+			if (delta.TotalMilliseconds > 500)
+			{
+				if (windowWidth < 1200)
+				{
+					double ratio = 1.0;
+					if (windowWidth < 800)
+						ratio = (double)windowWidth / 1800.0;
+					else
+						ratio = (double)windowWidth / 1450.0;
+					maxGridWidth = (int)(700 * ratio);
+					maxTileWidth = (int)(32 * ratio);
+					maxGridHeight = maxGridWidth;
+					maxTileHeight = maxTileWidth;
+					updateGridSizes();
+				}
+				else if (windowHeight < 900)
+				{
+					double ratio = 1.0;
+					ratio = (double)windowHeight / 1200.0;
+					maxGridHeight = (int)(700 * ratio);
+					maxTileHeight = (int)(32 * ratio);
+					maxGridWidth = maxGridHeight;
+					maxTileWidth = maxTileHeight;
+					updateGridSizes();
+				}
+				else if (windowWidth > 1920)
+				{
+					double ratio = 1.0;
+					ratio = (double)windowWidth / 1700.0;
+					maxGridWidth = (int)(700 * ratio);
+					maxTileWidth = (int)(32 * ratio);
+					maxGridHeight = maxGridWidth;
+					maxTileHeight = maxTileWidth;
+					updateGridSizes();
+				}
+				else if (windowHeight > 1080)
+				{
+					double ratio = 1.0;
+					ratio = (double)windowHeight / 1080.0;
+					maxGridHeight = (int)(700 * ratio);
+					maxTileHeight = (int)(32 * ratio);
+					maxGridWidth = maxGridHeight;
+					maxTileWidth = maxTileHeight;
+					updateGridSizes();
+				}
+				else
+				{
+					maxGridWidth = 700;
+					maxTileWidth = 32;
+					maxGridHeight = 700;
+					maxTileHeight = 32;
+					updateGridSizes();
+				}
+			}
+		}
+
+		private void updateGridSizes()
+		{
+			if (mapGrid != null)
+			{
+				calculateGridSizes();
+				double colWidth = mapGrid.Width / mapWidth;
+				double rowHeight = mapGrid.Height / mapHeight;
+				foreach (var col in gridColumns)
+				{
+					col.Width = new GridLength(colWidth);
+				}
+				foreach (var row in gridRows)
+				{
+					row.Height = new GridLength(rowHeight);
+				}
+				foreach (var child in mapGrid.Children)
+				{
+					var bu = child as Control;
+					if (bu != null)
+					{
+						gridTileData gbd = bu.DataContext as gridTileData;
+						if (gbd != null)
+						{
+							gbd.Width = colWidth;
+							gbd.Height = rowHeight;
+						}
+					}
+				}
+			}
+		}
+
+		private void calculateGridSizes()
+		{
+			mapGrid.Width = 0;
+			mapGrid.Height = 0;
+			if (mapWidth > mapHeight)
+			{
+				mapGrid.Width = mapWidth * maxTileWidth > maxGridWidth ? maxGridWidth : mapWidth * maxTileWidth;
+				mapGrid.Height = (mapGrid.Width) * ((float)mapHeight / (float)mapWidth > 1 ? 1 : (float)mapHeight / (float)mapWidth);
+			}
+			else if (mapWidth < mapHeight)
+			{
+				mapGrid.Height = mapHeight * maxTileHeight > maxGridHeight ? maxGridHeight : mapHeight * maxTileHeight;
+				mapGrid.Width = (mapGrid.Height) * ((float)mapWidth / (float)mapHeight > 1 ? 1 : (float)mapWidth / (float)mapHeight);
+			}
+			else
+			{
+				mapGrid.Width = mapWidth * maxTileWidth > maxGridWidth ? maxGridWidth : mapWidth * maxTileWidth;
+				mapGrid.Height = mapHeight * maxTileHeight > maxGridHeight ? maxGridHeight : mapHeight * maxTileHeight;
+			}
+		}
+
+		private void GridOnMouseMove(object sender, MouseEventArgs e)
 		{
 			if (e.LeftButton == MouseButtonState.Pressed)
 			{
 				if (mapGrid?.Children != null && mapGrid.Children.Count > 0)
 				{
-					foreach (var child in mapGrid.Children )
+					foreach (var child in mapGrid.Children)
 					{
-						var bu = child as Button;
-						if(bu != null)
+						var bu = child as Control;
+						if (bu != null)
 						{
-							if(bu.IsMouseOver)
+							if (bu.IsMouseOver)
 							{
-								gridButtonData gbd = bu.DataContext as gridButtonData;
+								gridTileData gbd = bu.DataContext as gridTileData;
 								if (gbd != null)
 								{
 									if (e.LeftButton == MouseButtonState.Pressed)
@@ -86,23 +226,27 @@ namespace MapBuilderWpf
 		private void newMapButtonClick(object sender, RoutedEventArgs e)
 		{
 			//parse width and height
-			bool success = int.TryParse(bottomData.widthTextBox, out width);
+			bool success = int.TryParse(bottomData.widthTextBox, out mapWidth);
 			if (success)
-				success = int.TryParse(bottomData.heightTextBox, out height);
+				success = int.TryParse(bottomData.heightTextBox, out mapHeight);
 			else
+			{
+				errorData.errorMessage = "Invalid Map Width";
 				return;
+			}
 
 			if (success)
 			{
 				Stopwatch test = new Stopwatch();
 				test.Start();
 				appMap = new MapBuilderApp();
-				appMap.initializeMap(width, height);
+				appMap.initializeMap(mapWidth, mapHeight);
 				BuildMapGrid();
 				test.Stop();
 			}
 			else
 			{
+				errorData.errorMessage = "Invalid Map Height";
 				return;
 			}
 		}
@@ -118,7 +262,7 @@ namespace MapBuilderWpf
 
 		private void GridButtonMouseDown(object sender, MouseButtonEventArgs e)
 		{
-			Button bu = sender as Button;
+			Control bu = sender as Control;
 			if (bu != null)
 			{
 				bu.CaptureMouse();
@@ -128,10 +272,10 @@ namespace MapBuilderWpf
 
 		private void gridButtonEnter(object sender, MouseEventArgs e)
 		{
-			Button bu = sender as Button;
+			Control bu = sender as Control;
 			if (bu != null)
 			{
-				gridButtonData gbd = bu.DataContext as gridButtonData;
+				gridTileData gbd = bu.DataContext as gridTileData;
 				if (gbd != null)
 				{
 					if (e.LeftButton == MouseButtonState.Pressed)
@@ -142,9 +286,35 @@ namespace MapBuilderWpf
 			}
 		}
 
-		private void changeTilebutton(gridButtonData data)
+		private void changeTilebutton(gridTileData data)
 		{
-			data.Background = new SolidColorBrush(Colors.Black);
+			if (Enum.IsDefined(typeof(terrainType), rightData.terrainType))
+			{
+				var oreCount = 0;
+				var crystalCount = 0;
+				var parsed = int.TryParse(rightData.oreCount, out oreCount);
+				if (parsed)
+					parsed = int.TryParse(rightData.crystalCount, out crystalCount);
+				else
+				{
+					errorData.errorMessage = "Invalid Ore Count";
+					return;
+				}
+				if (parsed)
+				{
+					if (appMap.buildMap.modifyTile(data.x, data.y, (terrainType)rightData.terrainType, oreCount, crystalCount, rightData.mobSpawn))
+					{
+						var tileDef = appMap.tileColors.Where(tile => tile.type == (terrainType)rightData.terrainType).ToArray();
+						var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
+						data.Background = new SolidColorBrush(colorToUse);
+					}
+				}
+				else
+				{
+					errorData.errorMessage = "Invalid Crystal Count";
+					return;
+				}
+			}
 		}
 
 		private void BuildMapGrid()
@@ -153,7 +323,7 @@ namespace MapBuilderWpf
 				mapParentGrid.Children.Clear();
 
 			mapGrid = new Grid();
-			
+
 			if (gridColumns != null)
 				gridColumns.Clear();
 			else
@@ -165,28 +335,12 @@ namespace MapBuilderWpf
 
 			//create the ui grid for the map
 			mapGrid.Background = new SolidColorBrush(Colors.LightSteelBlue);
-			mapGrid.Width = 0;
-			mapGrid.Height = 0;
-			if (width > height)
-			{
-				mapGrid.Width = width * 32 > 750 ? 750 : width * 32;
-				mapGrid.Height = (mapGrid.Width) * ((float)height / (float)width > 1 ? 1 : (float)height / (float)width);
-			}
-			else if(width < height)
-			{
-				mapGrid.Height = height * 32 > 750 ? 750 : height * 32 ;
-				mapGrid.Width = (mapGrid.Height) * ((float)width / (float)height > 1 ? 1 : (float)width / (float)height);
-			}
-			else
-			{
-				mapGrid.Width = width * 32 > 750 ? 750 : width * 32;
-				mapGrid.Height = height * 32 > 750 ? 750 : height * 32;
-			}
+			calculateGridSizes();
 			mapGrid.HorizontalAlignment = HorizontalAlignment.Center;
 			mapGrid.VerticalAlignment = VerticalAlignment.Center;
-			double colWidth = mapGrid.Width / width;
-			double rowHeight = mapGrid.Width / width;
-			for (int x = 0; x < width; ++x)
+			double colWidth = mapGrid.Width / mapWidth;
+			double rowHeight = mapGrid.Height / mapHeight;
+			for (int x = 0; x < mapWidth; ++x)
 			{
 				ColumnDefinition column = new ColumnDefinition();
 				gridColumns.Add(column);
@@ -196,7 +350,7 @@ namespace MapBuilderWpf
 				col.Width = new GridLength(colWidth);
 				mapGrid.ColumnDefinitions.Add(col);
 			}
-			for (int y = 0; y < height; ++y)
+			for (int y = 0; y < mapHeight; ++y)
 			{
 				RowDefinition row = new RowDefinition();
 				gridRows.Add(row);
@@ -208,32 +362,33 @@ namespace MapBuilderWpf
 			}
 
 			var buttonTemplate = FindResource("GridButtonColorTemplate") as ControlTemplate;
+			var tileTemplate = FindResource("GridTileTemplate") as ControlTemplate;
 			//create buttons on grid
-			for (int x = 0; x < width; ++x)
+			for (int x = 0; x < mapWidth; ++x)
 			{
-				for (int y = 0; y < height; ++y)
+				for (int y = 0; y < mapHeight; ++y)
 				{
 					if (buttonTemplate != null)
 					{
-						gridButtonData buttonData = new gridButtonData();
-						Button gridButton = new Button();
-						gridButton.Template = buttonTemplate;
-						gridButton.PreviewMouseDown += GridButtonMouseDown;
+						gridTileData tileData = new gridTileData();
+						Control gridTile = new Control();
+						gridTile.Template = tileTemplate;
+						gridTile.PreviewMouseDown += GridButtonMouseDown;
 						//gridButton.Click += gridButtonClick;
 						//gridButton.MouseMove += GridButtonMouseMove;
-						gridButton.MouseEnter += gridButtonEnter;
+						//gridButton.MouseEnter += gridButtonEnter;
 						var tileType = appMap.buildMap.mapTiles[x, y].tileType;
 						var tileDef = appMap.tileColors.Where(tile => tile.type == tileType).ToArray();
 						var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
-						buttonData.Background = new SolidColorBrush(colorToUse);
-						buttonData.Height = rowHeight;
-						buttonData.Width = colWidth;
-						buttonData.x = x;
-						buttonData.y = y;
-						gridButton.DataContext = buttonData;
-						Grid.SetRow(gridButton, y);
-						Grid.SetColumn(gridButton, x);
-						mapGrid.Children.Add(gridButton);
+						tileData.Background = new SolidColorBrush(colorToUse);
+						tileData.Height = rowHeight;
+						tileData.Width = colWidth;
+						tileData.x = x;
+						tileData.y = y;
+						gridTile.DataContext = tileData;
+						Grid.SetRow(gridTile, y);
+						Grid.SetColumn(gridTile, x);
+						mapGrid.Children.Add(gridTile);
 					}
 				}
 			}
@@ -262,80 +417,38 @@ namespace MapBuilderWpf
 		public string oxygenTick { get; set; }
 	}
 
-	public class gridButtonData : Button
+	public class errorMessageData : INotifyPropertyChanged
+	{
+		string _errorMessage;
+
+		public string errorMessage
+		{
+			get
+			{
+				return _errorMessage;
+			}
+			set
+			{
+				_errorMessage = value;
+				NotifyPropertyChanged("errorMessage");
+			}
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		private void NotifyPropertyChanged(String info)
+		{
+			if (PropertyChanged != null)
+			{
+				PropertyChanged(this, new PropertyChangedEventArgs(info));
+			}
+		}
+	}
+
+	public class gridTileData : Control
 	{
 		public int x;
 		public int y;
 	}
 
-	public class MapBuilderApp
-	{
-		public List<colorDef> tileColors { get; private set; }
-		public Map buildMap { get; private set; }
-		int width;
-		int height;
-
-		public MapBuilderApp()
-		{
-			tileColors = new List<colorDef>();
-			foreach(var type in Enum.GetValues(typeof(terrainType)))
-			{
-				terrainType typeToSet = terrainType.empty;
-				Color colorToSet = Color.FromRgb(0, 0, 0);
-				switch((int)type)
-				{
-					case 0:
-						typeToSet = terrainType.empty;
-						colorToSet = Color.FromRgb(0, 0, 0);
-						break;
-					case 1:
-						typeToSet = terrainType.floor;
-						colorToSet = Color.FromRgb(205, 160, 113);
-						break;
-					case 2:
-						typeToSet = terrainType.roof;
-						colorToSet = Color.FromRgb(89, 59, 53);
-						break;
-					case 3:
-						typeToSet = terrainType.softrock;
-						colorToSet = Color.FromRgb(168, 122, 74);
-						break;
-					case 4:
-						typeToSet = terrainType.looserock;
-						colorToSet = Color.FromRgb(142, 100, 55);
-						break;
-					case 5:
-						typeToSet = terrainType.hardrock;
-						colorToSet = Color.FromRgb(92, 74, 54);
-						break;
-					case 6:
-						typeToSet = terrainType.solidrock;
-						colorToSet = Color.FromRgb(65, 58, 50);
-						break;
-				}
-				var color = new colorDef(typeToSet, colorToSet);
-				tileColors.Add(color);
-			}
-		}
-
-		public void initializeMap(int width, int height)
-		{
-			this.width = width;
-			this.height = height;
-			buildMap = new Map(width, height);
-			buildMap.intializeBlankMap();
-		}
-	}
-
-	public class colorDef
-	{
-		public terrainType type { get; private set; }
-		public Color tileColor { get; private set; }
-
-		public colorDef(terrainType type, Color tileColor)
-		{
-			this.type = type;
-			this.tileColor = tileColor;
-		}
-	}
 }

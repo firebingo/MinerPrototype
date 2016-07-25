@@ -6,7 +6,12 @@
         xmlns:local="clr-namespace:MapBuilderWpf"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="MapBuilderWpf.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920">
+        Title="MainWindow" 
+	    Height="1080"
+	    Width="1920"
+		MinHeight="480"
+		MinWidth="640"
+		SizeChanged="WindowSizeChanged" >
 	<Window.Resources>
 		<ControlTemplate x:Key = "GridButtonColorTemplate" TargetType = "{x:Type Button}">
 			<Button Background="{Binding Background}" Height="{Binding Height}" Width="{Binding Width}" x:Name="btn_main">
@@ -38,8 +43,21 @@
 				</Button.Style>
 			</Button>
 		</ControlTemplate>
+		<ControlTemplate x:Key="GridTileTemplate" TargetType="{x:Type Control}">
+			<Canvas Height="{Binding Height}" Width="{Binding Width}">
+				<Rectangle x:Name="rect" Height="{Binding Height}" Width="{Binding Width}" Fill="{Binding Background}" Stroke="Gray" StrokeThickness="0.5" Panel.ZIndex="1"/>
+			</Canvas>
+			<ControlTemplate.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Setter TargetName="rect" Property="Stroke" Value="Red"/>
+				</Trigger>
+			</ControlTemplate.Triggers>
+		</ControlTemplate>
 	</Window.Resources>
 	<Grid>
+		<Grid x:Name="errorGrid" Height="40" Width="640" HorizontalAlignment="Center" VerticalAlignment="Top">
+			<Label HorizontalAlignment="Center"  Margin="5" Foreground="Red" Content="{Binding Path=errorMessage}"></Label>
+		</Grid>
 		<Grid x:Name="leftControls" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15" Height="450" Width="200">
 			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
 				<Label Content="Map Header" FontWeight="Bold" HorizontalAlignment="Left" Width="80"/>
@@ -53,7 +71,7 @@
 				</WrapPanel>
 			</StackPanel>
 		</Grid>
-		<Grid x:Name="mapParentGrid" MouseMove="OnMouseMove">
+		<Grid x:Name="mapParentGrid" MouseMove="GridOnMouseMove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50">
 			
 		</Grid>
 		<Grid x:Name="bottomControls" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="15" Width="350">
@@ -69,8 +87,8 @@
 			</StackPanel>
 			<Button Margin="15" Width="100" Height="50" Click="newMapButtonClick" Content="new map"/>
 		</Grid>
-		<Grid x:Name="rightControls" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15" Height="450" Width="195">
-			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+		<Grid x:Name="rightControls" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15" Height="450" Width="175">
+			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="175">
 				<WrapPanel>
 					<Label Content="Terrain Type" Width="80"/>
 					<ComboBox x:Name="terrainComboBox" HorizontalAlignment="Right" Width="85" Margin="3" SelectedIndex="{Binding terrainType, Mode=TwoWay}"/>

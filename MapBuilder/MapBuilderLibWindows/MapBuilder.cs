@@ -59,12 +59,23 @@ namespace MapBuilderLibWindows
 			}
 		}
 
-		public void modifyTile(int x, int y, terrainType tileType, bool mobSpawn)
+		public bool modifyTile(int x, int y, terrainType tileType, int oreCount, int crystalCount, bool mobSpawn)
 		{
-			if(x < width && y < height)
+			try
 			{
-				mapTiles[x, y].tileType = tileType;
-				mapTiles[x, y].mobSpawn = mobSpawn;
+				if ((x < width && y < height) && (x > 0 && y > 0))
+				{
+					mapTiles[x, y].tileType = tileType;
+					mapTiles[x, y].oreCount = oreCount;
+					mapTiles[x, y].crystalCount = crystalCount;
+					mapTiles[x, y].mobSpawn = mobSpawn;
+					return true;
+				}
+				return false;
+			}
+			catch (Exception e)
+			{
+				return false;
 			}
 		}
 	}
@@ -74,13 +85,17 @@ namespace MapBuilderLibWindows
 		public terrainType tileType;
 		public int x { get; private set; }
 		public int y { get; private set; }
+		public int oreCount;
+		public int crystalCount;
 		public bool mobSpawn;
 
-		public MapTile(terrainType type, int x, int y, bool mobSpawn = false)
+		public MapTile(terrainType type, int x, int y, int oreCount = 3, int crystalCount = 0, bool mobSpawn = false)
 		{
 			this.x = x;
 			this.y = y;
 			tileType = type;
+			this.oreCount = oreCount;
+			this.crystalCount = crystalCount;
 			this.mobSpawn = mobSpawn;
 		}
 	}

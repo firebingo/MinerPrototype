@@ -4,6 +4,14 @@
              xmlns:local="clr-namespace:MapBuilderWpf"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
-    </Application.Resources>
+		<SolidColorBrush x:Key="WindowBackgroundColor" Color="#FF282828"/>
+		<SolidColorBrush x:Key="TextForegroundColor" Color="#FFFCFCFC"/>
+		<SolidColorBrush x:Key="TextBackgroundColor" Color="#FF505050"/>
+		<SolidColorBrush x:Key="TextBorderColor" Color="#BF404040"/>
+		<SolidColorBrush x:Key="BarBackgroundColor" Color="#FF404040"/>
+		<SolidColorBrush x:Key="ButtonHighlightColor" Color="#FF505050"/>
+		<SolidColorBrush x:Key="SubMenuHighlightColor" Color="#FF606060"/>
+		<SolidColorBrush x:Key="TileBorderColor" Color="#BF404040"/>
+		<SolidColorBrush x:Key="GlyphBrush" Color="#444" />
+	</Application.Resources>
 </Application>

@@ -1,0 +1,100 @@
+﻿<Page x:Class="MapBuilderWpf.Pages.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MapBuilderWpf.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="1080" d:DesignWidth="1920"
+      Title="MainPage" SizeChanged="PageSizeChanged">
+	<Page.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Resources/Styles.xaml"/>
+				<ResourceDictionary Source="../Resources/Controls.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Page.Resources>
+
+	<Grid>
+		<Grid.Style>
+			<Style>
+				<Style.Resources>
+					<Style TargetType="{x:Type Label}">
+						<Setter Property="Foreground" Value="{StaticResource TextForegroundColor}" />
+					</Style>
+					<Style TargetType="{x:Type TextBox}">
+						<Setter Property="Foreground" Value="{StaticResource TextForegroundColor}" />
+						<Setter Property="Background" Value="{StaticResource TextBackgroundColor}" />
+						<Setter Property="BorderBrush" Value="{StaticResource TextBorderColor}" />
+					</Style>
+				</Style.Resources>
+			</Style>
+		</Grid.Style>
+		<!--<Grid x:Name="topMenuBar" Height="auto" Width="1912" VerticalAlignment="Top" HorizontalAlignment="Center" Background="{StaticResource WindowBackgroundColor}">
+			<WrapPanel Height="auto" HorizontalAlignment="Left" VerticalAlignment="Center">
+				<Button Style="{StaticResource topBarButtonStyle}" Click="fileMenuButtonClick" >
+					<Button.Content>
+						<Label Content="File"></Label>
+					</Button.Content>
+					<Button.ContextMenu>
+						<ContextMenu Style="{StaticResource topBarContextMenuStyle}">
+							<MenuItem HorizontalAlignment="Left" Header="New Map" Style="{StaticResource topBarContextMenuItemStyle}"/>
+						</ContextMenu>
+					</Button.ContextMenu>
+				</Button>
+			</WrapPanel>
+		</Grid>-->
+		<Grid x:Name="errorGrid" Height="40" Width="640" HorizontalAlignment="Center" VerticalAlignment="Top">
+			<Label HorizontalAlignment="Center"  Margin="5" Foreground="Red" Content="{Binding Path=errorMessage}"></Label>
+		</Grid>
+		<Grid x:Name="leftControls" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15" Height="450" Width="200">
+			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+				<Label Content="Map Header" FontWeight="Bold" HorizontalAlignment="Left" Width="80"/>
+				<WrapPanel>
+					<Label Content="Oxygen (Seconds)" Width="115"/>
+					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oxygenCount, Mode=TwoWay}"/>
+				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Oxygen Per Second" Width="115"/>
+					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oxygenTick, Mode=TwoWay}"/>
+				</WrapPanel>
+			</StackPanel>
+		</Grid>
+		<Grid x:Name="mapParentGrid" MouseMove="GridOnMouseMove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50" />
+		<Grid x:Name="bottomControls" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="15" Width="350">
+			<StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15">
+				<WrapPanel>
+					<Label Content="Height" Width="45"/>
+					<TextBox HorizontalAlignment="Right" Width="40" Margin="3" Text="{Binding heightTextBox, Mode=TwoWay}"/>
+				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Width" Width="45"/>
+					<TextBox HorizontalAlignment="Right" Width="40" Margin="3" Text="{Binding widthTextBox, Mode=TwoWay}"/>
+				</WrapPanel>
+			</StackPanel>
+			<Button Margin="15" Width="100" Height="50" Click="newMapButtonClick" Content="new map"/>
+			<Button Margin="25" Width="60" Height="30" HorizontalAlignment="Right"  Click="saveMapButtonClick" Content="temp save"/>
+		</Grid>
+		<Grid x:Name="rightControls" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15" Height="450" Width="175">
+			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="175">
+				<WrapPanel>
+					<Label Content="Terrain Type" Width="80"/>
+					<ComboBox x:Name="terrainComboBox" HorizontalAlignment="Right" Width="85" Margin="3" SelectedIndex="{Binding terrainType, Mode=TwoWay}"/>
+				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Ore Count" Width="80"/>
+					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oreCount, Mode=TwoWay}"/>
+				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Crystal Count" Width="80"/>
+					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding crystalCount, Mode=TwoWay}"/>
+				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Mob Spawn" Width="80"/>
+					<CheckBox HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" IsChecked="{Binding mobSpawn, Mode=TwoWay}"/>
+				</WrapPanel>
+			</StackPanel>
+		</Grid>
+	</Grid>
+</Page>

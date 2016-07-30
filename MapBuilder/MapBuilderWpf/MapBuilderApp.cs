@@ -74,6 +74,11 @@ namespace MapBuilderWpf
 			buildMap = new Map(width, height);
 			buildMap.intializeBlankMap();
 		}
+
+		public bool saveMap()
+		{
+			return buildMap.saveMap();
+		}
 	}
 
 	public class colorDef

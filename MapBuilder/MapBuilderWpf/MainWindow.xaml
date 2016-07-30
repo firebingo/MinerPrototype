@@ -13,99 +13,35 @@
 		MinWidth="640"
 		SizeChanged="WindowSizeChanged" >
 	<Window.Resources>
-		<ControlTemplate x:Key = "GridButtonColorTemplate" TargetType = "{x:Type Button}">
-			<Button Background="{Binding Background}" Height="{Binding Height}" Width="{Binding Width}" x:Name="btn_main">
-				<!--<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Content" />-->
-				<Button.Style>
-					<Style TargetType="{x:Type Button}" x:Name="btn_style">
-						<Setter Property="Height" Value="{Binding Height}"/>
-						<Setter Property="Width" Value="{Binding Width}"/>
-						<Setter Property="Background" Value="{Binding Background}"/>
-						<Setter Property="BorderBrush" Value="#FF050505"/>
-						<Setter Property="BorderThickness" Value="1"/>
-						<Setter Property="Foreground" Value="#00FFFFFF"/>
-						<!--<Setter Property="IsEnabled" Value="False" />-->
-						<Setter Property="Template">
-							<Setter.Value>
-								<ControlTemplate TargetType="{x:Type Button}">
-									<Border x:Name="border" SnapsToDevicePixels="true" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-										<ContentPresenter x:Name="contentPresenter" Focusable="False"/>
-									</Border>
-									<ControlTemplate.Triggers>
-										<Trigger Property="IsMouseOver" Value="True">
-											<Setter TargetName="border" Property="BorderBrush" Value="Red"/>
-										</Trigger>
-									</ControlTemplate.Triggers>
-								</ControlTemplate>
-							</Setter.Value>
-						</Setter>
-					</Style>
-				</Button.Style>
-			</Button>
-		</ControlTemplate>
-		<ControlTemplate x:Key="GridTileTemplate" TargetType="{x:Type Control}">
-			<Canvas Height="{Binding Height}" Width="{Binding Width}">
-				<Rectangle x:Name="rect" Height="{Binding Height}" Width="{Binding Width}" Fill="{Binding Background}" Stroke="Gray" StrokeThickness="0.5" Panel.ZIndex="1"/>
-			</Canvas>
-			<ControlTemplate.Triggers>
-				<Trigger Property="IsMouseOver" Value="True">
-					<Setter TargetName="rect" Property="Stroke" Value="Red"/>
-				</Trigger>
-			</ControlTemplate.Triggers>
-		</ControlTemplate>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Resources/Styles.xaml"/>
+				<ResourceDictionary Source="Resources/Controls.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
 	</Window.Resources>
-	<Grid>
-		<Grid x:Name="errorGrid" Height="40" Width="640" HorizontalAlignment="Center" VerticalAlignment="Top">
-			<Label HorizontalAlignment="Center"  Margin="5" Foreground="Red" Content="{Binding Path=errorMessage}"></Label>
-		</Grid>
-		<Grid x:Name="leftControls" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15" Height="450" Width="200">
-			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
-				<Label Content="Map Header" FontWeight="Bold" HorizontalAlignment="Left" Width="80"/>
-				<WrapPanel>
-					<Label Content="Oxygen (Seconds)" Width="115"/>
-					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oxygenCount, Mode=TwoWay}"/>
-				</WrapPanel>
-				<WrapPanel>
-					<Label Content="Oxygen Per Second" Width="115"/>
-					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oxygenTick, Mode=TwoWay}"/>
-				</WrapPanel>
-			</StackPanel>
-		</Grid>
-		<Grid x:Name="mapParentGrid" MouseMove="GridOnMouseMove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50">
-			
-		</Grid>
-		<Grid x:Name="bottomControls" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="15" Width="350">
-			<StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15">
-				<WrapPanel>
-					<Label Content="Height" Width="45"/>
-					<TextBox HorizontalAlignment="Right" Width="40" Margin="3" Text="{Binding heightTextBox, Mode=TwoWay}"/>
-				</WrapPanel>
-				<WrapPanel>
-					<Label Content="Width" Width="45"/>
-					<TextBox HorizontalAlignment="Right" Width="40" Margin="3" Text="{Binding widthTextBox, Mode=TwoWay}"/>
-				</WrapPanel>
-			</StackPanel>
-			<Button Margin="15" Width="100" Height="50" Click="newMapButtonClick" Content="new map"/>
-		</Grid>
-		<Grid x:Name="rightControls" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15" Height="450" Width="175">
-			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="175">
-				<WrapPanel>
-					<Label Content="Terrain Type" Width="80"/>
-					<ComboBox x:Name="terrainComboBox" HorizontalAlignment="Right" Width="85" Margin="3" SelectedIndex="{Binding terrainType, Mode=TwoWay}"/>
-				</WrapPanel>
-				<WrapPanel>
-					<Label Content="Ore Count" Width="80"/>
-					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oreCount, Mode=TwoWay}"/>
-				</WrapPanel>
-				<WrapPanel>
-					<Label Content="Crystal Count" Width="80"/>
-					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding crystalCount, Mode=TwoWay}"/>
-				</WrapPanel>
-				<WrapPanel>
-					<Label Content="Mob Spawn" Width="80"/>
-					<CheckBox HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" IsChecked="{Binding mobSpawn, Mode=TwoWay}"/>
-				</WrapPanel>
-			</StackPanel>
+	<Grid Background="{StaticResource WindowBackgroundColor}">
+		<DockPanel Height="20" VerticalAlignment="Top">
+			<Menu DockPanel.Dock="Top" Background="{StaticResource WindowBackgroundColor}">
+				<MenuItem Header="_File" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}">
+					<MenuItem Header="_New Map" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
+					<Separator Style="{StaticResource topBarSeperatorStyle}"/>
+					<MenuItem Header="_Open Map" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
+					<MenuItem Header="_Import Map" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
+					<Separator Style="{StaticResource topBarSeperatorStyle}" />
+					<MenuItem Header="_Save Map" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
+				</MenuItem>
+				<MenuItem Header="_View" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}">
+					<MenuItem Header="_Terrain" Name="terrainView" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}"  />
+					<MenuItem Header="_Ore Count" Name="oreView" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
+					<MenuItem Header="_Crystal Count" Name="crystalView" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
+				</MenuItem>
+			</Menu>
+		</DockPanel>
+		<Grid>
+			<!--<Frame Source="Pages/MainPage.xaml">
+
+			</Frame>-->
 		</Grid>
 	</Grid>
 </Window>

@@ -36,6 +36,8 @@
   <ItemGroup>
     <Compile Include="MapBuilder.cs" />
     <Compile Include="MapEnums.cs" />
+    <Compile Include="MapModels.cs" />
+    <Compile Include="MapWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

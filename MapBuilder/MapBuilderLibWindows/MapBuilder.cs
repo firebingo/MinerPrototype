@@ -63,7 +63,7 @@ namespace MapBuilderLibWindows
 		{
 			try
 			{
-				if ((x < width && y < height) && (x > 0 && y > 0))
+				if ((x < width && y < height) && (x > -1 && y > -1))
 				{
 					mapTiles[x, y].tileType = tileType;
 					mapTiles[x, y].oreCount = oreCount;
@@ -78,30 +78,10 @@ namespace MapBuilderLibWindows
 				return false;
 			}
 		}
-	}
 
-	public class MapTile
-	{
-		public terrainType tileType;
-		public int x { get; private set; }
-		public int y { get; private set; }
-		public int oreCount;
-		public int crystalCount;
-		public bool mobSpawn;
-
-		public MapTile(terrainType type, int x, int y, int oreCount = 3, int crystalCount = 0, bool mobSpawn = false)
+		public bool saveMap()
 		{
-			this.x = x;
-			this.y = y;
-			tileType = type;
-			this.oreCount = oreCount;
-			this.crystalCount = crystalCount;
-			this.mobSpawn = mobSpawn;
+			return mapWriter.serializeMap(mapTiles, mapHeader);
 		}
-	}
-
-	public class MapWriter
-	{
-
 	}
 }

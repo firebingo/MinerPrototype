@@ -33,10 +33,12 @@
 			</Button.Style>
 		</Button>
 	</ControlTemplate>
-	
+
 	<!-- Template for the tiles on the grid -->
 	<ControlTemplate x:Key="GridTileTemplate" TargetType="{x:Type Control}">
 		<Canvas Height="{Binding Height}" Width="{Binding Width}">
+			<Label Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{Binding oreCount}" Panel.ZIndex="2" Visibility="{Binding showOre}" FontSize="{Binding fontSize}"/>
+			<Label Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{Binding crystalCount}" Panel.ZIndex="2" Visibility="{Binding showCrystal}" FontSize="{Binding fontSize}"/>
 			<Rectangle x:Name="rect" Height="{Binding Height}" Width="{Binding Width}" Fill="{Binding Background}" Stroke="{StaticResource TileBorderColor}" StrokeThickness="0.5" Panel.ZIndex="1"/>
 		</Canvas>
 		<ControlTemplate.Triggers>
@@ -45,7 +47,7 @@
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
-	
+
 	<!-- Top Bar Context Menu Top Level Header -->
 	<ControlTemplate x:Key="topBarTopLevelHeader" TargetType="{x:Type MenuItem}">
 		<Border Name="Border" BorderBrush="{StaticResource TextBorderColor}" BorderThickness="0">
@@ -77,7 +79,7 @@
 			</Trigger>-->
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
-	
+
 	<!-- Top Bar Context Menu Top Level Item -->
 	<ControlTemplate x:Key="topBarTopLevelItem" TargetType="MenuItem">
 		<Border Name="Border" BorderBrush="{StaticResource TextBorderColor}" BorderThickness="0">
@@ -95,7 +97,7 @@
 			</Trigger>-->
 		</ControlTemplate.Triggers>
 	</ControlTemplate>
-	
+
 	<!-- Top Bar Context Menu Sub Header -->
 	<ControlTemplate x:Key="topBarSubLevelHeader" TargetType="MenuItem">
 		<Border Name="Border" >

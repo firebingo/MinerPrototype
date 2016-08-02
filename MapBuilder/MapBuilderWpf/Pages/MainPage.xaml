@@ -31,20 +31,6 @@
 				</Style.Resources>
 			</Style>
 		</Grid.Style>
-		<!--<Grid x:Name="topMenuBar" Height="auto" Width="1912" VerticalAlignment="Top" HorizontalAlignment="Center" Background="{StaticResource WindowBackgroundColor}">
-			<WrapPanel Height="auto" HorizontalAlignment="Left" VerticalAlignment="Center">
-				<Button Style="{StaticResource topBarButtonStyle}" Click="fileMenuButtonClick" >
-					<Button.Content>
-						<Label Content="File"></Label>
-					</Button.Content>
-					<Button.ContextMenu>
-						<ContextMenu Style="{StaticResource topBarContextMenuStyle}">
-							<MenuItem HorizontalAlignment="Left" Header="New Map" Style="{StaticResource topBarContextMenuItemStyle}"/>
-						</ContextMenu>
-					</Button.ContextMenu>
-				</Button>
-			</WrapPanel>
-		</Grid>-->
 		<Grid x:Name="errorGrid" Height="40" Width="640" HorizontalAlignment="Center" VerticalAlignment="Top">
 			<Label HorizontalAlignment="Center"  Margin="5" Foreground="Red" Content="{Binding Path=errorMessage}"></Label>
 		</Grid>

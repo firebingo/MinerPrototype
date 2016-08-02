@@ -16,10 +16,12 @@ using MapBuilderLibWindows;
 using MapEnums;
 using System.Diagnostics;
 using System.ComponentModel;
+using MapBuilderWpf.Pages;
 
 namespace MapBuilderWpf
 {
-	public enum viewsEnum {
+	public enum viewsEnum
+	{
 		terrain,
 		ore,
 		crystal
@@ -32,15 +34,21 @@ namespace MapBuilderWpf
 	{
 		public viewsEnum currentView;
 		public List<MenuItem> viewItems;
+		private MainPage mainAppPage;
+		private bool ignoreUnchecked;
 
 		public MainWindow()
 		{
 			currentView = viewsEnum.terrain;
+			InitializeComponent();
+
+			viewItems = new List<MenuItem>();
 			viewItems.Add(terrainView);
 			viewItems.Add(oreView);
 			viewItems.Add(crystalView);
-
-			InitializeComponent();
+			viewItems[(int)currentView].IsChecked = true;
+			mainAppPage = mainPage.Content as MainPage;
+			ignoreUnchecked = false;
 		}
 
 		private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
@@ -52,16 +60,58 @@ namespace MapBuilderWpf
 			//}
 		}
 
-		private void fileMenuButtonClick(object sender, RoutedEventArgs e)
+		private void viewChecked(object sender, RoutedEventArgs e)
 		{
-			var bu = sender as Button;
-			if (bu != null)
+			if(mainAppPage == null)
 			{
-				bu.ContextMenu.IsEnabled = true;
-				bu.ContextMenu.PlacementTarget = bu;
-				bu.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-				bu.ContextMenu.IsOpen = true;
+				mainAppPage = mainPage.Content as MainPage;
 			}
+			var check = sender as MenuItem;
+			if (check != null)
+			{
+				clearChecks(check);
+				if (check == viewItems[(int)viewsEnum.terrain])
+				{
+					currentView = viewsEnum.terrain;
+				}
+				else if (check == viewItems[(int)viewsEnum.ore])
+				{
+					currentView = viewsEnum.ore;
+				}
+				else if (check == viewItems[(int)viewsEnum.crystal])
+				{
+					currentView = viewsEnum.crystal;
+				}
+				if (mainAppPage != null)
+					mainAppPage.changeCurrentView(currentView);
+			}
+		}
+
+		private void viewUnchecked(object sender, RoutedEventArgs e)
+		{
+			if (!ignoreUnchecked)
+			{
+				var check = sender as MenuItem;
+				if (check != null)
+				{
+					foreach (var item in viewItems)
+					{
+						if (item == check && !item.IsChecked)
+							item.IsChecked = true;
+					}
+				}
+			}
+		}
+
+		private void clearChecks(MenuItem ignoreCheck)
+		{
+			ignoreUnchecked = true;
+			foreach (var item in viewItems)
+			{
+				if (item != ignoreCheck)
+					item.IsChecked = false;
+			}
+			ignoreUnchecked = false;
 		}
 	}
 }

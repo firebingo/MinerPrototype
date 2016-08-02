@@ -32,16 +32,16 @@
 					<MenuItem Header="_Save Map" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
 				</MenuItem>
 				<MenuItem Header="_View" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}">
-					<MenuItem Header="_Terrain" Name="terrainView" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}"  />
-					<MenuItem Header="_Ore Count" Name="oreView" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
-					<MenuItem Header="_Crystal Count" Name="crystalView" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
+					<MenuItem Header="_Terrain" Name="terrainView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}"  />
+					<MenuItem Header="_Ore Count" Name="oreView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
+					<MenuItem Header="_Crystal Count" Name="crystalView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
 				</MenuItem>
 			</Menu>
 		</DockPanel>
 		<Grid>
-			<!--<Frame Source="Pages/MainPage.xaml">
+			<Frame Name="mainPage" Source="Pages/MainPage.xaml">
 
-			</Frame>-->
+			</Frame>
 		</Grid>
 	</Grid>
 </Window>

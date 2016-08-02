@@ -22,25 +22,28 @@ namespace MapBuilderWpf.Pages
 	/// </summary>
 	public partial class MainPage : Page
 	{
-		MapBuilderApp appMap;
-		int mapWidth = 0;
-		int mapHeight = 0;
-		const int baseGridWidth = 700;
-		int maxGridWidth = baseGridWidth;
-		const int baseGridHeight = 700;
-		int maxGridHeight = baseGridHeight;
-		const int baseTileWidth = 32;
-		int maxTileWidth = baseTileWidth;
-		const int baseTileHeight = 32;
-		int maxTileHeight = baseTileHeight;
-		List<ColumnDefinition> gridColumns;
-		List<RowDefinition> gridRows;
-		bottomControlData bottomData;
-		rightControlData rightData;
-		leftControlData leftData;
-		errorMessageData errorData;
-		Grid mapGrid;
-		DateTime LastSizeUpdate = DateTime.Now;
+		private MapBuilderApp appMap;
+		private int mapWidth = 0;
+		private int mapHeight = 0;
+		private const int baseGridWidth = 700;
+		private int maxGridWidth = baseGridWidth;
+		private const int baseGridHeight = 700;
+		private int maxGridHeight = baseGridHeight;
+		private const int baseTileWidth = 32;
+		private int maxTileWidth = baseTileWidth;
+		private const int baseTileHeight = 32;
+		private int maxTileHeight = baseTileHeight;
+		private const double baseFontSize = 16;
+		private double currentFontSize = baseFontSize;
+		private List<ColumnDefinition> gridColumns;
+		private List<RowDefinition> gridRows;
+		private bottomControlData bottomData;
+		private rightControlData rightData;
+		private leftControlData leftData;
+		private errorMessageData errorData;
+		private Grid mapGrid;
+		private DateTime LastSizeUpdate = DateTime.Now;
+		public viewsEnum currentView;
 
 		public MainPage()
 		{
@@ -74,6 +77,7 @@ namespace MapBuilderWpf.Pages
 			}
 
 			checkSizes((int)this.Width, (int)this.Height);
+			currentView = viewsEnum.terrain;
 		}
 
 		private void PageSizeChanged(object sender, SizeChangedEventArgs e)
@@ -159,6 +163,7 @@ namespace MapBuilderWpf.Pages
 				calculateGridSizes();
 				double colWidth = mapGrid.Width / mapWidth;
 				double rowHeight = mapGrid.Height / mapHeight;
+				currentFontSize = (double)colWidth / (double)2;
 				foreach (var col in gridColumns)
 				{
 					col.Width = new GridLength(colWidth);
@@ -175,6 +180,7 @@ namespace MapBuilderWpf.Pages
 						gridTileData gbd = bu.DataContext as gridTileData;
 						if (gbd != null)
 						{
+							gbd.fontSize = currentFontSize;
 							gbd.Width = colWidth;
 							gbd.Height = rowHeight;
 						}
@@ -317,9 +323,12 @@ namespace MapBuilderWpf.Pages
 					//try to modify the tile on the map. if it succeeds update the tile on the grid.
 					if (appMap.buildMap.modifyTile(data.x, data.y, (terrainType)rightData.terrainType, oreCount, crystalCount, rightData.mobSpawn))
 					{
-						var tileDef = appMap.tileColors.Where(tile => tile.type == (terrainType)rightData.terrainType).ToArray();
-						var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
-						data.Background = new SolidColorBrush(colorToUse);
+						if (currentView == viewsEnum.terrain)
+						{
+							var tileDef = appMap.tileColors.Where(tile => tile.type == (terrainType)rightData.terrainType).ToArray();
+							var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
+							data.Background = new SolidColorBrush(colorToUse);
+						}
 						data.oreCount = oreCount;
 						data.crystalCount = crystalCount;
 						data.mobSpawn = rightData.mobSpawn;
@@ -400,8 +409,12 @@ namespace MapBuilderWpf.Pages
 						Control gridTile = new Control();
 						gridTile.Template = tileTemplate;
 						var tileType = appMap.buildMap.mapTiles[x, y].tileType;
-						var tileDef = appMap.tileColors.Where(tile => tile.type == tileType).ToArray();
-						var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
+						var colorToUse = Colors.White;
+						if (currentView == viewsEnum.terrain)
+						{
+							var tileDef = appMap.tileColors.Where(tile => tile.type == tileType).ToArray();
+							colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
+						}
 						tileData.Background = new SolidColorBrush(colorToUse);
 						tileData.Height = rowHeight;
 						tileData.Width = colWidth;
@@ -411,6 +424,15 @@ namespace MapBuilderWpf.Pages
 						tileData.crystalCount = 0;
 						tileData.mobSpawn = false;
 						tileData.terrain = tileType;
+						tileData.showCrystal = Visibility.Hidden;
+						tileData.showOre = Visibility.Hidden;
+						tileData.showMob = Visibility.Hidden;
+						if (currentView == viewsEnum.ore)
+							tileData.showOre = Visibility.Visible;
+						else if (currentView == viewsEnum.crystal)
+							tileData.showCrystal = Visibility.Visible;
+						currentFontSize = (double)colWidth / (double)2;
+						tileData.fontSize = currentFontSize;
 						gridTile.DataContext = tileData;
 						Grid.SetRow(gridTile, y);
 						Grid.SetColumn(gridTile, x);
@@ -420,6 +442,72 @@ namespace MapBuilderWpf.Pages
 			}
 
 			mapParentGrid.Children.Add(mapGrid);
+		}
+
+		public void changeCurrentView(viewsEnum view)
+		{
+			currentView = view;
+			if (mapGrid != null && mapGrid.Children.Count > 0)
+			{
+				switch (currentView)
+				{
+					default:
+					case viewsEnum.terrain:
+						foreach (var child in mapGrid.Children)
+						{
+							var ct = child as Control;
+							if (ct != null)
+							{
+								//bu.Content = null;
+								gridTileData gbd = ct.DataContext as gridTileData;
+								if (gbd != null)
+								{
+									var tileDef = appMap.tileColors.Where(tile => tile.type == gbd.terrain).ToArray();
+									var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
+									gbd.Background = new SolidColorBrush(colorToUse);
+									gbd.showCrystal = Visibility.Hidden;
+									gbd.showOre = Visibility.Hidden;
+									gbd.showMob = Visibility.Hidden;
+								}
+							}
+						}
+						break;
+					case viewsEnum.ore:
+						foreach (var child in mapGrid.Children)
+						{
+							var ct = child as Control;
+							if (ct != null)
+							{
+								gridTileData gbd = ct.DataContext as gridTileData;
+								if (gbd != null)
+								{
+									gbd.showCrystal = Visibility.Hidden;
+									gbd.showOre = Visibility.Visible;
+									gbd.showMob = Visibility.Hidden;
+									gbd.Background = new SolidColorBrush(Colors.White);
+								}
+							}
+						}
+						break;
+					case viewsEnum.crystal:
+						foreach (var child in mapGrid.Children)
+						{
+							var ct = child as Control;
+							if (ct != null)
+							{
+								gridTileData gbd = ct.DataContext as gridTileData;
+								if (gbd != null)
+								{
+									gbd.showCrystal = Visibility.Visible;
+									gbd.showOre = Visibility.Hidden;
+									gbd.showMob = Visibility.Hidden;
+									gbd.Background = new SolidColorBrush(Colors.White);
+								}
+							}
+						}
+						break;
+				}
+			}
 		}
 	}
 
@@ -471,13 +559,131 @@ namespace MapBuilderWpf.Pages
 		}
 	}
 
-	public class gridTileData : Control
+	public class gridTileData : Control, INotifyPropertyChanged
 	{
 		public int x;
 		public int y;
-		public terrainType terrain;
-		public int oreCount;
-		public int crystalCount;
-		public bool mobSpawn;
+		terrainType _terrain;
+		int _oreCount;
+		int _crystalCount;
+		bool _mobSpawn;
+		Visibility _showOre;
+		Visibility _showCrystal;
+		Visibility _showMob;
+		double _fontSize;
+
+		public terrainType terrain
+		{
+			get
+			{
+				return _terrain;
+			}
+			set
+			{
+				_terrain = value;
+				NotifyPropertyChanged("terrain");
+			}
+		}
+
+		public int oreCount
+		{
+			get
+			{
+				return _oreCount;
+			}
+			set
+			{
+				_oreCount = value;
+				NotifyPropertyChanged("oreCount");
+			}
+		}
+
+		public int crystalCount
+		{
+			get
+			{
+				return _crystalCount;
+			}
+			set
+			{
+				_crystalCount = value;
+				NotifyPropertyChanged("crystalCount");
+			}
+		}
+
+		public bool mobSpawn
+		{
+			get
+			{
+				return _mobSpawn;
+			}
+			set
+			{
+				_mobSpawn = value;
+				NotifyPropertyChanged("mobSpawn");
+			}
+		}
+
+		public Visibility showOre
+		{
+			get
+			{
+				return _showOre;
+			}
+			set
+			{
+				_showOre = value;
+				NotifyPropertyChanged("showOre");
+			}
+		}
+
+		public Visibility showCrystal
+		{
+			get
+			{
+				return _showCrystal;
+			}
+			set
+			{
+				_showCrystal = value;
+				NotifyPropertyChanged("showCrystal");
+			}
+		}
+
+		public Visibility showMob
+		{
+			get
+			{
+				return _showMob;
+			}
+			set
+			{
+				_showMob = value;
+				NotifyPropertyChanged("showMob");
+			}
+		}
+
+		public double fontSize
+		{
+			get
+			{
+				return _fontSize;
+			}
+			set
+			{
+				_fontSize = value;
+				NotifyPropertyChanged("fontSize");
+			}
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		private void NotifyPropertyChanged(String info)
+		{
+			if (PropertyChanged != null)
+			{
+				PropertyChanged(this, new PropertyChangedEventArgs(info));
+			}
+		}
 	}
 }

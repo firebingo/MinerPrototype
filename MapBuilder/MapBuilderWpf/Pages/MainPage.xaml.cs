@@ -93,64 +93,15 @@ namespace MapBuilderWpf.Pages
 		/// <param name="windowHeight"></param>
 		private void checkSizes(int windowWidth, int windowHeight)
 		{
-			//Throttle the resize a bit because very large maps can cause the resize to run very slow.
-			var delta = DateTime.Now - LastSizeUpdate;
-			if (delta.TotalMilliseconds > 500)
-			{
-				//this system could use some work but it mostly works for the majority of resizing
-				//the denominators here are also a bit of magic numbers that were just found by trial and error.
-				if (windowWidth < 1200)
-				{
-					double ratio = 1.0;
-					if (windowWidth < 800)
-						ratio = (double)windowWidth / 1800.0;
-					else
-						ratio = (double)windowWidth / 1450.0;
-					maxGridWidth = (int)(baseGridWidth * ratio);
-					maxTileWidth = (int)(baseTileWidth * ratio);
-					maxGridHeight = maxGridWidth;
-					maxTileHeight = maxTileWidth;
-					updateGridSizes();
-				}
-				else if (windowHeight < 900)
-				{
-					double ratio = 1.0;
-					ratio = (double)windowHeight / 1200.0;
-					maxGridHeight = (int)(baseGridHeight * ratio);
-					maxTileHeight = (int)(baseTileHeight * ratio);
-					maxGridWidth = maxGridHeight;
-					maxTileWidth = maxTileHeight;
-					updateGridSizes();
-				}
-				else if (windowWidth > 1920)
-				{
-					double ratio = 1.0;
-					ratio = (double)windowWidth / 1700.0;
-					maxGridWidth = (int)(baseGridWidth * ratio);
-					maxTileWidth = (int)(baseTileWidth * ratio);
-					maxGridHeight = maxGridWidth;
-					maxTileHeight = maxTileWidth;
-					updateGridSizes();
-				}
-				else if (windowHeight > 1080)
-				{
-					double ratio = 1.0;
-					ratio = (double)windowHeight / 1080.0;
-					maxGridHeight = (int)(baseGridHeight * ratio);
-					maxTileHeight = (int)(baseTileHeight * ratio);
-					maxGridWidth = maxGridHeight;
-					maxTileWidth = maxTileHeight;
-					updateGridSizes();
-				}
-				else
-				{
-					maxGridWidth = baseGridWidth;
-					maxTileWidth = baseTileWidth;
-					maxGridHeight = baseGridHeight;
-					maxTileHeight = baseTileHeight;
-					updateGridSizes();
-				}
-			}
+			LastSizeUpdate = DateTime.Now;
+			double ratio = 1.0;
+			long baseSize = 1920 * 1080;
+			ratio = (double)(windowWidth * windowHeight) / baseSize;
+			maxGridWidth = (int)(baseGridWidth * ratio);
+			maxTileWidth = (int)(baseTileWidth * ratio);
+			maxGridHeight = maxGridWidth;
+			maxTileHeight = maxTileWidth;
+			updateGridSizes();
 		}
 
 		/// <summary>

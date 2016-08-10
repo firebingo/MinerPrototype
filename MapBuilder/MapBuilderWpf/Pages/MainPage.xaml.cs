@@ -3,17 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MapBuilderWpf.Pages
 {
@@ -44,6 +37,12 @@ namespace MapBuilderWpf.Pages
 		private Grid mapGrid;
 		private DateTime LastSizeUpdate = DateTime.Now;
 		public viewsEnum currentView;
+		const int oreColorUpperBound = 5;
+		const int crystalColorUpperBound = 5;
+		Color resourceColorUpper = Colors.Red;
+		Color resourceColorLower = Colors.Green;
+		Color mobSpawnColor = Colors.DarkRed;
+		Color cRechargeColor = Colors.Purple;
 
 		public MainPage()
 		{
@@ -272,17 +271,56 @@ namespace MapBuilderWpf.Pages
 				if (parsed)
 				{
 					//try to modify the tile on the map. if it succeeds update the tile on the grid.
-					if (appMap.buildMap.modifyTile(data.x, data.y, (terrainType)rightData.terrainType, oreCount, crystalCount, rightData.mobSpawn))
+					if (appMap.buildMap.modifyTile(data.x, data.y, (terrainType)rightData.terrainType, oreCount, crystalCount, rightData.mobSpawn, rightData.crystalRecharge))
 					{
+						var tile = appMap.buildMap.mapTiles[data.x, data.y];
 						if (currentView == viewsEnum.terrain)
 						{
-							var tileDef = appMap.tileColors.Where(tile => tile.type == (terrainType)rightData.terrainType).ToArray();
+							var tileDef = appMap.tileColors.Where(t => t.type == (terrainType)rightData.terrainType).ToArray();
 							var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
 							data.Background = new SolidColorBrush(colorToUse);
+						}
+						if(currentView == viewsEnum.special)
+						{
+							if(tile != null)
+							{
+								if (tile.tileType > terrainType.roof && tile.tileType < terrainType.water)
+								{
+									if (tile.mobSpawn)
+										data.Background = new SolidColorBrush(mobSpawnColor);
+									else if (tile.crystalRecharge)
+										data.Background = new SolidColorBrush(cRechargeColor);
+									else
+										data.Background = new SolidColorBrush(Colors.White);
+								}
+								else
+									data.Background = new SolidColorBrush(Colors.White);
+							}
+						}
+						if(currentView == viewsEnum.ore)
+						{
+							if(tile != null)
+							{
+								if (tile.tileType > terrainType.roof && tile.tileType < terrainType.water)
+									data.Background = new SolidColorBrush(HelperFunctions.lerpColors(resourceColorUpper, resourceColorLower, ((float)tile.oreCount / (float)oreColorUpperBound)));
+								else
+									data.Background = new SolidColorBrush(Colors.White);
+							}
+						}
+						if(currentView == viewsEnum.crystal)
+						{
+							if (tile != null)
+							{
+								if (tile.tileType > terrainType.roof && tile.tileType < terrainType.water)
+									data.Background = new SolidColorBrush(HelperFunctions.lerpColors(resourceColorUpper, resourceColorLower, ((float)tile.crystalCount / (float)crystalColorUpperBound)));
+								else
+									data.Background = new SolidColorBrush(Colors.White);
+							}
 						}
 						data.oreCount = oreCount;
 						data.crystalCount = crystalCount;
 						data.mobSpawn = rightData.mobSpawn;
+						data.crystalRecharge = rightData.crystalRecharge;
 						data.terrain = (terrainType)rightData.terrainType;
 						errorData.errorMessage = "";
 					}
@@ -360,24 +398,19 @@ namespace MapBuilderWpf.Pages
 						Control gridTile = new Control();
 						gridTile.Template = tileTemplate;
 						var tileType = appMap.buildMap.mapTiles[x, y].tileType;
-						var colorToUse = Colors.White;
-						if (currentView == viewsEnum.terrain)
-						{
-							var tileDef = appMap.tileColors.Where(tile => tile.type == tileType).ToArray();
-							colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
-						}
-						tileData.Background = new SolidColorBrush(colorToUse);
+						tileData.Background = new SolidColorBrush(Colors.White);
 						tileData.Height = rowHeight;
 						tileData.Width = colWidth;
 						tileData.x = x;
 						tileData.y = y;
-						tileData.oreCount = 3;
-						tileData.crystalCount = 0;
-						tileData.mobSpawn = false;
+						tileData.oreCount = appMap.buildMap.mapTiles[x,y].oreCount;
+						tileData.crystalCount = appMap.buildMap.mapTiles[x, y].crystalCount;
+						tileData.mobSpawn = appMap.buildMap.mapTiles[x, y].mobSpawn;
+						tileData.crystalRecharge = appMap.buildMap.mapTiles[x, y].crystalRecharge;
 						tileData.terrain = tileType;
 						tileData.showCrystal = Visibility.Hidden;
 						tileData.showOre = Visibility.Hidden;
-						tileData.showMob = Visibility.Hidden;
+						tileData.showSpecial = Visibility.Hidden;
 						if (currentView == viewsEnum.ore)
 							tileData.showOre = Visibility.Visible;
 						else if (currentView == viewsEnum.crystal)
@@ -393,8 +426,13 @@ namespace MapBuilderWpf.Pages
 			}
 
 			mapParentGrid.Children.Add(mapGrid);
+			changeCurrentView(currentView);
 		}
 
+		/// <summary>
+		/// Changes the current view of the grid.
+		/// </summary>
+		/// <param name="view"></param>
 		public void changeCurrentView(viewsEnum view)
 		{
 			currentView = view;
@@ -418,7 +456,7 @@ namespace MapBuilderWpf.Pages
 									gbd.Background = new SolidColorBrush(colorToUse);
 									gbd.showCrystal = Visibility.Hidden;
 									gbd.showOre = Visibility.Hidden;
-									gbd.showMob = Visibility.Hidden;
+									gbd.showSpecial = Visibility.Hidden;
 								}
 							}
 						}
@@ -434,8 +472,11 @@ namespace MapBuilderWpf.Pages
 								{
 									gbd.showCrystal = Visibility.Hidden;
 									gbd.showOre = Visibility.Visible;
-									gbd.showMob = Visibility.Hidden;
-									gbd.Background = new SolidColorBrush(Colors.White);
+									gbd.showSpecial = Visibility.Hidden;
+									if (gbd.terrain > terrainType.roof && gbd.terrain < terrainType.water)
+										gbd.Background = new SolidColorBrush(HelperFunctions.lerpColors(resourceColorUpper, resourceColorLower, ((float)gbd.oreCount / (float)oreColorUpperBound)));
+									else
+										gbd.Background = new SolidColorBrush(Colors.White);
 								}
 							}
 						}
@@ -451,12 +492,77 @@ namespace MapBuilderWpf.Pages
 								{
 									gbd.showCrystal = Visibility.Visible;
 									gbd.showOre = Visibility.Hidden;
-									gbd.showMob = Visibility.Hidden;
-									gbd.Background = new SolidColorBrush(Colors.White);
+									gbd.showSpecial = Visibility.Hidden;
+									if (gbd.terrain > terrainType.roof && gbd.terrain < terrainType.water)
+										gbd.Background = new SolidColorBrush(HelperFunctions.lerpColors(resourceColorUpper, resourceColorLower, ((float)gbd.crystalCount / (float)crystalColorUpperBound)));
+									else
+										gbd.Background = new SolidColorBrush(Colors.White);
 								}
 							}
 						}
 						break;
+					case viewsEnum.special:
+						foreach(var child in mapGrid.Children)
+						{
+							var ct = child as Control;
+							if (ct != null)
+							{
+								gridTileData gbd = ct.DataContext as gridTileData;
+								if (gbd != null)
+								{
+									gbd.showCrystal = Visibility.Hidden;
+									gbd.showOre = Visibility.Hidden;
+									gbd.showSpecial = Visibility.Visible;
+									if (gbd.terrain > terrainType.roof && gbd.terrain < terrainType.water)
+									{
+										if (gbd.mobSpawn)
+											gbd.Background = new SolidColorBrush(mobSpawnColor);
+										else if (gbd.crystalRecharge)
+											gbd.Background = new SolidColorBrush(cRechargeColor);
+										else
+											gbd.Background = new SolidColorBrush(Colors.White);
+									}
+									else
+										gbd.Background = new SolidColorBrush(Colors.White);
+								}
+							}
+						}
+						break;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Used to confirm text in the ore input box
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OreCountKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Enter)
+			{
+				var textBox = sender as TextBox;
+				if (textBox != null)
+				{
+					var cont = rightControls.DataContext as rightControlData;
+					if (cont != null)
+						cont.oreCount = textBox.Text;
+					Keyboard.ClearFocus();
+				}
+			}
+		}
+
+		private void CrystalCountKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Enter)
+			{
+				var textBox = sender as TextBox;
+				if (textBox != null)
+				{
+					var cont = rightControls.DataContext as rightControlData;
+					if (cont != null)
+						cont.crystalCount = textBox.Text;
+					Keyboard.ClearFocus();
 				}
 			}
 		}
@@ -474,6 +580,7 @@ namespace MapBuilderWpf.Pages
 		public string oreCount { get; set; }
 		public string crystalCount { get; set; }
 		public bool mobSpawn { get; set; }
+		public bool crystalRecharge { get; set; }
 	}
 
 	public class leftControlData
@@ -518,9 +625,10 @@ namespace MapBuilderWpf.Pages
 		int _oreCount;
 		int _crystalCount;
 		bool _mobSpawn;
+		bool _crystalRecharge;
 		Visibility _showOre;
 		Visibility _showCrystal;
-		Visibility _showMob;
+		Visibility _showSpecial;
 		double _fontSize;
 
 		public terrainType terrain
@@ -575,6 +683,19 @@ namespace MapBuilderWpf.Pages
 			}
 		}
 
+		public bool crystalRecharge
+		{
+			get
+			{
+				return _crystalRecharge;
+			}
+			set
+			{
+				_crystalRecharge = value;
+				NotifyPropertyChanged("crystalRecharge");
+			}
+		}
+
 		public Visibility showOre
 		{
 			get
@@ -601,16 +722,16 @@ namespace MapBuilderWpf.Pages
 			}
 		}
 
-		public Visibility showMob
+		public Visibility showSpecial
 		{
 			get
 			{
-				return _showMob;
+				return _showSpecial;
 			}
 			set
 			{
-				_showMob = value;
-				NotifyPropertyChanged("showMob");
+				_showSpecial = value;
+				NotifyPropertyChanged("showSpecial");
 			}
 		}
 

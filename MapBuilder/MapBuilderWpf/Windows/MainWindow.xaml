@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MapBuilderWpf"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="MapBuilderWpf.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="Map Builder" 
 	    Height="1080"
 	    Width="1920"
 		MinHeight="480"
@@ -15,8 +15,8 @@
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="Resources/Styles.xaml"/>
-				<ResourceDictionary Source="Resources/Controls.xaml"/>
+				<ResourceDictionary Source="../Resources/Styles.xaml"/>
+				<ResourceDictionary Source="../Resources/Controls.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -35,11 +35,12 @@
 					<MenuItem Header="_Terrain" Name="terrainView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}"  />
 					<MenuItem Header="_Ore Count" Name="oreView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
 					<MenuItem Header="_Crystal Count" Name="crystalView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
+					<MenuItem Header="_Special" Name="specialView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
 				</MenuItem>
 			</Menu>
 		</DockPanel>
 		<Grid>
-			<Frame Name="mainPage" Source="Pages/MainPage.xaml">
+			<Frame Name="mainPage" Source="../Pages/MainPage.xaml">
 
 			</Frame>
 		</Grid>

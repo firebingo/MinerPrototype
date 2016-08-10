@@ -65,20 +65,24 @@
 		<Grid x:Name="rightControls" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15" Height="450" Width="175">
 			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="175">
 				<WrapPanel>
-					<Label Content="Terrain Type" Width="80"/>
-					<ComboBox x:Name="terrainComboBox" HorizontalAlignment="Right" Width="85" Margin="3" SelectedIndex="{Binding terrainType, Mode=TwoWay}"/>
+					<Label Content="Terrain Type" Width="92"/>
+					<ComboBox x:Name="terrainComboBox" HorizontalAlignment="Right" Width="76" Margin="3" SelectedIndex="{Binding terrainType, Mode=TwoWay}"/>
 				</WrapPanel>
 				<WrapPanel>
-					<Label Content="Ore Count" Width="80"/>
-					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oreCount, Mode=TwoWay}"/>
+					<Label Content="Ore Count" Width="92"/>
+					<TextBox KeyDown="OreCountKeyDown" HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oreCount, Mode=TwoWay}"/>
 				</WrapPanel>
 				<WrapPanel>
-					<Label Content="Crystal Count" Width="80"/>
-					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding crystalCount, Mode=TwoWay}"/>
+					<Label Content="Crystal Count" Width="92"/>
+					<TextBox KeyDown="CrystalCountKeyDown" HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding crystalCount, Mode=TwoWay}"/>
 				</WrapPanel>
 				<WrapPanel>
-					<Label Content="Mob Spawn" Width="80"/>
+					<Label Content="Mob Spawn" Width="92"/>
 					<CheckBox HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" IsChecked="{Binding mobSpawn, Mode=TwoWay}"/>
+				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Crystal Recharge" Width="92"/>
+					<CheckBox HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" IsChecked="{Binding crystalRecharge, Mode=TwoWay}"/>
 				</WrapPanel>
 			</StackPanel>
 		</Grid>

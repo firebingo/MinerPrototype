@@ -15,15 +15,25 @@ namespace MapBuilderLibWindows
 		public int oreCount;
 		public int crystalCount;
 		public bool mobSpawn;
+		public bool crystalRecharge;
 
-		public MapTile(terrainType type, int x, int y, int oreCount = 3, int crystalCount = 0, bool mobSpawn = false)
+		public MapTile(terrainType type, int x, int y, int oreCount = 3, int crystalCount = 0, bool mobSpawn = false, bool crystalRecharge = false)
 		{
 			this.x = x;
 			this.y = y;
 			tileType = type;
 			this.oreCount = oreCount;
 			this.crystalCount = crystalCount;
-			this.mobSpawn = mobSpawn;
+			if (tileType > terrainType.roof && tileType < terrainType.water)
+			{
+				this.mobSpawn = mobSpawn;
+				this.crystalRecharge = crystalRecharge;
+			}
+			else
+			{
+				this.mobSpawn = false;
+				this.crystalRecharge = false;
+			}
 		}
 	}
 }

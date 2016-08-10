@@ -42,7 +42,7 @@ namespace MapBuilderLibWindows
 			{
 				for (int y = 0; y < height; ++y)
 				{
-					mapTiles[x, y] = new MapTile(terrainType.floor, x, y);
+					mapTiles[x, y] = new MapTile(terrainType.floor, x, y, 0, 0);
 				}
 			}
 
@@ -59,7 +59,7 @@ namespace MapBuilderLibWindows
 			}
 		}
 
-		public bool modifyTile(int x, int y, terrainType tileType, int oreCount, int crystalCount, bool mobSpawn)
+		public bool modifyTile(int x, int y, terrainType tileType, int oreCount, int crystalCount, bool mobSpawn, bool crystalRecharge)
 		{
 			try
 			{
@@ -68,7 +68,16 @@ namespace MapBuilderLibWindows
 					mapTiles[x, y].tileType = tileType;
 					mapTiles[x, y].oreCount = oreCount;
 					mapTiles[x, y].crystalCount = crystalCount;
-					mapTiles[x, y].mobSpawn = mobSpawn;
+					if (mapTiles[x, y].tileType > terrainType.roof && mapTiles[x, y].tileType < terrainType.water)
+					{
+						mapTiles[x, y].mobSpawn = mobSpawn;
+						mapTiles[x, y].crystalRecharge = crystalRecharge;
+					}
+					else
+					{
+						mapTiles[x, y].mobSpawn = false;
+						mapTiles[x, y].crystalRecharge = false;
+					}
 					return true;
 				}
 				return false;

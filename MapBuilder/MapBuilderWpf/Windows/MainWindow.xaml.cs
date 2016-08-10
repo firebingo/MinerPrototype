@@ -1,21 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MapBuilderLibWindows;
-using MapEnums;
-using System.Diagnostics;
-using System.ComponentModel;
 using MapBuilderWpf.Pages;
 
 namespace MapBuilderWpf
@@ -24,7 +9,9 @@ namespace MapBuilderWpf
 	{
 		terrain,
 		ore,
-		crystal
+		crystal,
+		special,
+		building
 	}
 
 	/// <summary>
@@ -46,6 +33,7 @@ namespace MapBuilderWpf
 			viewItems.Add(terrainView);
 			viewItems.Add(oreView);
 			viewItems.Add(crystalView);
+			viewItems.Add(specialView);
 			viewItems[(int)currentView].IsChecked = true;
 			mainAppPage = mainPage.Content as MainPage;
 			ignoreUnchecked = false;
@@ -81,6 +69,10 @@ namespace MapBuilderWpf
 				else if (check == viewItems[(int)viewsEnum.crystal])
 				{
 					currentView = viewsEnum.crystal;
+				}
+				else if(check == viewItems[(int)viewsEnum.special])
+				{
+					currentView = viewsEnum.special;
 				}
 				if (mainAppPage != null)
 					mainAppPage.changeCurrentView(currentView);

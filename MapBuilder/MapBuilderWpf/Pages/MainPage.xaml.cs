@@ -15,7 +15,7 @@ namespace MapBuilderWpf.Pages
 	/// </summary>
 	public partial class MainPage : Page
 	{
-		private MapBuilderApp appMap;
+		public MapBuilderApp appMap { get; private set; }
 		private int mapWidth = 0;
 		private int mapHeight = 0;
 		private const int baseGridWidth = 700;
@@ -34,7 +34,7 @@ namespace MapBuilderWpf.Pages
 		private rightControlData rightData;
 		private leftControlData leftData;
 		private errorMessageData errorData;
-		private Grid mapGrid;
+		public Grid mapGrid { get; private set; }
 		private DateTime LastSizeUpdate = DateTime.Now;
 		public viewsEnum currentView;
 		const int oreColorUpperBound = 5;
@@ -163,35 +163,20 @@ namespace MapBuilderWpf.Pages
 			}
 		}
 
-		/// <summary>
-		/// Generate a new map if the width and height from the controls is valid.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void newMapButtonClick(object sender, RoutedEventArgs e)
+		public void updateErrorMessage(string message)
 		{
-			//parse width and height
-			bool success = int.TryParse(bottomData.widthTextBox, out mapWidth);
-			if (success)
-				success = int.TryParse(bottomData.heightTextBox, out mapHeight);
-			else
-			{
-				errorData.errorMessage = "Invalid Map Width";
-				return;
-			}
+			if(message != null && message != "")
+				errorData.errorMessage = message;
+		}
 
-			if (success)
-			{
-				appMap = new MapBuilderApp();
-				appMap.initializeMap(mapWidth, mapHeight);
-				BuildMapGrid();
-				errorData.errorMessage = "";
-			}
-			else
-			{
-				errorData.errorMessage = "Invalid Map Height";
-				return;
-			}
+		public void createNewMap(int width, int height)
+		{
+			mapWidth = width;
+			mapHeight = height;
+			appMap = new MapBuilderApp();
+			appMap.initializeMap(mapWidth, mapHeight);
+			BuildMapGrid();
+			errorData.errorMessage = "";
 		}
 
 		/// <summary>

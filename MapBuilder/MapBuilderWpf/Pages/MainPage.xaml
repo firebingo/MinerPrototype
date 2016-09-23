@@ -49,17 +49,6 @@
 		</Grid>
 		<Grid x:Name="mapParentGrid" MouseMove="GridOnMouseMove" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50" />
 		<Grid x:Name="bottomControls" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="15" Width="350">
-			<StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15">
-				<WrapPanel>
-					<Label Content="Height" Width="45"/>
-					<TextBox HorizontalAlignment="Right" Width="40" Margin="3" Text="{Binding heightTextBox, Mode=TwoWay}"/>
-				</WrapPanel>
-				<WrapPanel>
-					<Label Content="Width" Width="45"/>
-					<TextBox HorizontalAlignment="Right" Width="40" Margin="3" Text="{Binding widthTextBox, Mode=TwoWay}"/>
-				</WrapPanel>
-			</StackPanel>
-			<Button Margin="15" Width="100" Height="50" Click="newMapButtonClick" Content="new map"/>
 			<Button Margin="25" Width="60" Height="30" HorizontalAlignment="Right"  Click="saveMapButtonClick" Content="temp save"/>
 		</Grid>
 		<Grid x:Name="rightControls" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15" Height="450" Width="175">

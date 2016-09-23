@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using MapBuilderWpf.Pages;
+using MapBuilderWpf.Windows;
 
 namespace MapBuilderWpf
 {
@@ -21,7 +23,21 @@ namespace MapBuilderWpf
 	{
 		public viewsEnum currentView;
 		public List<MenuItem> viewItems;
-		private MainPage mainAppPage;
+		private MainPage _mainAppPage;
+		public MainPage mainAppPage {
+			get
+			{
+				if(_mainAppPage == null)
+				{
+					_mainAppPage = mainPage.Content as MainPage;
+				}
+				return _mainAppPage;
+			}
+			private set
+			{
+				_mainAppPage = value;
+			}
+		}
 		private bool ignoreUnchecked;
 
 		public MainWindow()
@@ -37,6 +53,10 @@ namespace MapBuilderWpf
 			viewItems[(int)currentView].IsChecked = true;
 			mainAppPage = mainPage.Content as MainPage;
 			ignoreUnchecked = false;
+			this.Closed += delegate
+			{
+				App.Current.Shutdown();
+			};
 		}
 
 		private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
@@ -51,9 +71,8 @@ namespace MapBuilderWpf
 		private void viewChecked(object sender, RoutedEventArgs e)
 		{
 			if(mainAppPage == null)
-			{
 				mainAppPage = mainPage.Content as MainPage;
-			}
+
 			var check = sender as MenuItem;
 			if (check != null)
 			{
@@ -104,6 +123,44 @@ namespace MapBuilderWpf
 					item.IsChecked = false;
 			}
 			ignoreUnchecked = false;
+		}
+
+		private void newMap(object sender, RoutedEventArgs e)
+		{
+			newMapWindow mapWindow = new newMapWindow(this);
+			mapWindow.Show();
+		}
+
+		private void saveMap(object sender, RoutedEventArgs e)
+		{
+			if (mainAppPage == null)
+				mainAppPage = mainPage.Content as MainPage;
+
+			if (mainAppPage?.mapGrid != null)
+			{
+				var result = mainAppPage.appMap.saveMap();
+				if (result)
+				{
+					mainAppPage.updateErrorMessage("");
+					return;
+				}
+				else
+					mainAppPage.updateErrorMessage("Error Saving Map");
+			}
+			else
+			{
+				mainAppPage.updateErrorMessage("Error Saving Map: No Map To Save");
+			}
+		}
+
+		private void openMap(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void importMap(object sender, RoutedEventArgs e)
+		{
+
 		}
 	}
 }

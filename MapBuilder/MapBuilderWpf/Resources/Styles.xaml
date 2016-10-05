@@ -6,6 +6,20 @@
 		<ResourceDictionary Source="Controls.xaml"/>
 	</ResourceDictionary.MergedDictionaries>
 	
+	<!-- Base Grid Style -->
+	<Style TargetType="{x:Type Grid}" x:Key="baseGridStyle">
+		<Style.Resources>
+			<Style TargetType="{x:Type Label}">
+				<Setter Property="Foreground" Value="{StaticResource TextForegroundColor}" />
+			</Style>
+			<Style TargetType="{x:Type TextBox}">
+				<Setter Property="Foreground" Value="{StaticResource TextForegroundColor}" />
+				<Setter Property="Background" Value="{StaticResource TextBackgroundColor}" />
+				<Setter Property="BorderBrush" Value="{StaticResource TextBorderColor}" />
+			</Style>
+		</Style.Resources>
+	</Style>
+	
 	<!-- Top Bar Button Template -->
 	<Style TargetType="{x:Type Button}" x:Key="topBarButtonStyle">
 		<Setter Property="Height" Value="30"/>

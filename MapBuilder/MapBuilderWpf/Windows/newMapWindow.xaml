@@ -7,11 +7,19 @@
         mc:Ignorable="d"
 		ResizeMode="NoResize"
         Title="New Map" Height="300" Width="300">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Resources/Styles.xaml"/>
+				<ResourceDictionary Source="../Resources/Controls.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
 	<Grid Background="{StaticResource WindowBackgroundColor}">
 		<Grid x:Name="errorGrid" Height="40" Width="275" HorizontalAlignment="Center" VerticalAlignment="Top">
 			<Label HorizontalAlignment="Center"  Margin="5" Foreground="Red" Content="{Binding Path=errorMessage}"></Label>
 		</Grid>
-		<Grid x:Name="newMapControls" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15" Width="275">
+		<Grid x:Name="newMapControls" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15" Width="275" Style="{StaticResource baseGridStyle}">
 			<StackPanel>
 				<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15">
 					<WrapPanel>

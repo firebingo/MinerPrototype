@@ -18,9 +18,9 @@ namespace MapBuilderWpf.Pages
 		public MapBuilderApp appMap { get; private set; }
 		private int mapWidth = 0;
 		private int mapHeight = 0;
-		private const int baseGridWidth = 700;
+		private const int baseGridWidth = 725;
 		private int maxGridWidth = baseGridWidth;
-		private const int baseGridHeight = 700;
+		private const int baseGridHeight = 725;
 		private int maxGridHeight = baseGridHeight;
 		private const int baseTileWidth = 32;
 		private int maxTileWidth = baseTileWidth;
@@ -130,7 +130,7 @@ namespace MapBuilderWpf.Pages
 						gridTileData gbd = bu.DataContext as gridTileData;
 						if (gbd != null)
 						{
-							gbd.fontSize = currentFontSize;
+							gbd.fontSize = currentFontSize > 8 ? currentFontSize : 0.01;
 							gbd.Width = colWidth;
 							gbd.Height = rowHeight;
 						}
@@ -180,26 +180,6 @@ namespace MapBuilderWpf.Pages
 		}
 
 		/// <summary>
-		/// Save the map
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void saveMapButtonClick(object sender, RoutedEventArgs e)
-		{
-			if (mapGrid != null)
-			{
-				var result = appMap.saveMap();
-				if (result)
-				{
-					errorData.errorMessage = "";
-					return;
-				}
-				else
-					errorData.errorMessage = "Error Saving Map";
-			}
-		}
-
-		/// <summary>
 		/// When the mouse moves on the grid.
 		/// If the mouse is pressed update the tile that the mouse is over with the data
 		///  in the UI controls.
@@ -222,11 +202,30 @@ namespace MapBuilderWpf.Pages
 								gridTileData gtd = co.DataContext as gridTileData;
 								if (gtd != null)
 								{
-									if (e.LeftButton == MouseButtonState.Pressed)
-									{
-										changeGridTile(gtd);
-									}
+									changeGridTile(gtd);
 								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private void GridOnMouseLeftUp(object sender, MouseButtonEventArgs e)
+		{
+			if (mapGrid?.Children != null && mapGrid.Children.Count > 0)
+			{
+				foreach (var child in mapGrid.Children)
+				{
+					var co = child as Control;
+					if (co != null)
+					{
+						if (co.IsMouseOver)
+						{
+							gridTileData gtd = co.DataContext as gridTileData;
+							if (gtd != null)
+							{
+								changeGridTile(gtd);
 							}
 						}
 					}
@@ -401,7 +400,7 @@ namespace MapBuilderWpf.Pages
 						else if (currentView == viewsEnum.crystal)
 							tileData.showCrystal = Visibility.Visible;
 						currentFontSize = (double)colWidth / (double)2;
-						tileData.fontSize = currentFontSize;
+						tileData.fontSize = currentFontSize > 8 ? currentFontSize : 0.01;
 						gridTile.DataContext = tileData;
 						Grid.SetRow(gridTile, y);
 						Grid.SetColumn(gridTile, x);

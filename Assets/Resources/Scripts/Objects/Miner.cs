@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Miner : Entity
 {
-    public NavMeshAgent navAgent;
+    public UnityEngine.AI.NavMeshAgent navAgent;
     public Order currentOrder;
     public bool doingOrder;
     protected float navSpeed;
@@ -28,7 +28,7 @@ public class Miner : Entity
     {
         if (navAgent == null)
         {
-            navAgent = GetComponent<NavMeshAgent>();
+            navAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
             navSpeed = navAgent.speed;
         }
 

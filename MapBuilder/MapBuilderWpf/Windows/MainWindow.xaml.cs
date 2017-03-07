@@ -50,6 +50,7 @@ namespace MapBuilderWpf
 			viewItems.Add(oreView);
 			viewItems.Add(crystalView);
 			viewItems.Add(specialView);
+			viewItems.Add(buildingView);
 			viewItems[(int)currentView].IsChecked = true;
 			mainAppPage = mainPage.Content as MainPage;
 			ignoreUnchecked = false;
@@ -92,6 +93,10 @@ namespace MapBuilderWpf
 				else if(check == viewItems[(int)viewsEnum.special])
 				{
 					currentView = viewsEnum.special;
+				}
+				else if (check == viewItems[(int)viewsEnum.building])
+				{
+					currentView = viewsEnum.building;
 				}
 				if (mainAppPage != null)
 					mainAppPage.changeCurrentView(currentView);

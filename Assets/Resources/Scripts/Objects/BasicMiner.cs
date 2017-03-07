@@ -100,7 +100,7 @@ public class BasicMiner : Miner
         {
             if (navAgent == null)
             {
-                navAgent = GetComponent<NavMeshAgent>();
+                navAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
                 navSpeed = navAgent.speed;
             }
 
@@ -110,7 +110,7 @@ public class BasicMiner : Miner
         {
             if (navAgent == null)
             {
-                navAgent = GetComponent<NavMeshAgent>();
+                navAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
                 navSpeed = navAgent.speed;
             }
 
@@ -121,7 +121,7 @@ public class BasicMiner : Miner
         {
             if (navAgent == null)
             {
-                navAgent = GetComponent<NavMeshAgent>();
+                navAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
                 navSpeed = navAgent.speed;
             }
 

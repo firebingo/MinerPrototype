@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 
 namespace MapBuilderWpf
 {
@@ -6,10 +7,7 @@ namespace MapBuilderWpf
 	{
 		public static Color lerpColors(Color c1, Color c2, float lerpValue)
 		{
-			if (lerpValue > 1.0f)
-				lerpValue = 1.0f;
-			else if (lerpValue < 0.0f)
-				lerpValue = 0.0f;
+			lerpValue = clampValue<float>(lerpValue, 0.0f, 1.0f);
 			return Color.Add(c1, (Color.Multiply(Color.Subtract(c2,c1), lerpValue)));
 			//Color retval = new Color();
 			//int newA = rangeInt((int)(c1.A + (c2.A - c1.A) * lerpValue),255,0);
@@ -20,14 +18,14 @@ namespace MapBuilderWpf
 			//return retval;
 		}
 
-		public static int rangeInt(int value, int max, int min)
+		public static T clampValue<T>(T i, T lower, T upper) where T : IComparable
 		{
-			if (value > max)
-				return max;
-			else if (value < min)
-				return min;
+			if (i.CompareTo(upper) > 0)
+				return upper;
+			else if (i.CompareTo(lower) < 0)
+				return lower;
 			else
-				return value;
+				return i;
 		}
 	}
 }

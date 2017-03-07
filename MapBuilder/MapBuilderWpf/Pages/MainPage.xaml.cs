@@ -512,6 +512,9 @@ namespace MapBuilderWpf.Pages
 							}
 						}
 						break;
+					case viewsEnum.building:
+
+						break;
 				}
 			}
 		}
@@ -613,6 +616,7 @@ namespace MapBuilderWpf.Pages
 		Visibility _showOre;
 		Visibility _showCrystal;
 		Visibility _showSpecial;
+		Visibility _showBuilding;
 		double _fontSize;
 
 		public terrainType terrain
@@ -716,6 +720,19 @@ namespace MapBuilderWpf.Pages
 			{
 				_showSpecial = value;
 				NotifyPropertyChanged("showSpecial");
+			}
+		}
+
+		public Visibility showBuilding
+		{
+			get
+			{
+				return _showBuilding;
+			}
+			set
+			{
+				_showBuilding = value;
+				NotifyPropertyChanged("showBuilding");
 			}
 		}
 

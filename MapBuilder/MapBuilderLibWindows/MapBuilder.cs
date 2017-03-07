@@ -7,24 +7,15 @@ using MapEnums;
 
 namespace MapBuilderLibWindows
 {
-	public class MapHeader
-	{
-		public float oxygenCount;
-		public float oxygenRate;
-
-		public MapHeader()
-		{
-		}
-	}
-
 	public class Map
 	{
-		public int width;
-		public int height;
+		public int width { get; private set; }
+		public int height { get; private set; }
 
 		public MapWriter mapWriter { get; private set; }
 		public MapHeader mapHeader { get; private set; }
 		public MapTile[,] mapTiles { get; private set; }
+		public MapBuildings buildings { get; private set; }
 
 		public Map(int width, int height)
 		{
@@ -33,6 +24,7 @@ namespace MapBuilderLibWindows
 			mapWriter = new MapWriter();
 			mapHeader = new MapHeader();
 			mapTiles = new MapTile[width, height];
+			buildings = new MapBuildings();
 		}
 
 		public void intializeBlankMap()
@@ -42,7 +34,7 @@ namespace MapBuilderLibWindows
 			{
 				for (int y = 0; y < height; ++y)
 				{
-					mapTiles[x, y] = new MapTile(terrainType.floor, x, y, 0, 0);
+					mapTiles[x, y] = new MapTile(terrainType.floor, new Vector2<int>(x, y), 0, 0);
 				}
 			}
 
@@ -50,7 +42,7 @@ namespace MapBuilderLibWindows
 			for (int x = 0; x < width; ++x)
 			{
 				mapTiles[x, 0].tileType = terrainType.solidrock;
-				mapTiles[x, height-1].tileType = terrainType.solidrock;
+				mapTiles[x, height - 1].tileType = terrainType.solidrock;
 			}
 			for (int y = 0; y < height; ++y)
 			{
@@ -65,6 +57,10 @@ namespace MapBuilderLibWindows
 			{
 				if ((x < width && y < height) && (x > -1 && y > -1))
 				{
+					if (mapTiles[x, y].building != Guid.Empty)
+					{
+						return false;
+					}
 					mapTiles[x, y].tileType = tileType;
 					mapTiles[x, y].oreCount = oreCount;
 					mapTiles[x, y].crystalCount = crystalCount;
@@ -88,9 +84,52 @@ namespace MapBuilderLibWindows
 			}
 		}
 
+		public bool placeBuilding(BuildingModel building)
+		{
+			try
+			{
+				var orientedLayout = building.orientedLayout;
+				foreach (var tile in orientedLayout)
+				{
+					var tileX = building.pos.x + tile.relativePos.x;
+					var tileY = building.pos.y + tile.relativePos.y;
+					if (tileX < 0 || tileX > width)
+						return false;
+					if (tileY < 0 || tileY > height)
+						return false;
+					if(mapTiles[tileX, tileY].building != Guid.Empty)
+						return false;
+					mapTiles[tileX, tileY].tileType = terrainType.floor;
+					mapTiles[tileX, tileY].mobSpawn = false;
+					mapTiles[tileX, tileY].building = building.buildingGuid;
+				}
+				buildings.mapBuildings.Add(building.buildingGuid, building);
+				return true;
+			}
+			catch (Exception e)
+			{
+				return false;
+			}
+		}
+
+		public bool removeBuilding(Guid buildingGuid)
+		{
+			var success = false;
+			foreach(var tile in mapTiles)
+			{
+				if (tile.building == buildingGuid)
+				{
+					tile.building = default(Guid);
+					success = true;
+				}
+			}
+			buildings.mapBuildings.Remove(buildingGuid);
+			return success;
+		}
+
 		public bool saveMap()
 		{
-			return mapWriter.serializeMap(mapTiles, mapHeader);
+			return mapWriter.serializeMap(mapTiles, mapHeader, buildings);
 		}
 	}
 }

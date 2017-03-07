@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MapEnums
+﻿namespace MapEnums
 {
 	public enum terrainType
 	{
@@ -16,5 +11,33 @@ namespace MapEnums
 		solidrock,
 		water,
 		lava
+	}
+
+	public enum buildingType
+	{
+		none,
+		toolstore,
+		unknown
+	}
+
+	public enum orientation
+	{
+		north,
+		east,
+		south,
+		west
+	}
+
+	public enum buildingSection
+	{
+		building,
+		path,
+		empty,
+		personTeleport,
+		resourceCollect,
+		landTeleport,
+		waterTeleport,
+		energyCollect,
+		energyRecharge
 	}
 }

@@ -36,13 +36,12 @@
 					<MenuItem Header="_Ore Count" Name="oreView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
 					<MenuItem Header="_Crystal Count" Name="crystalView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
 					<MenuItem Header="_Special" Name="specialView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
+					<MenuItem Header="_Building" Name="buildingView" Unchecked="viewUnchecked" Checked="viewChecked" IsCheckable="True" Foreground="{StaticResource TextForegroundColor}" Style="{StaticResource topBarContextMenuItemStyle}" />
 				</MenuItem>
 			</Menu>
 		</DockPanel>
 		<Grid>
-			<Frame Name="mainPage" Source="../Pages/MainPage.xaml">
-
-			</Frame>
+			<Frame Name="mainPage" Source="../Pages/MainPage.xaml"></Frame>
 		</Grid>
 	</Grid>
 </Window>

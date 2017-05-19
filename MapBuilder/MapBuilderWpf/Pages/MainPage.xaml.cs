@@ -1,12 +1,17 @@
-﻿using MapEnums;
+﻿//system
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+//map builder wpf
+using MapBuilderWpf.Models;
+//map builder lib
+using MapBuilderLibWindows;
+using MapEnums;
+using MapBuilderWpf.Helpers;
 
 namespace MapBuilderWpf.Pages
 {
@@ -18,16 +23,6 @@ namespace MapBuilderWpf.Pages
 		public MapBuilderApp appMap { get; private set; }
 		private int mapWidth = 0;
 		private int mapHeight = 0;
-		private const int baseGridWidth = 725;
-		private int maxGridWidth = baseGridWidth;
-		private const int baseGridHeight = 725;
-		private int maxGridHeight = baseGridHeight;
-		private const int baseTileWidth = 32;
-		private int maxTileWidth = baseTileWidth;
-		private const int baseTileHeight = 32;
-		private int maxTileHeight = baseTileHeight;
-		private const double baseFontSize = 16;
-		private double currentFontSize = baseFontSize;
 		private List<ColumnDefinition> gridColumns;
 		private List<RowDefinition> gridRows;
 		private bottomControlData bottomData;
@@ -35,7 +30,6 @@ namespace MapBuilderWpf.Pages
 		private leftControlData leftData;
 		private errorMessageData errorData;
 		public Grid mapGrid { get; private set; }
-		private DateTime LastSizeUpdate = DateTime.Now;
 		public viewsEnum currentView;
 		const int oreColorUpperBound = 5;
 		const int crystalColorUpperBound = 5;
@@ -56,6 +50,8 @@ namespace MapBuilderWpf.Pages
 			rightData.crystalCount = "0";
 			rightData.mobSpawn = false;
 			rightData.terrainType = (int)terrainType.empty;
+			rightData.showMapControls = Visibility.Visible;
+			rightData.showBuildingControls = Visibility.Hidden;
 			rightControls.DataContext = rightData;
 
 			leftData = new leftControlData();
@@ -75,100 +71,38 @@ namespace MapBuilderWpf.Pages
 				terrainComboBox.Items.Add(nameItem);
 			}
 
-			checkSizes((int)this.Width, (int)this.Height);
+			buildingComboBox.Items.Add("None");
+			foreach (var name in PredefBuildings.preBuildings)
+			{
+				var nameItem = new ComboBoxItem();
+				nameItem.Content = name.Key;
+				buildingComboBox.Items.Add(nameItem);
+			}
+
+			GridHelper.checkSizes((int)this.Width, (int)this.Height, mapGrid, mapWidth, mapHeight, gridColumns, gridRows);
 			currentView = viewsEnum.terrain;
 		}
 
 		private void PageSizeChanged(object sender, SizeChangedEventArgs e)
 		{
-			checkSizes((int)e.NewSize.Width, (int)e.NewSize.Height);
+			GridHelper.checkSizes((int)e.NewSize.Width, (int)e.NewSize.Height, mapGrid, mapWidth, mapHeight, gridColumns, gridRows);
 		}
 
 		/// <summary>
-		/// Checks the passed window height and width and calculates new row and column max sizes
-		/// so the grid fits the window.
+		/// Updates the error messages on the page.
 		/// </summary>
-		/// <param name="windowWidth"></param>
-		/// <param name="windowHeight"></param>
-		private void checkSizes(int windowWidth, int windowHeight)
-		{
-			LastSizeUpdate = DateTime.Now;
-			double ratio = 1.0;
-			long baseSize = 1920 * 1080;
-			ratio = (double)(windowWidth * windowHeight) / baseSize;
-			maxGridWidth = (int)(baseGridWidth * ratio);
-			maxTileWidth = (int)(baseTileWidth * ratio);
-			maxGridHeight = maxGridWidth;
-			maxTileHeight = maxTileWidth;
-			updateGridSizes();
-		}
-
-		/// <summary>
-		/// recalculates grid sizes and updates the current grid.
-		/// </summary>
-		private void updateGridSizes()
-		{
-			if (mapGrid != null)
-			{
-				calculateGridSizes();
-				double colWidth = mapGrid.Width / mapWidth;
-				double rowHeight = mapGrid.Height / mapHeight;
-				currentFontSize = (double)colWidth / (double)2;
-				foreach (var col in gridColumns)
-				{
-					col.Width = new GridLength(colWidth);
-				}
-				foreach (var row in gridRows)
-				{
-					row.Height = new GridLength(rowHeight);
-				}
-				foreach (var child in mapGrid.Children)
-				{
-					var bu = child as Control;
-					if (bu != null)
-					{
-						gridTileData gbd = bu.DataContext as gridTileData;
-						if (gbd != null)
-						{
-							gbd.fontSize = currentFontSize > 8 ? currentFontSize : 0.01;
-							gbd.Width = colWidth;
-							gbd.Height = rowHeight;
-						}
-					}
-				}
-			}
-		}
-
-		/// <summary>
-		/// Does the caluclations for grid and column widths so that they fit the grid sizes
-		/// </summary>
-		private void calculateGridSizes()
-		{
-			mapGrid.Width = 0;
-			mapGrid.Height = 0;
-			if (mapWidth > mapHeight)
-			{
-				mapGrid.Width = mapWidth * maxTileWidth > maxGridWidth ? maxGridWidth : mapWidth * maxTileWidth;
-				mapGrid.Height = (mapGrid.Width) * ((float)mapHeight / (float)mapWidth > 1 ? 1 : (float)mapHeight / (float)mapWidth);
-			}
-			else if (mapWidth < mapHeight)
-			{
-				mapGrid.Height = mapHeight * maxTileHeight > maxGridHeight ? maxGridHeight : mapHeight * maxTileHeight;
-				mapGrid.Width = (mapGrid.Height) * ((float)mapWidth / (float)mapHeight > 1 ? 1 : (float)mapWidth / (float)mapHeight);
-			}
-			else
-			{
-				mapGrid.Width = mapWidth * maxTileWidth > maxGridWidth ? maxGridWidth : mapWidth * maxTileWidth;
-				mapGrid.Height = mapHeight * maxTileHeight > maxGridHeight ? maxGridHeight : mapHeight * maxTileHeight;
-			}
-		}
-
+		/// <param name="message"></param>
 		public void updateErrorMessage(string message)
 		{
-			if(message != null && message != "")
+			if (message != null && message != "")
 				errorData.errorMessage = message;
 		}
 
+		/// <summary>
+		/// Runs the process of creating a new map
+		/// </summary>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
 		public void createNewMap(int width, int height)
 		{
 			mapWidth = width;
@@ -211,6 +145,11 @@ namespace MapBuilderWpf.Pages
 			}
 		}
 
+		/// <summary>
+		/// When a grid tile is clicked on update its data.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void GridOnMouseLeftUp(object sender, MouseButtonEventArgs e)
 		{
 			if (mapGrid?.Children != null && mapGrid.Children.Count > 0)
@@ -264,9 +203,9 @@ namespace MapBuilderWpf.Pages
 							var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
 							data.Background = new SolidColorBrush(colorToUse);
 						}
-						if(currentView == viewsEnum.special)
+						if (currentView == viewsEnum.special)
 						{
-							if(tile != null)
+							if (tile != null)
 							{
 								if (tile.tileType > terrainType.roof && tile.tileType < terrainType.water)
 								{
@@ -281,9 +220,9 @@ namespace MapBuilderWpf.Pages
 									data.Background = new SolidColorBrush(Colors.White);
 							}
 						}
-						if(currentView == viewsEnum.ore)
+						if (currentView == viewsEnum.ore)
 						{
-							if(tile != null)
+							if (tile != null)
 							{
 								if (tile.tileType > terrainType.roof && tile.tileType < terrainType.water)
 									data.Background = new SolidColorBrush(HelperFunctions.lerpColors(resourceColorUpper, resourceColorLower, ((float)tile.oreCount / (float)oreColorUpperBound)));
@@ -291,7 +230,7 @@ namespace MapBuilderWpf.Pages
 									data.Background = new SolidColorBrush(Colors.White);
 							}
 						}
-						if(currentView == viewsEnum.crystal)
+						if (currentView == viewsEnum.crystal)
 						{
 							if (tile != null)
 							{
@@ -344,7 +283,7 @@ namespace MapBuilderWpf.Pages
 
 			//create the ui grid for the map
 			mapGrid.Background = new SolidColorBrush(Colors.LightSteelBlue);
-			calculateGridSizes();
+			GridHelper.calculateGridSizes(mapGrid, mapWidth, mapHeight);
 			mapGrid.HorizontalAlignment = HorizontalAlignment.Center;
 			mapGrid.VerticalAlignment = VerticalAlignment.Center;
 			double colWidth = mapGrid.Width / mapWidth;
@@ -387,7 +326,7 @@ namespace MapBuilderWpf.Pages
 						tileData.Width = colWidth;
 						tileData.x = x;
 						tileData.y = y;
-						tileData.oreCount = appMap.buildMap.mapTiles[x,y].oreCount;
+						tileData.oreCount = appMap.buildMap.mapTiles[x, y].oreCount;
 						tileData.crystalCount = appMap.buildMap.mapTiles[x, y].crystalCount;
 						tileData.mobSpawn = appMap.buildMap.mapTiles[x, y].mobSpawn;
 						tileData.crystalRecharge = appMap.buildMap.mapTiles[x, y].crystalRecharge;
@@ -399,8 +338,8 @@ namespace MapBuilderWpf.Pages
 							tileData.showOre = Visibility.Visible;
 						else if (currentView == viewsEnum.crystal)
 							tileData.showCrystal = Visibility.Visible;
-						currentFontSize = (double)colWidth / (double)2;
-						tileData.fontSize = currentFontSize > 8 ? currentFontSize : 0.01;
+						GridHelper.currentFontSize = (double)colWidth / (double)2;
+						tileData.fontSize = GridHelper.currentFontSize > 8 ? GridHelper.currentFontSize : 0.01;
 						gridTile.DataContext = tileData;
 						Grid.SetRow(gridTile, y);
 						Grid.SetColumn(gridTile, x);
@@ -410,14 +349,24 @@ namespace MapBuilderWpf.Pages
 			}
 
 			mapParentGrid.Children.Add(mapGrid);
-			changeCurrentView(currentView);
+			changeCurrentView(currentView, true);
+		}
+
+		/// <summary>
+		/// Rotates the selected building clockwise.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void rotateBuildingCW(object sender, RoutedEventArgs e)
+		{
+
 		}
 
 		/// <summary>
 		/// Changes the current view of the grid.
 		/// </summary>
 		/// <param name="view"></param>
-		public void changeCurrentView(viewsEnum view)
+		public void changeCurrentView(viewsEnum view, bool hasMap)
 		{
 			currentView = view;
 			if (mapGrid != null && mapGrid.Children.Count > 0)
@@ -426,6 +375,8 @@ namespace MapBuilderWpf.Pages
 				{
 					default:
 					case viewsEnum.terrain:
+						rightData.showMapControls = Visibility.Visible;
+						rightData.showBuildingControls = Visibility.Hidden;
 						foreach (var child in mapGrid.Children)
 						{
 							var ct = child as Control;
@@ -446,6 +397,8 @@ namespace MapBuilderWpf.Pages
 						}
 						break;
 					case viewsEnum.ore:
+						rightData.showMapControls = Visibility.Visible;
+						rightData.showBuildingControls = Visibility.Hidden;
 						foreach (var child in mapGrid.Children)
 						{
 							var ct = child as Control;
@@ -466,6 +419,8 @@ namespace MapBuilderWpf.Pages
 						}
 						break;
 					case viewsEnum.crystal:
+						rightData.showMapControls = Visibility.Visible;
+						rightData.showBuildingControls = Visibility.Hidden;
 						foreach (var child in mapGrid.Children)
 						{
 							var ct = child as Control;
@@ -486,7 +441,9 @@ namespace MapBuilderWpf.Pages
 						}
 						break;
 					case viewsEnum.special:
-						foreach(var child in mapGrid.Children)
+						rightData.showMapControls = Visibility.Visible;
+						rightData.showBuildingControls = Visibility.Hidden;
+						foreach (var child in mapGrid.Children)
 						{
 							var ct = child as Control;
 							if (ct != null)
@@ -513,7 +470,8 @@ namespace MapBuilderWpf.Pages
 						}
 						break;
 					case viewsEnum.building:
-
+						rightData.showMapControls = Visibility.Hidden;
+						rightData.showBuildingControls = Visibility.Visible;
 						break;
 				}
 			}
@@ -539,6 +497,11 @@ namespace MapBuilderWpf.Pages
 			}
 		}
 
+		/// <summary>
+		/// Used to confirm text in the crystal input box
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void CrystalCountKeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Enter)
@@ -553,210 +516,14 @@ namespace MapBuilderWpf.Pages
 				}
 			}
 		}
-	}
 
-	public class bottomControlData
-	{
-		public string widthTextBox { get; set; }
-		public string heightTextBox { get; set; }
-	}
-
-	public class rightControlData
-	{
-		public int terrainType { get; set; }
-		public string oreCount { get; set; }
-		public string crystalCount { get; set; }
-		public bool mobSpawn { get; set; }
-		public bool crystalRecharge { get; set; }
-	}
-
-	public class leftControlData
-	{
-		public string oxygenCount { get; set; }
-		public string oxygenTick { get; set; }
-	}
-
-	public class errorMessageData : INotifyPropertyChanged
-	{
-		string _errorMessage;
-
-		public string errorMessage
+		private void buildingChanged(object sender, SelectionChangedEventArgs e)
 		{
-			get
-			{
-				return _errorMessage;
-			}
-			set
-			{
-				_errorMessage = value;
-				NotifyPropertyChanged("errorMessage");
-			}
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		private void NotifyPropertyChanged(String info)
-		{
-			if (PropertyChanged != null)
-			{
-				PropertyChanged(this, new PropertyChangedEventArgs(info));
-			}
-		}
-	}
-
-	public class gridTileData : Control, INotifyPropertyChanged
-	{
-		public int x;
-		public int y;
-		terrainType _terrain;
-		int _oreCount;
-		int _crystalCount;
-		bool _mobSpawn;
-		bool _crystalRecharge;
-		Visibility _showOre;
-		Visibility _showCrystal;
-		Visibility _showSpecial;
-		Visibility _showBuilding;
-		double _fontSize;
-
-		public terrainType terrain
-		{
-			get
-			{
-				return _terrain;
-			}
-			set
-			{
-				_terrain = value;
-				NotifyPropertyChanged("terrain");
-			}
-		}
-
-		public int oreCount
-		{
-			get
-			{
-				return _oreCount;
-			}
-			set
-			{
-				_oreCount = value;
-				NotifyPropertyChanged("oreCount");
-			}
-		}
-
-		public int crystalCount
-		{
-			get
-			{
-				return _crystalCount;
-			}
-			set
-			{
-				_crystalCount = value;
-				NotifyPropertyChanged("crystalCount");
-			}
-		}
-
-		public bool mobSpawn
-		{
-			get
-			{
-				return _mobSpawn;
-			}
-			set
-			{
-				_mobSpawn = value;
-				NotifyPropertyChanged("mobSpawn");
-			}
-		}
-
-		public bool crystalRecharge
-		{
-			get
-			{
-				return _crystalRecharge;
-			}
-			set
-			{
-				_crystalRecharge = value;
-				NotifyPropertyChanged("crystalRecharge");
-			}
-		}
-
-		public Visibility showOre
-		{
-			get
-			{
-				return _showOre;
-			}
-			set
-			{
-				_showOre = value;
-				NotifyPropertyChanged("showOre");
-			}
-		}
-
-		public Visibility showCrystal
-		{
-			get
-			{
-				return _showCrystal;
-			}
-			set
-			{
-				_showCrystal = value;
-				NotifyPropertyChanged("showCrystal");
-			}
-		}
-
-		public Visibility showSpecial
-		{
-			get
-			{
-				return _showSpecial;
-			}
-			set
-			{
-				_showSpecial = value;
-				NotifyPropertyChanged("showSpecial");
-			}
-		}
-
-		public Visibility showBuilding
-		{
-			get
-			{
-				return _showBuilding;
-			}
-			set
-			{
-				_showBuilding = value;
-				NotifyPropertyChanged("showBuilding");
-			}
-		}
-
-		public double fontSize
-		{
-			get
-			{
-				return _fontSize;
-			}
-			set
-			{
-				_fontSize = value;
-				NotifyPropertyChanged("fontSize");
-			}
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		private void NotifyPropertyChanged(String info)
-		{
-			if (PropertyChanged != null)
-			{
-				PropertyChanged(this, new PropertyChangedEventArgs(info));
-			}
+			var item = e.AddedItems[0] as ComboBoxItem;
+			if (item?.Content != null)
+				EventHelper.dynamicMessage(this, new { building = item?.Content != null ? item.Content : "None" }, "changeBuilding");
+			else
+				EventHelper.dynamicMessage(this, new { building = "None" }, "changeBuilding");
 		}
 	}
 }

@@ -10,8 +10,7 @@
 	    Height="1080"
 	    Width="1920"
 		MinHeight="480"
-		MinWidth="640"
-		SizeChanged="WindowSizeChanged">
+		MinWidth="640">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -42,6 +41,7 @@
 		</DockPanel>
 		<Grid>
 			<Frame Name="mainPage" Source="../Pages/MainPage.xaml"></Frame>
+			<Frame Name="buildingGhost" Source="../Pages/BuildingGhostLayer.xaml"></Frame>
 		</Grid>
 	</Grid>
 </Window>

@@ -37,7 +37,7 @@
 		<Grid x:Name="bottomControls" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="15" Width="350">
 		</Grid>
 		<Grid x:Name="rightControls" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15" Height="450" Width="185">
-			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="185">
+			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="185" Visibility="{Binding showMapControls, Mode=OneWay}">
 				<WrapPanel>
 					<Label Content="Terrain Type" Width="100"/>
 					<ComboBox x:Name="terrainComboBox" HorizontalAlignment="Right" Width="76" Margin="3" SelectedIndex="{Binding terrainType, Mode=TwoWay}"/>
@@ -57,6 +57,13 @@
 				<WrapPanel>
 					<Label Content="Crystal Recharge" Width="100"/>
 					<CheckBox HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" IsChecked="{Binding crystalRecharge, Mode=TwoWay}"/>
+				</WrapPanel>
+			</StackPanel>
+			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="185" Visibility="{Binding showBuildingControls, Mode=OneWay}">
+				<Button Margin="15" Width="100" Height="25" Click="rotateBuildingCW" Content="Rotate CW"/>
+				<WrapPanel>
+					<Label Content="Building" Width="65"/>
+					<ComboBox x:Name="buildingComboBox" HorizontalAlignment="Right" Width="110" Margin="3" SelectedIndex="{Binding buildingType, Mode=TwoWay}" SelectionChanged="buildingChanged"/>
 				</WrapPanel>
 			</StackPanel>
 		</Grid>

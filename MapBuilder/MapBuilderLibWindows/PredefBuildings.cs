@@ -5,14 +5,14 @@ namespace MapBuilderLibWindows
 {
 	public static class PredefBuildings
 	{
-		public static readonly Dictionary<buildingType, BuildingTile[,]> preBuildings = new Dictionary<buildingType, BuildingTile[,]>()
+		public static readonly Dictionary<string, BuildingTile[,]> preBuildings = new Dictionary<string, BuildingTile[,]>()
 		{
 			{
 				/*
 				 * [x]
 				 * [X]
 				 */
-				buildingType.toolstore,
+				"Tool Store",
 				new BuildingTile[,]
 				{
 					//y

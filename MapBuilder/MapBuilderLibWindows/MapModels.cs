@@ -77,7 +77,7 @@ namespace MapBuilderLibWindows
 	public class BuildingModel
 	{
 		public Guid buildingGuid;
-		public buildingType buildingType;
+		public string buildingType;
 		public orientation buildingDirection;
 		public BuildingTile[,] buildingLayout;
 		public BuildingTile[,] orientedLayout
@@ -101,7 +101,7 @@ namespace MapBuilderLibWindows
 		}
 		public Vector2<int> pos;
 
-		public BuildingModel(buildingType type, orientation direction, Vector2<int> pos, BuildingTile[,] layout = null)
+		public BuildingModel(string type, orientation direction, Vector2<int> pos, BuildingTile[,] layout = null)
 		{
 			buildingGuid = new Guid();
 			buildingType = type;
@@ -115,7 +115,7 @@ namespace MapBuilderLibWindows
 			}
 			else
 			{
-				if (PredefBuildings.preBuildings.ContainsKey(buildingType) && (buildingType != buildingType.unknown || buildingType != buildingType.none))
+				if (PredefBuildings.preBuildings.ContainsKey(buildingType) && (buildingType != "Unknown" || buildingType != "None"))
 				{
 					buildingLayout = PredefBuildings.preBuildings[buildingType];
 				}

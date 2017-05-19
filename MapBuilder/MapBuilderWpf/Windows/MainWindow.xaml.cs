@@ -1,7 +1,9 @@
-﻿using System;
+﻿//system
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+//map builder wpf
 using MapBuilderWpf.Pages;
 using MapBuilderWpf.Windows;
 
@@ -38,7 +40,24 @@ namespace MapBuilderWpf
 				_mainAppPage = value;
 			}
 		}
+		private BuildingGhostLayer _buildingGhostLayer;
+		public BuildingGhostLayer buildingGhostLayer
+		{
+			get
+			{
+				if (_buildingGhostLayer == null)
+				{
+					_buildingGhostLayer = buildingGhost.Content as BuildingGhostLayer;
+				}
+				return _buildingGhostLayer;
+			}
+			private set
+			{
+				_buildingGhostLayer = value;
+			}
+		}
 		private bool ignoreUnchecked;
+		public bool hasMap;
 
 		public MainWindow()
 		{
@@ -53,6 +72,7 @@ namespace MapBuilderWpf
 			viewItems.Add(buildingView);
 			viewItems[(int)currentView].IsChecked = true;
 			mainAppPage = mainPage.Content as MainPage;
+			buildingGhostLayer = buildingGhost.Content as BuildingGhostLayer;
 			ignoreUnchecked = false;
 			this.Closed += delegate
 			{
@@ -60,19 +80,12 @@ namespace MapBuilderWpf
 			};
 		}
 
-		private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
-		{
-			//checkSizes((int)e.NewSize.Width, (int)e.NewSize.Height);
-			//if (e.NewSize.Width != e.PreviousSize.Width)
-			//{
-			//	topMenuBar.Width = e.NewSize.Width - 8;
-			//}
-		}
-
 		private void viewChecked(object sender, RoutedEventArgs e)
 		{
 			if(mainAppPage == null)
 				mainAppPage = mainPage.Content as MainPage;
+			if(buildingGhostLayer == null)
+				buildingGhostLayer = buildingGhost.Content as BuildingGhostLayer;
 
 			var check = sender as MenuItem;
 			if (check != null)
@@ -99,7 +112,9 @@ namespace MapBuilderWpf
 					currentView = viewsEnum.building;
 				}
 				if (mainAppPage != null)
-					mainAppPage.changeCurrentView(currentView);
+					mainAppPage.changeCurrentView(currentView, hasMap);
+				if(buildingGhostLayer != null)
+					buildingGhostLayer.changeCurrentView(currentView, hasMap);
 			}
 		}
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 
-namespace MapBuilderWpf
+namespace MapBuilderWpf.Helpers
 {
 	public static class HelperFunctions
 	{
@@ -26,6 +26,12 @@ namespace MapBuilderWpf
 				return lower;
 			else
 				return i;
+		}
+
+		public static bool hasProperty(dynamic obj, string name)
+		{
+			Type objType = obj.GetType();
+			return objType.GetProperty(name) != null;
 		}
 	}
 }

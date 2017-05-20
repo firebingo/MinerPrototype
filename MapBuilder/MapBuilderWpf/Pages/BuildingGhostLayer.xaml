@@ -7,8 +7,15 @@
       mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920"
       Title="BuildingGhostLayer">
-
+	<Page.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Resources/Styles.xaml"/>
+				<ResourceDictionary Source="../Resources/Controls.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Page.Resources>
     <Grid>
-		<Grid x:Name="buildingGhost" Visibility="{Binding showBuildingGhost, Mode=OneWay}"/>
+		<Canvas x:Name="buildingGhost" Visibility="{Binding showBuildingGhost, Mode=OneWay}" IsHitTestVisible="False"/>
     </Grid>
 </Page>

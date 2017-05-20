@@ -107,6 +107,7 @@ namespace MapBuilderWpf.Pages
 		{
 			mapWidth = width;
 			mapHeight = height;
+			EventHelper.dynamicMessage(this, new { width = width, height = height }, "mapDimensions");
 			appMap = new MapBuilderApp();
 			appMap.initializeMap(mapWidth, mapHeight);
 			BuildMapGrid();
@@ -143,6 +144,11 @@ namespace MapBuilderWpf.Pages
 					}
 				}
 			}
+		}
+
+		private void MainOnMouseMove(object sender, MouseEventArgs e)
+		{
+			EventHelper.dynamicMessage(this, new { position = e.GetPosition(null) }, "mainMouseMove");
 		}
 
 		/// <summary>

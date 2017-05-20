@@ -61,6 +61,7 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\EventHelper.cs" />
     <Compile Include="Helpers\GridHelper.cs" />
+    <Compile Include="Models\BuildingGhostModels.cs" />
     <Compile Include="Models\MainPageModels.cs" />
     <Compile Include="Pages\BuildingGhostLayer.xaml.cs">
       <DependentUpon>BuildingGhostLayer.xaml</DependentUpon>

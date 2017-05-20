@@ -34,7 +34,7 @@
 		</Button>
 	</ControlTemplate>
 
-	<!-- Template for the tiles on the grid -->
+	<!-- Template for the tiles on the map grid -->
 	<ControlTemplate x:Key="GridTileTemplate" TargetType="{x:Type Control}">
 		<Canvas Height="{Binding Height}" Width="{Binding Width}">
 			<Label Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Content="{Binding oreCount}" Panel.ZIndex="2" Visibility="{Binding showOre}" FontSize="{Binding fontSize}"/>
@@ -44,6 +44,18 @@
 		<ControlTemplate.Triggers>
 			<Trigger Property="IsMouseOver" Value="True">
 				<Setter TargetName="rect" Property="Stroke" Value="Red"/>
+			</Trigger>
+		</ControlTemplate.Triggers>
+	</ControlTemplate>
+
+	<!-- Template for the tiles on the building ghost grid -->
+	<ControlTemplate x:Key="GhostGridTileTemplate" TargetType="{x:Type Control}">
+		<Canvas Height="{Binding Height}" Width="{Binding Width}" IsHitTestVisible="False">
+			<Rectangle x:Name="rect" Height="{Binding Height}" Width="{Binding Width}" Fill="{Binding Background}" Stroke="{StaticResource TileBorderColor}" Visibility="{Binding tileExists}" StrokeThickness="0.5" Panel.ZIndex="1"/>
+		</Canvas>
+		<ControlTemplate.Triggers>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter TargetName="rect" Property="Stroke" Value="Transparent"/>
 			</Trigger>
 		</ControlTemplate.Triggers>
 	</ControlTemplate>

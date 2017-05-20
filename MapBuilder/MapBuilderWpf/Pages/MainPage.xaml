@@ -6,7 +6,9 @@
       xmlns:local="clr-namespace:MapBuilderWpf.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920"
-      Title="MainPage" SizeChanged="PageSizeChanged">
+      Title="MainPage" 
+	  SizeChanged="PageSizeChanged"
+	  MouseMove="MainOnMouseMove">
 	<Page.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -16,7 +18,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Style="{StaticResource baseGridStyle}">
+	<Grid Style="{StaticResource baseGridStyle}" >
 		<Grid x:Name="errorGrid" Height="40" Width="640" HorizontalAlignment="Center" VerticalAlignment="Top">
 			<Label HorizontalAlignment="Center"  Margin="5" Foreground="Red" Content="{Binding Path=errorMessage}"></Label>
 		</Grid>

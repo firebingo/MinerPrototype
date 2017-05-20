@@ -6,6 +6,8 @@ using System.Windows.Controls;
 //map builder wpf
 using MapBuilderWpf.Pages;
 using MapBuilderWpf.Windows;
+using System.Windows.Input;
+using MapBuilderWpf.Helpers;
 
 namespace MapBuilderWpf
 {
@@ -78,6 +80,11 @@ namespace MapBuilderWpf
 			{
 				App.Current.Shutdown();
 			};
+		}
+
+		private void MainOnMouseMove(object sender, MouseEventArgs e)
+		{
+			EventHelper.dynamicMessage(this, new { position = e.GetPosition(null) }, "mainMouseMove");
 		}
 
 		private void viewChecked(object sender, RoutedEventArgs e)

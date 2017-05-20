@@ -22,6 +22,13 @@ namespace MapBuilderWpf.Pages
 	{
 		private buildingGhostData buildingGhostData;
 		public viewsEnum currentView;
+		private string buildingType = "None";
+		private orientation buildingOrientation;
+		private Grid ghostGrid = null;
+		private List<ColumnDefinition> gridColumns;
+		private List<RowDefinition> gridRows;
+		private int mapWidth = 0;
+		private int mapHeight = 0;
 
 		public BuildingGhostLayer()
 		{
@@ -42,14 +49,117 @@ namespace MapBuilderWpf.Pages
 					changeBuilding(e.args.building);
 				else
 					return;
+			} 
+			else if (e.target == "mapDimensions" && HelperFunctions.hasProperty(e.args, "width") && HelperFunctions.hasProperty(e.args, "height"))
+			{
+				setMapDimensions(e.args.width, e.args.height);
+			}
+			else if (e.target == "mainMouseMove" && HelperFunctions.hasProperty(e.args, "position"))
+			{
+				setGhostPosition(e.args.position);
 			}
 			else
 				return;
 		}
 
-		public void changeBuilding(string building)
+		private void setMapDimensions(int width, int height)
 		{
+			mapWidth = width;
+			mapHeight = height;
+		}
 
+		private void changeBuilding(string building)
+		{
+			buildingType = building;
+			buildGhostGrid();
+		}
+
+		private void setGhostPosition(Point position)
+		{
+			Canvas.SetLeft(ghostGrid, position.X);
+			Canvas.SetTop(ghostGrid, position.Y);
+		}
+
+		private void buildGhostGrid()
+		{
+			var layout = PredefBuildings.preBuildings.ContainsKey(buildingType) ? PredefBuildings.preBuildings[buildingType] : null;
+
+			//remove the old grid if there is one
+			if (buildingGhost.Children.Count > 0)
+				buildingGhost.Children.Clear();
+
+			ghostGrid = new Grid();
+
+			//clear the grid rows and columns
+			if (gridColumns != null)
+				gridColumns.Clear();
+			else
+				gridColumns = new List<ColumnDefinition>();
+			if (gridRows != null)
+				gridRows.Clear();
+			else
+				gridRows = new List<RowDefinition>();
+
+			if(layout != null)
+			{
+				var model = new BuildingModel(buildingType, buildingOrientation, new Vector2<int>(-1, -1), layout);
+				var oriented = model.orientedLayout;
+				var width = oriented.GetLength(0);
+				var height = oriented.GetLength(1);
+				ghostGrid.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+				GridHelper.calculateGridSizes(ghostGrid, mapWidth, mapHeight);
+				ghostGrid.HorizontalAlignment = HorizontalAlignment.Center;
+				ghostGrid.VerticalAlignment = VerticalAlignment.Center;
+				double colWidth = ghostGrid.Width / mapWidth;
+				double rowHeight = ghostGrid.Height / mapHeight;
+				for (int x = 0; x < width; ++x)
+				{
+					ColumnDefinition column = new ColumnDefinition();
+					gridColumns.Add(column);
+				}
+				foreach (var col in gridColumns)
+				{
+					col.Width = new GridLength(colWidth);
+					ghostGrid.ColumnDefinitions.Add(col);
+				}
+				for (int y = 0; y < height; ++y)
+				{
+					RowDefinition row = new RowDefinition();
+					gridRows.Add(row);
+				}
+				foreach (var row in gridRows)
+				{
+					row.Height = new GridLength(rowHeight);
+					ghostGrid.RowDefinitions.Add(row);
+				}
+
+				var tileTemplate = FindResource("GhostGridTileTemplate") as ControlTemplate;
+
+				for (int x = 0; x < width; ++x)
+				{
+					for (int y = 0; y < height; ++y)
+					{
+						if (tileTemplate != null)
+						{
+							gridGhostTileData tileData = new gridGhostTileData();
+							Control gridTile = new Control();
+							gridTile.Template = tileTemplate;
+							tileData.Background = new SolidColorBrush(Color.FromArgb(255, 128, 128, 128));
+							tileData.Height = rowHeight;
+							tileData.Width = colWidth;
+							tileData.x = x;
+							tileData.y = y;
+							tileData.tileExists = (oriented.GetLength(x) <= height) ? Visibility.Visible : Visibility.Hidden;
+							gridTile.DataContext = tileData;
+							Grid.SetRow(gridTile, y);
+							Grid.SetColumn(gridTile, x);
+							ghostGrid.Children.Add(gridTile);
+						}
+					}
+				}
+
+				buildingGhost.Children.Add(ghostGrid);
+			}
 		}
 
 		/// <summary>

@@ -16,8 +16,8 @@ namespace MapBuilderLibWindows
 				new BuildingTile[,]
 				{
 					//y
-					{ new BuildingTile() { section = buildingSection.personTeleport, core = false, relativePos = new Vector2<int>(0, 0) },
-						new BuildingTile() { section = buildingSection.resourceCollect, core = true, relativePos = new Vector2<int>(0, 1) } }
+					{ new BuildingTile() { section = buildingSection.personTeleport, core = false },
+						new BuildingTile() { section = buildingSection.resourceCollect, core = true } }
 				}
 				
 			},
@@ -30,11 +30,11 @@ namespace MapBuilderLibWindows
 				new BuildingTile[,]
 				{
 					//y
-					{ new BuildingTile() { section = buildingSection.path, core = false, relativePos = new Vector2<int>(0, 0) },
-						new BuildingTile() { section = buildingSection.energyCollect, core = true, relativePos = new Vector2<int>(0, 1) } },
+					{ new BuildingTile() { section = buildingSection.path, core = false },
+						new BuildingTile() { section = buildingSection.energyCollect, core = true } },
 					//x
-					{ new BuildingTile() { section = buildingSection.empty, core = false, relativePos = new Vector2<int>(1, 0) },
-						new BuildingTile() { section = buildingSection.building, core = true, relativePos = new Vector2<int>(1, 1) } }
+					{ new BuildingTile() { section = buildingSection.empty, core = false },
+						new BuildingTile() { section = buildingSection.building, core = true } }
 				}
 			}
 

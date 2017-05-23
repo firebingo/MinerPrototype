@@ -186,9 +186,6 @@ namespace MapBuilderLibWindows
 				for (int j = 0; j < buildingHeight; ++j)
 				{
 					rotBuilding[i, j] = building[j, i];
-					var tempX = rotBuilding[i, j].relativePos.x;
-					rotBuilding[i, j].relativePos.x = rotBuilding[i, j].relativePos.y;
-					rotBuilding[i, j].relativePos.y = tempX;
 				}
 			}
 			//reverse rows
@@ -198,7 +195,6 @@ namespace MapBuilderLibWindows
 				for (int j = buildingHeight - 1; j >= 0; --j)
 				{
 					flippedBuilding[i, j] = rotBuilding[i, buildingHeight - j - 1];
-					flippedBuilding[i, j].relativePos.x = flippedBuilding[i, j].relativePos.x;
 				}
 			}
 			return flippedBuilding;
@@ -256,7 +252,6 @@ namespace MapBuilderLibWindows
 	public class BuildingTile
 	{
 		public buildingSection section;
-		public Vector2<int> relativePos; //the position of the building tile when the orientation is north.
 		public bool core;
 		public bool onLava = false;
 		public bool onWater = false;

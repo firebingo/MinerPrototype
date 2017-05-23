@@ -12,7 +12,21 @@ namespace MapBuilderWpf.Models
 	{
 		public int x;
 		public int y;
+		private buildingSection _buildingSection;
 		private Visibility _tileExists;
+
+		public buildingSection buildingSection
+		{
+			get
+			{
+				return _buildingSection;
+			}
+			set
+			{
+				_buildingSection = value;
+				NotifyPropertyChanged("buildingSection");
+			}
+		}
 
 		public Visibility tileExists
 		{

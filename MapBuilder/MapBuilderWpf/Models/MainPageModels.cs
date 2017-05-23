@@ -126,10 +126,12 @@ namespace MapBuilderWpf.Models
 		public int x;
 		public int y;
 		terrainType _terrain;
+		buildingSection _buildingSection;
 		int _oreCount;
 		int _crystalCount;
 		bool _mobSpawn;
 		bool _crystalRecharge;
+		bool _hasBuilding;
 		Visibility _showOre;
 		Visibility _showCrystal;
 		Visibility _showSpecial;
@@ -146,6 +148,19 @@ namespace MapBuilderWpf.Models
 			{
 				_terrain = value;
 				NotifyPropertyChanged("terrain");
+			}
+		}
+
+		public buildingSection buildingSection
+		{
+			get
+			{
+				return _buildingSection;
+			}
+			set
+			{
+				_buildingSection = value;
+				NotifyPropertyChanged("buildingSection");
 			}
 		}
 
@@ -198,6 +213,19 @@ namespace MapBuilderWpf.Models
 			{
 				_crystalRecharge = value;
 				NotifyPropertyChanged("crystalRecharge");
+			}
+		}
+
+		public bool hasBuilding
+		{
+			get
+			{
+				return _hasBuilding;
+			}
+			set
+			{
+				_hasBuilding = value;
+				NotifyPropertyChanged("hasBuilding");
 			}
 		}
 

@@ -89,20 +89,48 @@ namespace MapBuilderLibWindows
 			try
 			{
 				var orientedLayout = building.orientedLayout;
-				foreach (var tile in orientedLayout)
+				var bHeight = orientedLayout.GetLength(0);
+				var bWidth = orientedLayout.GetLength(1);
+				for(var i = 0; i < bHeight; ++i)
 				{
-					var tileX = building.pos.x + tile.relativePos.x;
-					var tileY = building.pos.y + tile.relativePos.y;
-					if (tileX < 0 || tileX > width)
-						return false;
-					if (tileY < 0 || tileY > height)
-						return false;
-					if(mapTiles[tileX, tileY].building != Guid.Empty)
-						return false;
-					mapTiles[tileX, tileY].tileType = terrainType.floor;
-					mapTiles[tileX, tileY].mobSpawn = false;
-					mapTiles[tileX, tileY].building = building.buildingGuid;
+					for(var j = 0; j < bWidth; ++j)
+					{
+						var tile = orientedLayout[i, j];
+						if (tile.section != buildingSection.empty)
+						{
+							var tileX = building.pos.x + i;
+							var tileY = building.pos.y + j;
+							if (tileX < 0 || tileX > width)
+								return false;
+							if (tileY < 0 || tileY > height)
+								return false;
+							if (mapTiles[tileX, tileY].building != Guid.Empty)
+								return false;
+							mapTiles[tileX, tileY].tileType = terrainType.floor;
+							mapTiles[tileX, tileY].buildingSection = tile.section;
+							mapTiles[tileX, tileY].mobSpawn = false;
+							mapTiles[tileX, tileY].building = building.buildingGuid;
+						}
+					}
 				}
+				//foreach (var tile in orientedLayout)
+				//{
+				//	if (tile.section != buildingSection.empty)
+				//	{
+				//		var tileX = building.pos.x + tile.relativePos.x;
+				//		var tileY = building.pos.y + tile.relativePos.y;
+				//		if (tileX < 0 || tileX > width)
+				//			return false;
+				//		if (tileY < 0 || tileY > height)
+				//			return false;
+				//		if (mapTiles[tileX, tileY].building != Guid.Empty)
+				//			return false;
+				//		mapTiles[tileX, tileY].tileType = terrainType.floor;
+				//		mapTiles[tileX, tileY].buildingSection = tile.section;
+				//		mapTiles[tileX, tileY].mobSpawn = false;
+				//		mapTiles[tileX, tileY].building = building.buildingGuid;
+				//	}
+				//}
 				buildings.mapBuildings.Add(building.buildingGuid, building);
 				return true;
 			}

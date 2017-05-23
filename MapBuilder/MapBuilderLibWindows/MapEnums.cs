@@ -37,7 +37,17 @@
 		resourceCollect,
 		landTeleport,
 		waterTeleport,
+		lavaTeleport,
 		energyCollect,
 		energyRecharge
+	}
+
+	public enum mapGoal
+	{
+		ore,
+		crystals,
+		time,
+		building,
+		discovery
 	}
 }

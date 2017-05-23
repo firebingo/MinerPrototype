@@ -50,6 +50,10 @@ namespace MapBuilderWpf.Pages
 				else
 					return;
 			} 
+			else if (e.target == "changeOrientation" && HelperFunctions.hasProperty(e.args, "orientation"))
+			{
+				changeOrientation(e.args.orientation);
+			}
 			else if (e.target == "mapDimensions" && HelperFunctions.hasProperty(e.args, "width") && HelperFunctions.hasProperty(e.args, "height"))
 			{
 				setMapDimensions(e.args.width, e.args.height);
@@ -74,10 +78,16 @@ namespace MapBuilderWpf.Pages
 			buildGhostGrid();
 		}
 
+		private void changeOrientation (orientation orientation)
+		{
+			buildingOrientation = orientation;
+			buildGhostGrid();
+		}
+
 		private void setGhostPosition(Point position)
 		{
-			Canvas.SetLeft(ghostGrid, position.X);
-			Canvas.SetTop(ghostGrid, position.Y);
+			Canvas.SetLeft(ghostGrid, position.X - 10);
+			Canvas.SetTop(ghostGrid, position.Y - 10);
 		}
 
 		private void buildGhostGrid()
@@ -88,6 +98,13 @@ namespace MapBuilderWpf.Pages
 			if (buildingGhost.Children.Count > 0)
 				buildingGhost.Children.Clear();
 
+			double? left = null;
+			double? top = null;
+			if(ghostGrid != null)
+			{
+				left = Canvas.GetLeft(ghostGrid);
+				top = Canvas.GetTop(ghostGrid);
+			}
 			ghostGrid = new Grid();
 
 			//clear the grid rows and columns
@@ -144,12 +161,13 @@ namespace MapBuilderWpf.Pages
 							gridGhostTileData tileData = new gridGhostTileData();
 							Control gridTile = new Control();
 							gridTile.Template = tileTemplate;
-							tileData.Background = new SolidColorBrush(Color.FromArgb(255, 128, 128, 128));
 							tileData.Height = rowHeight;
 							tileData.Width = colWidth;
 							tileData.x = x;
 							tileData.y = y;
-							tileData.tileExists = (oriented.GetLength(x) <= height) ? Visibility.Visible : Visibility.Hidden;
+							tileData.buildingSection = oriented[x, y].section;
+							tileData.tileExists = tileData.buildingSection != buildingSection.empty ? Visibility.Visible : Visibility.Hidden;
+							tileData.Background = new SolidColorBrush(GridHelper.buildingTileColors[tileData.buildingSection]);
 							gridTile.DataContext = tileData;
 							Grid.SetRow(gridTile, y);
 							Grid.SetColumn(gridTile, x);
@@ -159,6 +177,8 @@ namespace MapBuilderWpf.Pages
 				}
 
 				buildingGhost.Children.Add(ghostGrid);
+				if(left.HasValue && top.HasValue)
+				setGhostPosition(new Point(left.Value, top.Value));
 			}
 		}
 

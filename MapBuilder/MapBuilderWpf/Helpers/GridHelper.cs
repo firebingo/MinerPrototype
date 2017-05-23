@@ -1,4 +1,5 @@
 ﻿using MapBuilderWpf.Models;
+using MapEnums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace MapBuilderWpf.Helpers
 {
@@ -22,6 +24,32 @@ namespace MapBuilderWpf.Helpers
 		private static int maxTileHeight = baseTileHeight;
 		private const double baseFontSize = 16;
 		public static double currentFontSize = baseFontSize;
+		public static Dictionary<terrainType, Color> terrainTileColors { get; } = new Dictionary<terrainType, Color>()
+		{
+			{ terrainType.empty, Color.FromRgb(0, 0, 0) },
+			{ terrainType.floor, Color.FromRgb(205, 160, 113) },
+			{ terrainType.roof, Color.FromRgb(89, 59, 53) },
+			{ terrainType.softrock, Color.FromRgb(168, 122, 74) },
+			{ terrainType.looserock, Color.FromRgb(142, 100, 55) },
+			{ terrainType.hardrock, Color.FromRgb(92, 74, 54) },
+			{ terrainType.solidrock, Color.FromRgb(65, 58, 50) },
+			{ terrainType.water, Color.FromRgb(0, 90, 255) },
+			{ terrainType.lava, Color.FromRgb(255, 90, 0) },
+		};
+		public static Dictionary<buildingSection, Color> buildingTileColors { get; } = new Dictionary<buildingSection, Color>()
+		{
+			{ buildingSection.building, Color.FromRgb(128, 128, 128) },
+			{ buildingSection.path, Color.FromRgb(160, 160, 170) },
+			{ buildingSection.empty, Color.FromArgb(0, 128, 128, 128) },
+			{ buildingSection.personTeleport, Color.FromRgb(180, 180, 100) },
+			{ buildingSection.resourceCollect, Color.FromRgb(220, 180, 100) },
+			{ buildingSection.landTeleport, Color.FromRgb(180, 20, 180) },
+			{ buildingSection.waterTeleport, Color.FromRgb(180, 20, 220) },
+			{ buildingSection.lavaTeleport, Color.FromRgb(220, 20, 180) },
+			{ buildingSection.energyCollect, Color.FromRgb(20, 180, 20) },
+			{ buildingSection.energyRecharge, Color.FromRgb(30, 220, 30) },
+		};
+		//public static Color buildingColor { get; } = Color.FromArgb(255, 128, 128, 128);
 
 		/// <summary>
 		/// Checks the passed window height and width and calculates new row and column max sizes

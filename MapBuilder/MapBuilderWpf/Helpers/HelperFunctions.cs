@@ -18,6 +18,23 @@ namespace MapBuilderWpf.Helpers
 			//return retval;
 		}
 
+		/// <summary>
+		/// Blends a opaque and semi transparent color using normal blending.
+		/// </summary>
+		/// <param name="back"></param>
+		/// <param name="front"></param>
+		/// <returns></returns>
+		public static Color normalBlendColor(Color back, Color front)
+		{
+			float r = front.ScA * front.ScR + back.ScR * (1 - front.ScA);
+			float g = front.ScA * front.ScG + back.ScG * (1 - front.ScA);
+			float b = front.ScA * front.ScB + back.ScB * (1 - front.ScA);
+			return Color.FromScRgb(1, r, g, b);
+			//var result = Color.Multiply(Color.Multiply(Color.Add(front, back), front.ScA), (1 - front.ScA));
+			//result.ScA = 1;
+			//return result;
+		}
+
 		public static T clampValue<T>(T i, T lower, T upper) where T : IComparable
 		{
 			if (i.CompareTo(upper) > 0)
@@ -28,6 +45,12 @@ namespace MapBuilderWpf.Helpers
 				return i;
 		}
 
+		/// <summary>
+		/// Check if a dynamic object has a property.
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		public static bool hasProperty(dynamic obj, string name)
 		{
 			Type objType = obj.GetType();

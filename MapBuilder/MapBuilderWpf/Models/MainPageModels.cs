@@ -53,17 +53,34 @@ namespace MapBuilderWpf.Models
 
 		private void NotifyPropertyChanged(String info)
 		{
-			if (PropertyChanged != null)
-			{
-				PropertyChanged(this, new PropertyChangedEventArgs(info));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
 		}
 	}
 
-	public class leftControlData
+	public class leftControlData : INotifyPropertyChanged
 	{
 		public string oxygenCount { get; set; }
 		public string oxygenTick { get; set; }
+		private Visibility _showLeftControls;
+		public Visibility showLeftControls
+		{
+			get
+			{
+				return _showLeftControls;
+			}
+			set
+			{
+				_showLeftControls = value;
+				NotifyPropertyChanged("showLeftControls");
+			}
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		private void NotifyPropertyChanged(String info)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+		}
 	}
 
 	public class errorMessageData : INotifyPropertyChanged
@@ -127,6 +144,7 @@ namespace MapBuilderWpf.Models
 		public int y;
 		terrainType _terrain;
 		buildingSection _buildingSection;
+		Guid _buildingGuid;
 		int _oreCount;
 		int _crystalCount;
 		bool _mobSpawn;
@@ -163,6 +181,8 @@ namespace MapBuilderWpf.Models
 				NotifyPropertyChanged("buildingSection");
 			}
 		}
+
+		public Guid buildingGuid { get { return _buildingGuid; } set { _buildingGuid = value; } }
 
 		public int oreCount
 		{

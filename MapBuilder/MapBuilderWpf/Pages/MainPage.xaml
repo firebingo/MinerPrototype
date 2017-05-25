@@ -22,16 +22,16 @@
 		<Grid x:Name="errorGrid" Height="40" Width="640" HorizontalAlignment="Center" VerticalAlignment="Top">
 			<Label HorizontalAlignment="Center"  Margin="5" Foreground="Red" Content="{Binding Path=errorMessage}"></Label>
 		</Grid>
-		<Grid x:Name="leftControls" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15" Height="450" Width="200">
+		<Grid x:Name="leftControls" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15" Height="450" Width="200" Visibility="{Binding showLeftControls, Mode=OneWay}">
 			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
 				<Label Content="Map Header" FontWeight="Bold" HorizontalAlignment="Left" Width="80"/>
 				<WrapPanel>
 					<Label Content="Oxygen (Seconds)" Width="115"/>
-					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oxygenCount, Mode=TwoWay}"/>
+					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" TextChanged="oxygenCountChanged" Text="{Binding oxygenCount, Mode=TwoWay}"/>
 				</WrapPanel>
 				<WrapPanel>
 					<Label Content="Oxygen Per Second" Width="115"/>
-					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" Text="{Binding oxygenTick, Mode=TwoWay}"/>
+					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" TextChanged="oxygenSecondChanged" Text="{Binding oxygenTick, Mode=TwoWay}"/>
 				</WrapPanel>
 			</StackPanel>
 		</Grid>
@@ -62,7 +62,7 @@
 				</WrapPanel>
 			</StackPanel>
 			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="185" Visibility="{Binding showBuildingControls, Mode=OneWay}">
-				<Button Margin="15" Width="100" Height="25" Click="rotateBuildingCW" Content="Rotate CW"/>
+				<Button Margin="15" Width="100" Height="25" Click="rotateBuilding" Content="Rotate"/>
 				<WrapPanel>
 					<Label Content="Building" Width="65"/>
 					<ComboBox x:Name="buildingComboBox" HorizontalAlignment="Right" Width="110" Margin="3" SelectedIndex="{Binding buildingType, Mode=TwoWay}" SelectionChanged="buildingChanged"/>

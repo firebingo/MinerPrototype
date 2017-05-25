@@ -51,13 +51,14 @@ namespace MapBuilderWpf.Pages
 			rightData.crystalCount = "0";
 			rightData.mobSpawn = false;
 			rightData.terrainType = (int)terrainType.empty;
-			rightData.showMapControls = Visibility.Visible;
+			rightData.showMapControls = Visibility.Hidden;
 			rightData.showBuildingControls = Visibility.Hidden;
 			rightControls.DataContext = rightData;
 
 			leftData = new leftControlData();
 			leftData.oxygenCount = "300";
 			leftData.oxygenTick = "1.0";
+			leftData.showLeftControls = Visibility.Hidden;
 			leftControls.DataContext = leftData;
 
 			errorData = new errorMessageData();
@@ -113,6 +114,7 @@ namespace MapBuilderWpf.Pages
 			appMap = new MapBuilderApp();
 			appMap.initializeMap(mapWidth, mapHeight);
 			BuildMapGrid();
+			leftData.showLeftControls = Visibility.Visible;
 			errorData.errorMessage = "";
 		}
 
@@ -209,8 +211,6 @@ namespace MapBuilderWpf.Pages
 							var tile = appMap.buildMap.mapTiles[data.x, data.y];
 							if (currentView == viewsEnum.terrain)
 							{
-								//var tileDef = appMap.tileColors.Where(t => t.type == (terrainType)rightData.terrainType).ToArray();
-								//var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
 								data.Background = new SolidColorBrush(GridHelper.terrainTileColors[(terrainType)rightData.terrainType]);
 							}
 							if (currentView == viewsEnum.special)
@@ -271,8 +271,15 @@ namespace MapBuilderWpf.Pages
 			}
 			else
 			{
-				var newBuilding = new BuildingModel(buildingComboBox.Text, currentOrientation, new Vector2<int>(data.x, data.y));
-				appMap.buildMap.placeBuilding(newBuilding);
+				if (buildingComboBox.Text != "None")
+				{
+					var newBuilding = new BuildingModel(buildingComboBox.Text, currentOrientation, new Vector2<int>(data.x, data.y));
+					appMap.buildMap.placeBuilding(newBuilding);
+				}
+				else
+				{
+					appMap.buildMap.removeBuilding(data.buildingGuid);
+				}
 				//resync the map since there can be multiple tiles changed in various forms
 				BuildMapGrid();
 			}
@@ -351,6 +358,7 @@ namespace MapBuilderWpf.Pages
 						tileData.terrain = tileType;
 						tileData.hasBuilding = appMap.buildMap.mapTiles[x, y].building != default(Guid);
 						tileData.buildingSection = appMap.buildMap.mapTiles[x, y].buildingSection;
+						tileData.buildingGuid = appMap.buildMap.mapTiles[x, y].building;
 						tileData.showCrystal = Visibility.Hidden;
 						tileData.showOre = Visibility.Hidden;
 						tileData.showSpecial = Visibility.Hidden;
@@ -377,7 +385,7 @@ namespace MapBuilderWpf.Pages
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void rotateBuildingCW(object sender, RoutedEventArgs e)
+		private void rotateBuilding(object sender, RoutedEventArgs e)
 		{
 			switch(currentOrientation)
 			{
@@ -422,9 +430,13 @@ namespace MapBuilderWpf.Pages
 								gridTileData gbd = ct.DataContext as gridTileData;
 								if (gbd != null)
 								{
-									//var tileDef = appMap.tileColors.Where(tile => tile.type == gbd.terrain).ToArray();
-									//var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
-									gbd.Background = new SolidColorBrush(GridHelper.terrainTileColors[gbd.terrain]);
+									if (gbd.hasBuilding)
+									{
+										var bColor = GridHelper.buildingTileColors[gbd.buildingSection];
+										gbd.Background = new SolidColorBrush(HelperFunctions.normalBlendColor(GridHelper.terrainTileColors[gbd.terrain], Color.FromScRgb(0.4f, bColor.ScR, bColor.ScG, bColor.ScB)));
+									}
+									else
+										gbd.Background = new SolidColorBrush(GridHelper.terrainTileColors[gbd.terrain]);
 									gbd.showCrystal = Visibility.Hidden;
 									gbd.showOre = Visibility.Hidden;
 									gbd.showSpecial = Visibility.Hidden;
@@ -525,8 +537,6 @@ namespace MapBuilderWpf.Pages
 									}
 									else
 									{
-										//var tileDef = appMap.tileColors.Where(tile => tile.type == gbd.terrain).ToArray();
-										//var colorToUse = tileDef.Length > 0 ? tileDef[0].tileColor : Color.FromRgb(0, 0, 0);
 										gbd.Background = new SolidColorBrush(GridHelper.terrainTileColors[gbd.terrain]);
 										gbd.showCrystal = Visibility.Hidden;
 										gbd.showOre = Visibility.Hidden;
@@ -580,6 +590,11 @@ namespace MapBuilderWpf.Pages
 			}
 		}
 
+		/// <summary>
+		/// When the building selected in the combo box is changed.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void buildingChanged(object sender, SelectionChangedEventArgs e)
 		{
 			var item = e.AddedItems[0] as ComboBoxItem;
@@ -587,6 +602,42 @@ namespace MapBuilderWpf.Pages
 				EventHelper.dynamicMessage(this, new { building = item?.Content != null ? item.Content : "None" }, "changeBuilding");
 			else
 				EventHelper.dynamicMessage(this, new { building = "None" }, "changeBuilding");
+		}
+
+		/// <summary>
+		/// Update oxygen count when field changes
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void oxygenCountChanged(object sender, TextChangedEventArgs e)
+		{
+			if (appMap != null)
+			{
+				errorData.errorMessage = "";
+				var value = 0.0f;
+				if (float.TryParse((sender as TextBox).Text, out value))
+					appMap.buildMap.mapHeader.oxygenCount = value;
+				else
+					errorData.errorMessage = "Invalid Oxygen";
+			}
+		}
+
+		/// <summary>
+		/// Update oxygen per second when field changes
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void oxygenSecondChanged(object sender, TextChangedEventArgs e)
+		{
+			if (appMap != null)
+			{
+				errorData.errorMessage = "";
+				var value = 0.0f;
+				if (float.TryParse((sender as TextBox).Text, out value))
+					appMap.buildMap.mapHeader.oxygenRate = value;
+				else
+					errorData.errorMessage = "Invalid Oxygen Per Second";
+			}
 		}
 	}
 }

@@ -41,6 +41,11 @@ namespace MapBuilderWpf.Pages
 			buildingGhost.DataContext = buildingGhostData;
 		}
 
+		/// <summary>
+		/// Catch events from the message system
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		public void handleEvent(object sender, dynamicMessagesArgs e)
 		{
 			if (e.target == "changeBuilding" && HelperFunctions.hasProperty(e.args, "building"))
@@ -90,6 +95,9 @@ namespace MapBuilderWpf.Pages
 			Canvas.SetTop(ghostGrid, position.Y - 10);
 		}
 
+		/// <summary>
+		/// Create the grid for the building ghost and put it on the page.
+		/// </summary>
 		private void buildGhostGrid()
 		{
 			var layout = PredefBuildings.preBuildings.ContainsKey(buildingType) ? PredefBuildings.preBuildings[buildingType] : null;

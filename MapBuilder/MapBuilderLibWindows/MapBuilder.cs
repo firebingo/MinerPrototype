@@ -25,6 +25,7 @@ namespace MapBuilderLibWindows
 			mapHeader = new MapHeader();
 			mapTiles = new MapTile[width, height];
 			buildings = new MapBuildings();
+			buildings.mapBuildings = new Dictionary<Guid, BuildingModel>();
 		}
 
 		public void intializeBlankMap()
@@ -113,24 +114,6 @@ namespace MapBuilderLibWindows
 						}
 					}
 				}
-				//foreach (var tile in orientedLayout)
-				//{
-				//	if (tile.section != buildingSection.empty)
-				//	{
-				//		var tileX = building.pos.x + tile.relativePos.x;
-				//		var tileY = building.pos.y + tile.relativePos.y;
-				//		if (tileX < 0 || tileX > width)
-				//			return false;
-				//		if (tileY < 0 || tileY > height)
-				//			return false;
-				//		if (mapTiles[tileX, tileY].building != Guid.Empty)
-				//			return false;
-				//		mapTiles[tileX, tileY].tileType = terrainType.floor;
-				//		mapTiles[tileX, tileY].buildingSection = tile.section;
-				//		mapTiles[tileX, tileY].mobSpawn = false;
-				//		mapTiles[tileX, tileY].building = building.buildingGuid;
-				//	}
-				//}
 				buildings.mapBuildings.Add(building.buildingGuid, building);
 				return true;
 			}
@@ -142,17 +125,20 @@ namespace MapBuilderLibWindows
 
 		public bool removeBuilding(Guid buildingGuid)
 		{
-			var success = false;
-			foreach(var tile in mapTiles)
+			try
 			{
-				if (tile.building == buildingGuid)
+				foreach (var tile in mapTiles)
 				{
-					tile.building = default(Guid);
-					success = true;
+					if (tile.building == buildingGuid)
+						tile.building = default(Guid);
 				}
+				buildings.mapBuildings.Remove(buildingGuid);
+				return true;
 			}
-			buildings.mapBuildings.Remove(buildingGuid);
-			return success;
+			catch (Exception e)
+			{
+				return false;
+			}
 		}
 
 		public bool saveMap()

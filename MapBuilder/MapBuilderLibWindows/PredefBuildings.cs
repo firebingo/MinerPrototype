@@ -9,6 +9,17 @@ namespace MapBuilderLibWindows
 		{
 			{
 				/*
+				 * [X]
+				 */
+				"Path",
+				new BuildingTile[,]
+				{
+					//y
+					{ new BuildingTile() { section = buildingSection.path, core = true } }
+				}
+			},
+			{
+				/*
 				 * [x]
 				 * [X]
 				 */
@@ -19,7 +30,19 @@ namespace MapBuilderLibWindows
 					{ new BuildingTile() { section = buildingSection.personTeleport, core = false },
 						new BuildingTile() { section = buildingSection.resourceCollect, core = true } }
 				}
-				
+			},
+			{
+				/*
+				 * [x][ ]
+				 * [X][x]
+				 */
+				"Support Station",
+				new BuildingTile[,]
+				{
+					//y
+					{ new BuildingTile() { section = buildingSection.personTeleport, core = false },
+						new BuildingTile() { section = buildingSection.building, core = true } }
+				}
 			},
 			{
 				/*
@@ -34,10 +57,9 @@ namespace MapBuilderLibWindows
 						new BuildingTile() { section = buildingSection.energyCollect, core = true } },
 					//x
 					{ new BuildingTile() { section = buildingSection.empty, core = false },
-						new BuildingTile() { section = buildingSection.building, core = true } }
+						new BuildingTile() { section = buildingSection.building, core = false } }
 				}
 			}
-
 		};
 	}
 }

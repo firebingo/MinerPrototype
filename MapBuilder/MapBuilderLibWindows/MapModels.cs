@@ -126,7 +126,7 @@ namespace MapBuilderLibWindows
 		{
 			get
 			{
-				//Deep copy array
+				//The serializtion in here is to deep copy the arrays content because c# doesn't have a way to do in natively.
 				var height = buildingLayout.GetLength(1);
 				var width = buildingLayout.GetLength(0); 
 				var serialized = JsonConvert.SerializeObject(buildingLayout);
@@ -139,7 +139,6 @@ namespace MapBuilderLibWindows
 					case orientation.east:
 						return rotateBuildingPos90(modifiable);
 					case orientation.west:
-						//The serializtion is to deep copy otherwise the relative pos vectors get passed by reference and get screwed up.
 						var rot1 = rotateBuildingPos90(modifiable);
 						serialized = JsonConvert.SerializeObject(rot1);
 						var rot2 = rotateBuildingPos90(JsonConvert.DeserializeObject<BuildingTile[,]>(serialized));
@@ -199,35 +198,6 @@ namespace MapBuilderLibWindows
 			}
 			return flippedBuilding;
 		}
-
-		//private BuildingTile[,] rotateBuildingNeg90(BuildingTile[,] building)
-		//{
-		//	var buildingWidth = building.GetLength(1);
-		//	var buildingHeight = building.GetLength(0);
-		//	//reverse rows
-		//	BuildingTile[,] flippedBuilding = new BuildingTile[buildingWidth, buildingHeight];
-		//	for (int i = 0; i < buildingHeight; ++i)
-		//	{
-		//		for (int j = buildingWidth - 1; j >= 0; --j)
-		//		{
-		//			flippedBuilding[j, i] = building[i, buildingWidth - j - 1];
-		//			flippedBuilding[j, i].relativePos.x = -flippedBuilding[j, i].relativePos.x;
-		//		}
-		//	}
-		//	//transpose building
-		//	BuildingTile[,] rotBuilding = new BuildingTile[buildingWidth, buildingHeight];
-		//	for (int i = 0; i < buildingHeight; ++i)
-		//	{
-		//		for (int j = 0; j < buildingWidth; ++j)
-		//		{
-		//			rotBuilding[j, i] = building[i, j];
-		//			var tempX = rotBuilding[j, i].relativePos.x;
-		//			rotBuilding[j, i].relativePos.x = rotBuilding[j, i].relativePos.y;
-		//			rotBuilding[j, i].relativePos.y = tempX;
-		//		}
-		//	}
-		//	return rotBuilding;
-		//}
 
 		//From https://stackoverflow.com/questions/18034805/rotate-mn-matrix-90-degrees in case 
 		//I need future refernce for changing the rotation functions.

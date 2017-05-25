@@ -9,8 +9,8 @@ namespace MapBuilderLibWindows
 {
 	public class WriteModel
 	{
-		public MapTile[,] mapArray;
 		public MapHeader header;
+		public MapTile[,] mapArray;
 		public MapBuildings buildings;
 
 		public WriteModel(MapTile[,] ma, MapHeader mh, MapBuildings mb)

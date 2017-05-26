@@ -67,6 +67,7 @@ namespace MapBuilderLibWindows
 
 	public class MapHeader
 	{
+		public string mapName;
 		public float oxygenCount;
 		public float oxygenRate;
 		public mapGoal goal;
@@ -153,6 +154,13 @@ namespace MapBuilderLibWindows
 		}
 		public Vector2<int> pos;
 
+		/// <summary>
+		/// A model of a building intended to be placed on the map.
+		/// </summary>
+		/// <param name="type">A string denoting the type/name of the building</param>
+		/// <param name="direction">The orinentation of the building</param>
+		/// <param name="pos">The position the 0x0 (top left) tile of the building will be placed at</param>
+		/// <param name="layout">The array of tiles that compose the building</param>
 		public BuildingModel(string type, orientation direction, Vector2<int> pos, BuildingTile[,] layout = null)
 		{
 			buildingGuid = Guid.NewGuid();

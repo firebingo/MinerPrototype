@@ -46,8 +46,9 @@ ExportedObj/
 MapBuilder/packages
 
 #MapBuilder Builds
-MapBuilder/MapBuilderLibWindows/bin
-MapBuilder/MapBuilderLibWindows/obj
+MapBuilder/MapBuilderLibCore/bin
+MapBuilder/MapBuilderLibCore/obj
+MapBuilder/MapBuilderLibWindows
 MapBuilder/MapBuilderWpf/bin
 MapBuilder/MapBuilderWpf/obj
 

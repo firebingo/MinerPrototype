@@ -26,10 +26,10 @@ namespace MapBuilderWpf
 			buildMap = new Map(width, height);
 			buildMap.intializeBlankMap();
 		}
-
-		public bool saveMap()
+		
+		public async Task<bool> saveMap(string directory, string fileName)
 		{
-			return buildMap.saveMap();
+			return await buildMap.saveMap(directory, fileName);
 		}
 	}
 }

@@ -8,6 +8,8 @@ using MapBuilderWpf.Pages;
 using MapBuilderWpf.Windows;
 using System.Windows.Input;
 using MapBuilderWpf.Helpers;
+using Microsoft.Win32;
+using System.IO;
 
 namespace MapBuilderWpf
 {
@@ -158,21 +160,30 @@ namespace MapBuilderWpf
 			mapWindow.Show();
 		}
 
-		private void saveMap(object sender, RoutedEventArgs e)
+		private async void saveMap(object sender, RoutedEventArgs e)
 		{
 			if (mainAppPage == null)
 				mainAppPage = mainPage.Content as MainPage;
 
 			if (mainAppPage?.mapGrid != null)
 			{
-				var result = mainAppPage.appMap.saveMap();
-				if (result)
+				SaveFileDialog saveDialog = new SaveFileDialog();
+				saveDialog.DefaultExt = "json";
+				saveDialog.FileName = "Map1";
+				saveDialog.AddExtension = true;
+				saveDialog.Filter = "JSON file (*.json)|*.json";
+				saveDialog.OverwritePrompt = true;
+				if (saveDialog.ShowDialog() == true)
 				{
-					mainAppPage.updateErrorMessage("");
-					return;
+					var result = await mainAppPage.appMap.saveMap(Path.GetDirectoryName(saveDialog.FileName), saveDialog.SafeFileName);
+					if (result)
+					{
+						mainAppPage.updateErrorMessage("");
+						return;
+					}
+					else
+						mainAppPage.updateErrorMessage("Error Saving Map");
 				}
-				else
-					mainAppPage.updateErrorMessage("Error Saving Map");
 			}
 			else
 			{

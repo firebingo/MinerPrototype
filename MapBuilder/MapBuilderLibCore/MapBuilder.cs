@@ -28,6 +28,9 @@ namespace MapBuilderLibWindows
 			buildings.mapBuildings = new Dictionary<Guid, BuildingModel>();
 		}
 
+		/// <summary>
+		/// Creates a new map of the dimensions from the contructor with solid rock on the edges and floor covering the rest.
+		/// </summary>
 		public void intializeBlankMap()
 		{
 			//initialize all tiles to floor.
@@ -52,6 +55,17 @@ namespace MapBuilderLibWindows
 			}
 		}
 
+		/// <summary>
+		/// Modifies a tile
+		/// </summary>
+		/// <param name="x">The X coordinate of the tile</param>
+		/// <param name="y">The Y coordniate of the tile</param>
+		/// <param name="tileType">The terrainType of the tile</param>
+		/// <param name="oreCount">The count of ore in the tile if it is a wall</param>
+		/// <param name="crystalCount">The count of crystals in the tile if it is a wall</param>
+		/// <param name="mobSpawn">Whether the tile can spawn mobs</param>
+		/// <param name="crystalRecharge">Whether the tile can be used to recharge crystals</param>
+		/// <returns>Returns true if modifying the tile succedded</returns>
 		public bool modifyTile(int x, int y, terrainType tileType, int oreCount, int crystalCount, bool mobSpawn, bool crystalRecharge)
 		{
 			try
@@ -85,6 +99,11 @@ namespace MapBuilderLibWindows
 			}
 		}
 
+		/// <summary>
+		/// Places a building on the map
+		/// </summary>
+		/// <param name="building">The model of the building to place</param>
+		/// <returns>Returns true if placing the building succeded</returns>
 		public bool placeBuilding(BuildingModel building)
 		{
 			try
@@ -123,6 +142,11 @@ namespace MapBuilderLibWindows
 			}
 		}
 
+		/// <summary>
+		/// Removes a building from the map.
+		/// </summary>
+		/// <param name="buildingGuid">The guid of the building to remove</param>
+		/// <returns></returns>
 		public bool removeBuilding(Guid buildingGuid)
 		{
 			try
@@ -141,9 +165,16 @@ namespace MapBuilderLibWindows
 			}
 		}
 
-		public bool saveMap()
+		/// <summary>
+		/// Saves the map to the given directory.
+		/// Will overwrite the file if it already exists.
+		/// </summary>
+		/// <param name="directory">The directory to save in, does not include filename.</param>
+		/// <param name="fileName">The filename of the file to save.</param>
+		/// <returns>Returns true if saving the map to the directory succeeds.</returns>
+		public async Task<bool> saveMap(string directory, string fileName)
 		{
-			return mapWriter.serializeMap(mapTiles, mapHeader, buildings);
+			return await mapWriter.serializeMap(directory, fileName, mapTiles, mapHeader, buildings);
 		}
 	}
 }

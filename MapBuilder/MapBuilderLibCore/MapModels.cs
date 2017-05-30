@@ -1,12 +1,9 @@
 ﻿using MapEnums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace MapBuilderLibWindows
+namespace MapBuilderLibCore
 {
 	public class Vector2<T>
 	{

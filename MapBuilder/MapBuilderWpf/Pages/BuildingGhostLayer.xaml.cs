@@ -1,16 +1,13 @@
 ﻿//system
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 //map builder wpf
 using MapBuilderWpf.Models;
 using MapBuilderWpf.Helpers;
 //map builder lib
-using MapBuilderLibWindows;
+using MapBuilderLibCore;
 using MapEnums;
 
 namespace MapBuilderWpf.Pages
@@ -48,27 +45,27 @@ namespace MapBuilderWpf.Pages
 		/// <param name="e"></param>
 		public void handleEvent(object sender, dynamicMessagesArgs e)
 		{
-			if (e.target == "changeBuilding" && HelperFunctions.hasProperty(e.args, "building"))
+			switch(e.target)
 			{
-				if (e.args.building != null)
-					changeBuilding(e.args.building);
-				else
-					return;
-			} 
-			else if (e.target == "changeOrientation" && HelperFunctions.hasProperty(e.args, "orientation"))
-			{
-				changeOrientation(e.args.orientation);
+				case "changeBuilding":
+					if(HelperFunctions.hasProperty(e.args, "building"))
+						changeBuilding(e.args.building);
+					break;
+				case "changeOrientation":
+					if(HelperFunctions.hasProperty(e.args, "orientation"))
+						changeOrientation(e.args.orientation);
+					break;
+				case "mapDimensions":
+					if(HelperFunctions.hasProperty(e.args, "width") && HelperFunctions.hasProperty(e.args, "height"))
+						setMapDimensions(e.args.width, e.args.height);
+					break;
+				case "mainMouseMove":
+					if(HelperFunctions.hasProperty(e.args, "position"))
+						setGhostPosition(e.args.position);
+					break;
+				default:
+					break;
 			}
-			else if (e.target == "mapDimensions" && HelperFunctions.hasProperty(e.args, "width") && HelperFunctions.hasProperty(e.args, "height"))
-			{
-				setMapDimensions(e.args.width, e.args.height);
-			}
-			else if (e.target == "mainMouseMove" && HelperFunctions.hasProperty(e.args, "position"))
-			{
-				setGhostPosition(e.args.position);
-			}
-			else
-				return;
 		}
 
 		private void setMapDimensions(int width, int height)

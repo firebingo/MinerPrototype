@@ -26,11 +26,15 @@
 			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
 				<Label Content="Map Header" FontWeight="Bold" HorizontalAlignment="Left" Width="80"/>
 				<WrapPanel>
-					<Label Content="Oxygen (Seconds)" Width="115"/>
+					<Label Content="Name" Width="50"/>
+					<TextBox HorizontalAlignment="Right" Width="135" Margin="3" TextChanged="mapNameChanged" Text="{Binding mapName, Mode=TwoWay}"/>
+				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Oxygen (Seconds)" Width="140"/>
 					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" TextChanged="oxygenCountChanged" Text="{Binding oxygenCount, Mode=TwoWay}"/>
 				</WrapPanel>
 				<WrapPanel>
-					<Label Content="Oxygen Per Second" Width="115"/>
+					<Label Content="Oxygen Per Second" Width="140"/>
 					<TextBox HorizontalAlignment="Right" Width="45" Margin="3" TextChanged="oxygenSecondChanged" Text="{Binding oxygenTick, Mode=TwoWay}"/>
 				</WrapPanel>
 			</StackPanel>

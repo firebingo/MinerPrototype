@@ -61,6 +61,7 @@ namespace MapBuilderWpf.Models
 	{
 		public string oxygenCount { get; set; }
 		public string oxygenTick { get; set; }
+		public string mapName { get; set; }
 		private Visibility _showLeftControls;
 		public Visibility showLeftControls
 		{

@@ -1,15 +1,14 @@
 ﻿//system
-using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
+using System.IO;
+using System.Windows.Input;
 //map builder wpf
 using MapBuilderWpf.Pages;
 using MapBuilderWpf.Windows;
-using System.Windows.Input;
 using MapBuilderWpf.Helpers;
-using Microsoft.Win32;
-using System.IO;
 
 namespace MapBuilderWpf
 {
@@ -169,7 +168,7 @@ namespace MapBuilderWpf
 			{
 				SaveFileDialog saveDialog = new SaveFileDialog();
 				saveDialog.DefaultExt = "json";
-				saveDialog.FileName = "Map1";
+				saveDialog.FileName = HelperFunctions.escapeFilename(mainAppPage.appMap.buildMap.mapHeader.mapName);
 				saveDialog.AddExtension = true;
 				saveDialog.Filter = "JSON file (*.json)|*.json";
 				saveDialog.OverwritePrompt = true;

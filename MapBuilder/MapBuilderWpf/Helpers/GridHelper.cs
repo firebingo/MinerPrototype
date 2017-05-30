@@ -1,13 +1,12 @@
-﻿using MapBuilderWpf.Models;
-using MapEnums;
+﻿//system
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+//map builder lib
+using MapBuilderWpf.Models;
+using MapEnums;
 
 namespace MapBuilderWpf.Helpers
 {

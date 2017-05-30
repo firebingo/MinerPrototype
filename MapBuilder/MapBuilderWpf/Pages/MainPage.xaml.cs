@@ -1,17 +1,16 @@
 ﻿//system
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 //map builder wpf
 using MapBuilderWpf.Models;
-//map builder lib
-using MapBuilderLibWindows;
-using MapEnums;
 using MapBuilderWpf.Helpers;
+//map builder lib
+using MapBuilderLibCore;
+using MapEnums;
 
 namespace MapBuilderWpf.Pages
 {
@@ -58,6 +57,7 @@ namespace MapBuilderWpf.Pages
 			leftData = new leftControlData();
 			leftData.oxygenCount = "300";
 			leftData.oxygenTick = "1.0";
+			leftData.mapName = "Map1";
 			leftData.showLeftControls = Visibility.Hidden;
 			leftControls.DataContext = leftData;
 
@@ -113,6 +113,9 @@ namespace MapBuilderWpf.Pages
 			EventHelper.dynamicMessage(this, new { width = width, height = height }, "mapDimensions");
 			appMap = new MapBuilderApp();
 			appMap.initializeMap(mapWidth, mapHeight);
+			appMap.buildMap.mapHeader.mapName = leftData.mapName;
+			appMap.buildMap.mapHeader.oxygenCount = float.Parse(leftData.oxygenCount);
+			appMap.buildMap.mapHeader.oxygenRate = float.Parse(leftData.oxygenTick);
 			BuildMapGrid();
 			leftData.showLeftControls = Visibility.Visible;
 			errorData.errorMessage = "";
@@ -637,6 +640,24 @@ namespace MapBuilderWpf.Pages
 					appMap.buildMap.mapHeader.oxygenRate = value;
 				else
 					errorData.errorMessage = "Invalid Oxygen Per Second";
+			}
+		}
+
+		/// <summary>
+		/// Update the map name when the field changes
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void mapNameChanged(object sender, TextChangedEventArgs e)
+		{
+			if (appMap != null)
+			{
+				errorData.errorMessage = "";
+				var name = (sender as TextBox).Text;
+				if (name != null && name.Length > 0)
+					appMap.buildMap.mapHeader.mapName = name;
+				else
+					errorData.errorMessage = "Invalid Map Name";
 			}
 		}
 	}

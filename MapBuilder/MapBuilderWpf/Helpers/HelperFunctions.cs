@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Media;
 
 namespace MapBuilderWpf.Helpers
@@ -55,6 +57,48 @@ namespace MapBuilderWpf.Helpers
 		{
 			Type objType = obj.GetType();
 			return objType.GetProperty(name) != null;
+		}
+
+		/// <summary>
+		/// Checks if a string contains invalid characters for a file name.
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <returns></returns>
+		public static bool isValidFilename(string filename)
+		{
+			Regex reg = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
+			if (reg.IsMatch(filename))
+				return false;
+
+			return true;
+		}
+
+		/// <summary>
+		/// Removes invalid characters from a string for usage as a filename.
+		/// Does not check 
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <returns>Returns string with invalid characters replaced with a _</returns>
+		public static string escapeFilename(string filename)
+		{
+			if (isReservedName(filename))
+				filename = "reserved";
+
+			string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
+			string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+
+			return Regex.Replace(filename, invalidRegStr, "_");
+		}
+
+		/// <summary>
+		/// Checks if a string is a reserved filename in windows.
+		/// </summary>
+		/// <param name="filename"></param>
+		/// <returns></returns>
+		private static bool isReservedName(string filename)
+		{
+			Regex names = new Regex("^COM[0-9]$|^LPT[0-9]$|^CON$|^AUX$|^PRN$|^NUL$", RegexOptions.IgnoreCase);
+			return names.IsMatch(filename);
 		}
 	}
 }

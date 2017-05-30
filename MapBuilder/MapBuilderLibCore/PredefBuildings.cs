@@ -1,7 +1,7 @@
 ﻿using MapEnums;
 using System.Collections.Generic;
 
-namespace MapBuilderLibWindows
+namespace MapBuilderLibCore
 {
 	public static class PredefBuildings
 	{

@@ -66,7 +66,7 @@ namespace MapBuilderWpf.Helpers
 		/// <returns></returns>
 		public static bool isValidFilename(string filename)
 		{
-			Regex reg = new Regex("[" + Regex.Escape(new string(Path.GetInvalidFileNameChars())) + "]");
+			Regex reg = new Regex($"[{Regex.Escape(new string(Path.GetInvalidFileNameChars()))}]");
 			if (reg.IsMatch(filename))
 				return false;
 
@@ -85,7 +85,7 @@ namespace MapBuilderWpf.Helpers
 				filename = "reserved";
 
 			string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
-			string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+			string invalidRegStr = $@"([{invalidChars}]*\.+$)|([{invalidChars}]+)";
 
 			return Regex.Replace(filename, invalidRegStr, "_");
 		}

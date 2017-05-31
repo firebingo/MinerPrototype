@@ -64,7 +64,7 @@ namespace MapBuilderLibCore
 		/// <param name="mobSpawn">Whether the tile can spawn mobs</param>
 		/// <param name="crystalRecharge">Whether the tile can be used to recharge crystals</param>
 		/// <returns>Returns true if modifying the tile succedded</returns>
-		public bool modifyTile(int x, int y, terrainType tileType, int oreCount, int crystalCount, bool mobSpawn, bool crystalRecharge)
+		public bool modifyTile(int x, int y, terrainType tileType, int oreCount, int crystalCount, bool mobSpawn, bool crystalRecharge, bool hidden)
 		{
 			try
 			{
@@ -87,6 +87,10 @@ namespace MapBuilderLibCore
 						mapTiles[x, y].mobSpawn = false;
 						mapTiles[x, y].crystalRecharge = false;
 					}
+					if (mapTiles[x, y].tileType == terrainType.floor || mapTiles[x, y].tileType == terrainType.water || mapTiles[x, y].tileType == terrainType.lava)
+						mapTiles[x, y].hidden = hidden;
+					else
+						mapTiles[x, y].hidden = false;
 					return true;
 				}
 				return false;

@@ -209,12 +209,15 @@ namespace MapBuilderWpf.Pages
 					if (parsed)
 					{
 						//try to modify the tile on the map. if it succeeds update the tile on the grid.
-						if (appMap.buildMap.modifyTile(data.x, data.y, (terrainType)rightData.terrainType, oreCount, crystalCount, rightData.mobSpawn, rightData.crystalRecharge))
+						if (appMap.buildMap.modifyTile(data.x, data.y, (terrainType)rightData.terrainType, oreCount, crystalCount, rightData.mobSpawn, rightData.crystalRecharge, rightData.hidden))
 						{
 							var tile = appMap.buildMap.mapTiles[data.x, data.y];
 							if (currentView == viewsEnum.terrain)
 							{
-								data.Background = new SolidColorBrush(GridHelper.terrainTileColors[(terrainType)rightData.terrainType]);
+								if (!tile.hidden)
+									data.Background = new SolidColorBrush(GridHelper.terrainTileColors[(terrainType)rightData.terrainType]);
+								else
+									data.Background = new SolidColorBrush(HelperFunctions.normalBlendColor(GridHelper.terrainTileColors[(terrainType)rightData.terrainType], GridHelper.hiddenOverlay));
 							}
 							if (currentView == viewsEnum.special)
 							{
@@ -258,6 +261,7 @@ namespace MapBuilderWpf.Pages
 							data.mobSpawn = rightData.mobSpawn;
 							data.crystalRecharge = rightData.crystalRecharge;
 							data.terrain = (terrainType)rightData.terrainType;
+							data.hidden = rightData.hidden;
 							errorData.errorMessage = "";
 						}
 						else
@@ -348,20 +352,22 @@ namespace MapBuilderWpf.Pages
 						gridTileData tileData = new gridTileData();
 						Control gridTile = new Control();
 						gridTile.Template = tileTemplate;
-						var tileType = appMap.buildMap.mapTiles[x, y].tileType;
+						var tile = appMap.buildMap.mapTiles[x, y];
+						var tileType = tile.tileType;
 						tileData.Background = new SolidColorBrush(Colors.White);
 						tileData.Height = rowHeight;
 						tileData.Width = colWidth;
 						tileData.x = x;
 						tileData.y = y;
-						tileData.oreCount = appMap.buildMap.mapTiles[x, y].oreCount;
-						tileData.crystalCount = appMap.buildMap.mapTiles[x, y].crystalCount;
-						tileData.mobSpawn = appMap.buildMap.mapTiles[x, y].mobSpawn;
-						tileData.crystalRecharge = appMap.buildMap.mapTiles[x, y].crystalRecharge;
+						tileData.oreCount = tile.oreCount;
+						tileData.crystalCount = tile.crystalCount;
+						tileData.mobSpawn = tile.mobSpawn;
+						tileData.crystalRecharge = tile.crystalRecharge;
 						tileData.terrain = tileType;
-						tileData.hasBuilding = appMap.buildMap.mapTiles[x, y].building != default(Guid);
-						tileData.buildingSection = appMap.buildMap.mapTiles[x, y].buildingSection;
-						tileData.buildingGuid = appMap.buildMap.mapTiles[x, y].building;
+						tileData.hasBuilding = tile.building != default(Guid);
+						tileData.buildingSection = tile.buildingSection;
+						tileData.buildingGuid = tile.building;
+						tileData.hidden = tile.hidden;
 						tileData.showCrystal = Visibility.Hidden;
 						tileData.showOre = Visibility.Hidden;
 						tileData.showSpecial = Visibility.Hidden;
@@ -439,7 +445,12 @@ namespace MapBuilderWpf.Pages
 										gbd.Background = new SolidColorBrush(HelperFunctions.normalBlendColor(GridHelper.terrainTileColors[gbd.terrain], Color.FromScRgb(0.4f, bColor.ScR, bColor.ScG, bColor.ScB)));
 									}
 									else
-										gbd.Background = new SolidColorBrush(GridHelper.terrainTileColors[gbd.terrain]);
+									{
+										if (!gbd.hidden)
+											gbd.Background = new SolidColorBrush(GridHelper.terrainTileColors[gbd.terrain]);
+										else
+											gbd.Background = new SolidColorBrush(HelperFunctions.normalBlendColor(GridHelper.terrainTileColors[(terrainType)rightData.terrainType], GridHelper.hiddenOverlay));
+									}
 									gbd.showCrystal = Visibility.Hidden;
 									gbd.showOre = Visibility.Hidden;
 									gbd.showSpecial = Visibility.Hidden;
@@ -532,19 +543,17 @@ namespace MapBuilderWpf.Pages
 								if (gbd != null)
 								{
 									if (gbd.hasBuilding)
-									{
 										gbd.Background = new SolidColorBrush(GridHelper.buildingTileColors[gbd.buildingSection]);
-										gbd.showCrystal = Visibility.Hidden;
-										gbd.showOre = Visibility.Hidden;
-										gbd.showSpecial = Visibility.Hidden;
-									}
 									else
 									{
-										gbd.Background = new SolidColorBrush(GridHelper.terrainTileColors[gbd.terrain]);
-										gbd.showCrystal = Visibility.Hidden;
-										gbd.showOre = Visibility.Hidden;
-										gbd.showSpecial = Visibility.Hidden;
+										if(!gbd.hidden)
+											gbd.Background = new SolidColorBrush(GridHelper.terrainTileColors[gbd.terrain]);
+										else
+											gbd.Background = new SolidColorBrush(HelperFunctions.normalBlendColor(GridHelper.terrainTileColors[(terrainType)rightData.terrainType], GridHelper.hiddenOverlay));
 									}
+									gbd.showCrystal = Visibility.Hidden;
+									gbd.showOre = Visibility.Hidden;
+									gbd.showSpecial = Visibility.Hidden;
 								}
 							}
 						}

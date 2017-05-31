@@ -85,8 +85,9 @@ namespace MapBuilderLibCore
 		public bool mobSpawn;
 		public bool crystalRecharge;
 		public Guid building;
+		public bool hidden;
 
-		public MapTile(terrainType type, Vector2<int> pos, int oreCount = 3, int crystalCount = 0, bool mobSpawn = false, bool crystalRecharge = false)
+		public MapTile(terrainType type, Vector2<int> pos, int oreCount = 3, int crystalCount = 0, bool mobSpawn = false, bool crystalRecharge = false, bool hidden = false)
 		{
 			this.pos = new Vector2<int>();
 			this.pos.x = pos.x;
@@ -94,6 +95,7 @@ namespace MapBuilderLibCore
 			tileType = type;
 			this.oreCount = oreCount;
 			this.crystalCount = crystalCount;
+			this.hidden = hidden;
 			building = default(Guid);
 			buildingSection = buildingSection.empty;
 			if (tileType > terrainType.roof && tileType < terrainType.water)

@@ -48,7 +48,7 @@ namespace MapBuilderWpf.Helpers
 			{ buildingSection.energyCollect, Color.FromRgb(20, 180, 20) },
 			{ buildingSection.energyRecharge, Color.FromRgb(30, 220, 30) },
 		};
-		//public static Color buildingColor { get; } = Color.FromArgb(255, 128, 128, 128);
+		public static Color hiddenOverlay = Color.FromArgb(120, 0, 0, 0);
 
 		/// <summary>
 		/// Checks the passed window height and width and calculates new row and column max sizes

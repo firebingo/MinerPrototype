@@ -64,6 +64,10 @@
 					<Label Content="Crystal Recharge" Width="100"/>
 					<CheckBox HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" IsChecked="{Binding crystalRecharge, Mode=TwoWay}"/>
 				</WrapPanel>
+				<WrapPanel>
+					<Label Content="Hidden" Width="100"/>
+					<CheckBox HorizontalAlignment="Left" Margin="3" VerticalAlignment="Center" IsChecked="{Binding hidden, Mode=TwoWay}"/>
+				</WrapPanel>
 			</StackPanel>
 			<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="185" Visibility="{Binding showBuildingControls, Mode=OneWay}">
 				<Button Margin="15" Width="100" Height="25" Click="rotateBuilding" Content="Rotate"/>

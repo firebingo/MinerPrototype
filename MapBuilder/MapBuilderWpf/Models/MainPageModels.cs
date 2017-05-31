@@ -22,6 +22,7 @@ namespace MapBuilderWpf.Models
 		public bool mobSpawn { get; set; }
 		public bool crystalRecharge { get; set; }
 		public int buildingType { get; set; }
+		public bool hidden { get; set; }
 		private Visibility _showMapControls;
 		public Visibility showMapControls
 		{
@@ -151,6 +152,7 @@ namespace MapBuilderWpf.Models
 		bool _mobSpawn;
 		bool _crystalRecharge;
 		bool _hasBuilding;
+		bool _hidden;
 		Visibility _showOre;
 		Visibility _showCrystal;
 		Visibility _showSpecial;
@@ -247,6 +249,19 @@ namespace MapBuilderWpf.Models
 			{
 				_hasBuilding = value;
 				NotifyPropertyChanged("hasBuilding");
+			}
+		}
+
+		public bool hidden
+		{
+			get
+			{
+				return _hidden;
+			}
+			set
+			{
+				_hidden = value;
+				NotifyPropertyChanged("hidden");
 			}
 		}
 
